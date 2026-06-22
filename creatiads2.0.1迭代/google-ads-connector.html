@@ -1,0 +1,2962 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Creatiads — Auto Report</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          border: 'hsl(214.3 31.8% 91.4%)',
+          input: 'hsl(214.3 31.8% 91.4%)',
+          ring: 'hsl(222.2 84% 4.9%)',
+          background: 'hsl(0 0% 100%)',
+          foreground: 'hsl(222.2 84% 4.9%)',
+          primary: { DEFAULT: 'hsl(222.2 47.4% 11.2%)', foreground: 'hsl(210 40% 98%)' },
+          secondary: { DEFAULT: 'hsl(210 40% 96.1%)', foreground: 'hsl(222.2 47.4% 11.2%)' },
+          muted: { DEFAULT: 'hsl(210 40% 96.1%)', foreground: 'hsl(215.4 16.3% 46.9%)' },
+          accent: { DEFAULT: 'hsl(210 40% 96.1%)', foreground: 'hsl(222.2 47.4% 11.2%)' },
+          card: { DEFAULT: 'hsl(0 0% 100%)', foreground: 'hsl(222.2 84% 4.9%)' },
+        },
+        borderRadius: { lg: '0.5rem', md: '0.375rem', sm: '0.25rem' },
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif; font-feature-settings: "rlig" 1, "calt" 1; }
+  .fade-in { animation: fadeIn .2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(2px);} to { opacity: 1; transform: translateY(0);} }
+  details > summary::-webkit-details-marker { display: none; }
+  details[open] .chevron { transform: rotate(90deg); }
+  .chevron { transition: transform .15s ease; }
+  .scrollable::-webkit-scrollbar { width: 6px; height: 6px; }
+  .scrollable::-webkit-scrollbar-thumb { background: hsl(214.3 31.8% 85%); border-radius: 3px; }
+  .scrollable::-webkit-scrollbar-track { background: transparent; }
+  /* shadcn focus ring */
+  input:focus, textarea:focus, select:focus, button:focus-visible {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+  .focus-ring:focus-visible {
+    box-shadow: 0 0 0 2px white, 0 0 0 4px hsl(222.2 84% 4.9%);
+  }
+  /* Drawer animation */
+  .drawer { transform: translateX(100%); transition: transform .3s cubic-bezier(0.32, 0.72, 0, 1); }
+  .drawer.open { transform: translateX(0); }
+  .drawer.config-workbench {
+    width: min(60vw, 960px) !important;
+    min-width: 760px;
+  }
+  .config-selection-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(280px, 2fr);
+    min-height: 0;
+  }
+  .config-step-button,
+  .config-platform-tab {
+    border-color: hsl(214.3 31.8% 91.4%);
+    background: hsl(0 0% 100%);
+    color: hsl(222.2 84% 4.9%);
+  }
+  .config-step-button:hover,
+  .config-platform-tab:hover {
+    background: hsl(210 40% 96.1% / .65);
+  }
+  .config-step-button[aria-current="step"] {
+    border-color: hsl(214.3 31.8% 87%);
+    background: hsl(210 40% 96.1%);
+    box-shadow: 0 1px 2px 0 hsl(222.2 47.4% 11.2% / .06);
+  }
+  .config-platform-tab[data-state="active"] {
+    border-color: hsl(214.3 31.8% 87%);
+    background: hsl(210 40% 96.1%);
+    box-shadow: 0 1px 2px 0 hsl(222.2 47.4% 11.2% / .06);
+  }
+  .config-step-button:focus-visible,
+  .config-platform-tab:focus-visible {
+    box-shadow: 0 0 0 2px hsl(0 0% 100%), 0 0 0 4px hsl(222.2 84% 4.9%);
+  }
+  @media (max-width: 1100px) {
+    .drawer.config-workbench {
+      width: 100vw !important;
+      min-width: 0;
+      max-width: none;
+    }
+  }
+  /* Smooth tab content */
+  .tab-pane { opacity: 0; transform: translateY(4px); transition: opacity .18s ease, transform .18s ease; pointer-events: none; position: absolute; inset: 0; }
+  .tab-pane.active { opacity: 1; transform: translateY(0); pointer-events: auto; position: relative; }
+  /* Drag handle */
+  .drag-item { transition: background-color .15s ease, transform .15s ease; }
+  .drag-item.dragging { opacity: .4; }
+  .drag-item.drag-over { border-top: 2px solid hsl(222.2 47.4% 11.2%); }
+  /* Drop zone */
+  .drop-zone.drag-active { border-color: hsl(222.2 47.4% 11.2%); background: hsl(210 40% 96.1%); }
+  /* Invalid id pill */
+  .pill-invalid { background: hsl(0 84% 95%); color: hsl(0 72% 41%); border-color: hsl(0 84% 87%); }
+  .pill-valid { background: hsl(143 64% 95%); color: hsl(142 70% 30%); border-color: hsl(143 64% 85%); }
+  /* Scene template cards */
+  .template-card { position: relative; overflow: hidden; }
+  .template-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: var(--template-accent, hsl(222.2 47.4% 11.2%));
+    opacity: 0;
+    transition: opacity .15s ease;
+  }
+  .template-card:hover::before, .template-card:focus-visible::before { opacity: 1; }
+  .template-filter {
+    height: 36px;
+    padding: 0 13px;
+    border: 1px solid hsl(214.3 31.8% 91.4%);
+    border-radius: 6px;
+    background: white;
+    color: hsl(215.4 16.3% 46.9%);
+    font-size: 12px;
+    font-weight: 500;
+    transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .template-filter:hover { border-color: hsl(215.4 16.3% 70%); color: hsl(222.2 84% 4.9%); }
+  .template-filter[aria-pressed="true"] {
+    border-color: hsl(222.2 47.4% 11.2%);
+    background: hsl(210 40% 96.1%);
+    color: hsl(222.2 47.4% 11.2%);
+    box-shadow: inset 0 0 0 1px hsl(222.2 47.4% 11.2%);
+  }
+  .platform-logo {
+    width: 30px;
+    height: 30px;
+    border: 1px solid hsl(214.3 31.8% 91.4%);
+    border-radius: 7px;
+    background: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+  .platform-stack { display: flex; align-items: center; padding-left: 8px; }
+  .platform-stack .platform-logo { margin-left: -8px; box-shadow: 0 0 0 2px white; }
+  .preview-chart-grid {
+    background-image:
+      linear-gradient(to right, hsl(214.3 31.8% 91.4% / .7) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(214.3 31.8% 91.4% / .7) 1px, transparent 1px);
+    background-size: 14.285% 100%, 100% 25%;
+  }
+  .config-section + .config-section { border-top: 1px solid hsl(214.3 31.8% 91.4%); }
+  .auth-attention { animation: authPulse .8s ease 2; }
+  @keyframes authPulse {
+    50% { box-shadow: 0 0 0 4px hsl(0 84% 90%); }
+  }
+  /* 隐藏左侧导航，仅保留主内容区 */
+  #primaryNav, #secondaryNav { display: none !important; }
+</style>
+</head>
+<body class="bg-background text-foreground text-sm antialiased">
+
+<div class="flex h-screen overflow-hidden">
+
+  <!-- ====================== 一级图标导航 ====================== -->
+  <nav id="primaryNav" class="w-[56px] bg-background border-r border-border flex flex-col items-center py-3 flex-shrink-0">
+    <!-- Logo -->
+    <div class="w-8 h-8 bg-foreground rounded-md flex items-center justify-center mb-4">
+      <span class="text-background text-sm font-semibold">C</span>
+    </div>
+    <!-- Icons -->
+    <div class="flex flex-col items-center gap-0.5 w-full px-1.5">
+      <button class="w-full h-11 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition" title="Dashboard">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        <span class="text-[10px] mt-0.5">Dashboard</span>
+      </button>
+      <button class="w-full h-11 rounded-md flex flex-col items-center justify-center bg-primary text-primary-foreground" title="Data">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+        <span class="text-[10px] mt-0.5">Data</span>
+      </button>
+      <button class="w-full h-11 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition" title="Processing">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <span class="text-[10px] mt-0.5">Processing</span>
+      </button>
+      <button class="w-full h-11 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition" title="Agent">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+        <span class="text-[10px] mt-0.5">Agent</span>
+      </button>
+      <button class="w-full h-11 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition" title="BI">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+        <span class="text-[10px] mt-0.5">BI</span>
+      </button>
+      <button class="w-full h-11 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition" title="Admin">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="text-[10px] mt-0.5">Admin</span>
+      </button>
+      <button class="w-full h-11 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition" title="Monitoring">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <span class="text-[10px] mt-0.5">Monitoring</span>
+      </button>
+      <button class="w-full h-11 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition" title="Ad Studio">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+        <span class="text-[10px] mt-0.5">Ad Studio</span>
+      </button>
+      <button class="w-full h-11 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition" title="Creation">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+        <span class="text-[10px] mt-0.5">Creation</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ====================== 二级菜单 ====================== -->
+  <aside id="secondaryNav" class="w-[240px] bg-background border-r border-border flex flex-col flex-shrink-0">
+    <div class="px-4 pt-4 pb-3 flex items-center justify-between border-b border-border">
+      <div class="flex items-center gap-2 min-w-0">
+        <div class="w-6 h-6 bg-secondary rounded flex items-center justify-center flex-shrink-0">
+          <span class="text-[11px] font-semibold">A</span>
+        </div>
+        <span class="text-sm font-medium truncate">All Workspaces</span>
+        <svg class="w-3 h-3 text-muted-foreground flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+      <button class="text-muted-foreground hover:text-foreground">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m11 17-5-5 5-5M18 17l-5-5 5-5"/></svg>
+      </button>
+    </div>
+
+    <div class="px-3 pt-4 pb-2">
+      <h2 class="text-xs font-semibold text-muted-foreground px-1">Data</h2>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto scrollable px-2 pb-2">
+      <button onclick="navTo('auto-report')" id="nav-auto-report"
+        class="nav-sub w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-sm font-medium transition mb-1">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span class="flex-1 text-left">Auto Report</span>
+      </button>
+
+      <div class="px-2.5 pt-3 pb-1.5">
+        <span class="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Custom Configuration</span>
+      </div>
+
+      <button onclick="navTo('sources')" id="nav-sources" class="nav-sub w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+        Sources
+      </button>
+      <button onclick="navTo('connectors')" id="nav-connectors" class="nav-sub w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6"/><path d="M15 2v6"/><path d="M12 17v5"/><path d="M5 8h14"/><path d="M6 11V8h12v3a6 6 0 0 1-12 0Z"/></svg>
+        Connectors
+      </button>
+      <button onclick="navTo('destinations')" id="nav-destinations" class="nav-sub w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>
+        Destinations
+      </button>
+      <button onclick="navTo('datasets')" id="nav-datasets" class="nav-sub w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+        Datasets
+      </button>
+    </nav>
+
+    <div class="p-3 border-t border-border">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center text-xs font-medium">T</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium truncate">Theodore</div>
+          <div class="text-xs text-muted-foreground">Pro plan</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ====================== 主内容区 ====================== -->
+  <main class="flex-1 overflow-y-auto scrollable">
+
+    <!-- ============ 页面 1: Auto Report 首页 ============ -->
+    <section id="page-auto-report" class="page">
+      <div class="max-w-4xl mx-auto px-8 py-10">
+
+        <!-- Header -->
+        <div class="mb-8">
+          <h1 class="text-2xl font-semibold tracking-tight mb-1.5">Auto Report</h1>
+          <p class="text-sm text-muted-foreground">用一句话描述你想要的报表，系统将自动完成数据授权、拉取、处理和报表生成。</p>
+        </div>
+
+        <!-- 自然语言输入卡片 -->
+        <div class="bg-card border border-border rounded-lg p-5 mb-3">
+          <label class="text-sm font-medium mb-2 block">描述你的需求</label>
+          <textarea id="nlInput" rows="3"
+            oninput="clearNLError()"
+            placeholder="例如：帮我生成 Meta Ads 和 TikTok 过去 30 天的转化和 ROAS 对比报表，按国家维度切片"
+            class="w-full text-sm text-foreground placeholder:text-muted-foreground bg-background border border-input rounded-md px-3 py-2 resize-none focus-ring outline-none transition"></textarea>
+          <p id="nlError" class="hidden text-xs text-red-600 mt-1.5" role="alert">请先描述你想生成的报表。</p>
+          <div class="flex items-center justify-between mt-3">
+            <div class="flex flex-wrap gap-1.5">
+              <button onclick="useExample(0)" class="text-xs px-2.5 py-1 border border-border rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition">跨平台广告效果</button>
+              <button onclick="useExample(1)" class="text-xs px-2.5 py-1 border border-border rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition">转化漏斗对比</button>
+              <button onclick="useExample(2)" class="text-xs px-2.5 py-1 border border-border rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition">月度花费追踪</button>
+            </div>
+            <button onclick="generateFromNL()" class="inline-flex items-center gap-1.5 px-4 h-9 bg-primary text-primary-foreground text-sm font-medium rounded-md hover:bg-primary/90 transition">
+              生成报表
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+        <p class="text-xs text-muted-foreground text-center mb-10">输入越具体，配置越精准。或者从下面的场景模板开始</p>
+
+        <!-- 场景模板 -->
+        <div class="mb-10">
+          <div class="flex items-end justify-between mb-3">
+            <div>
+              <h3 class="text-sm font-semibold">从场景模板开始</h3>
+              <p class="text-xs text-muted-foreground mt-1">按数据平台快速选择，支持单平台与跨平台联合分析</p>
+            </div>
+            <div class="flex items-center gap-3 flex-shrink-0">
+              <button type="button" onclick="openAddTemplate()" class="inline-flex items-center gap-1.5 px-3 h-9 text-sm font-medium rounded-md border border-border bg-background hover:bg-accent transition focus-ring">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                添加模板
+              </button>
+              <span id="templateCount" class="text-[11px] text-muted-foreground" aria-live="polite">6 个模板</span>
+            </div>
+          </div>
+
+          <div class="flex items-center mb-3">
+            <div class="flex flex-wrap gap-1.5" role="group" aria-label="按平台筛选场景模板">
+              <button type="button" class="template-filter focus-ring" data-template-filter="all" aria-pressed="true" onclick="filterTemplates('all')">全部</button>
+              <button type="button" class="template-filter focus-ring" data-template-filter="facebook" aria-pressed="false" onclick="filterTemplates('facebook')">Meta</button>
+              <button type="button" class="template-filter focus-ring" data-template-filter="google" aria-pressed="false" onclick="filterTemplates('google')">Google</button>
+              <button type="button" class="template-filter focus-ring" data-template-filter="tiktok" aria-pressed="false" onclick="filterTemplates('tiktok')">TikTok</button>
+              <button type="button" class="template-filter focus-ring" data-template-filter="amazon" aria-pressed="false" onclick="filterTemplates('amazon')">Amazon</button>
+              <button type="button" class="template-filter focus-ring" data-template-filter="multi" aria-pressed="false" onclick="filterTemplates('multi')">跨平台</button>
+            </div>
+          </div>
+
+          <div id="templateGrid" class="grid grid-cols-3 gap-3">
+            <!-- Meta 单平台 -->
+            <button onclick="openTemplatePreview('performance', ['facebook'])"
+              data-platforms="facebook" data-multi="false"
+              style="--template-accent:#1877F2"
+              class="template-card min-h-[210px] flex flex-col text-left bg-card border border-border hover:border-foreground/30 hover:bg-accent/20 rounded-lg p-4 transition focus-ring">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2.5">
+                  <span class="platform-logo" title="Meta">
+                    <svg class="w-5 h-5" viewBox="0 0 32 20" fill="none" aria-hidden="true">
+                      <path d="M3 16.5C4.7 9.2 7.6 3.5 11.2 3.5c4.9 0 7.3 13 11.4 13 2.5 0 4.4-3.7 6.4-10.1" stroke="#1877F2" stroke-width="3" stroke-linecap="round"/>
+                      <path d="M3 16.5C5 9.8 7.5 3.5 11.2 3.5c4.8 0 7.2 13 11.4 13 3.4 0 5.2-6.8 6.4-10.1" stroke="#1877F2" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <div class="text-[10px] uppercase tracking-wider text-muted-foreground">单平台</div>
+                    <div class="text-sm font-semibold leading-tight">Meta Ads</div>
+                  </div>
+                </div>
+                <svg class="w-4 h-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+              </div>
+              <h4 class="font-medium text-sm mb-1.5">广告效果分析</h4>
+              <p class="text-xs text-muted-foreground leading-relaxed">查看花费、展示、点击、CTR、CPC 与 CPM 趋势</p>
+              <div class="mt-auto pt-4 flex items-center justify-end">
+                <span class="text-[10px] text-muted-foreground">12 字段 · 6 指标</span>
+              </div>
+            </button>
+
+            <!-- Google 单平台 -->
+            <button onclick="openTemplatePreview('budget', ['google'])"
+              data-platforms="google" data-multi="false"
+              style="--template-accent:#4285F4"
+              class="template-card min-h-[210px] flex flex-col text-left bg-card border border-border hover:border-foreground/30 hover:bg-accent/20 rounded-lg p-4 transition focus-ring">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2.5">
+                  <span class="platform-logo" title="Google Ads">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M8.2 3.2a3.1 3.1 0 0 1 4.2 1.15l7.05 12.2a3.05 3.05 0 0 1-5.28 3.05L7.1 7.4A3.1 3.1 0 0 1 8.2 3.2Z" fill="#4285F4"/>
+                      <path d="M10.9 7.4 5.35 17a3.05 3.05 0 1 0 5.28 3.05l3.15-5.45-2.88-7.2Z" fill="#34A853"/>
+                      <circle cx="7.98" cy="18.52" r="3.05" fill="#FBBC04"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <div class="text-[10px] uppercase tracking-wider text-muted-foreground">单平台</div>
+                    <div class="text-sm font-semibold leading-tight">Google Ads</div>
+                  </div>
+                </div>
+                <svg class="w-4 h-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+              </div>
+              <h4 class="font-medium text-sm mb-1.5">花费 &amp; 预算追踪</h4>
+              <p class="text-xs text-muted-foreground leading-relaxed">按广告账号与 Campaign 追踪预算使用和超支风险</p>
+              <div class="mt-auto pt-4 flex items-center justify-end">
+                <span class="text-[10px] text-muted-foreground">8 字段 · 5 指标</span>
+              </div>
+            </button>
+
+            <!-- TikTok 单平台 -->
+            <button onclick="openTemplatePreview('conversion', ['tiktok'])"
+              data-platforms="tiktok" data-multi="false"
+              style="--template-accent:#161823"
+              class="template-card min-h-[210px] flex flex-col text-left bg-card border border-border hover:border-foreground/30 hover:bg-accent/20 rounded-lg p-4 transition focus-ring">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2.5">
+                  <span class="platform-logo" title="TikTok Ads">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M14.3 3v11.25a4.65 4.65 0 1 1-4-4.6" stroke="#25F4EE" stroke-width="3" stroke-linecap="round"/>
+                      <path d="M14.3 3c.35 2.7 1.9 4.25 4.7 4.55" stroke="#FE2C55" stroke-width="3" stroke-linecap="round"/>
+                      <path d="M13.3 2v11.25a4.65 4.65 0 1 1-4-4.6M13.3 2c.35 2.7 1.9 4.25 4.7 4.55" stroke="#161823" stroke-width="2.2" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <div class="text-[10px] uppercase tracking-wider text-muted-foreground">单平台</div>
+                    <div class="text-sm font-semibold leading-tight">TikTok Ads</div>
+                  </div>
+                </div>
+                <svg class="w-4 h-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+              </div>
+              <h4 class="font-medium text-sm mb-1.5">转化与 ROAS</h4>
+              <p class="text-xs text-muted-foreground leading-relaxed">监控转化漏斗、CPA 和 ROAS，定位高效广告组合</p>
+              <div class="mt-auto pt-4 flex items-center justify-end">
+                <span class="text-[10px] text-muted-foreground">9 字段 · 11 指标</span>
+              </div>
+            </button>
+
+            <!-- Amazon 单平台 -->
+            <button onclick="openTemplatePreview('performance', ['amazon'])"
+              data-platforms="amazon" data-multi="false"
+              style="--template-accent:#FF9900"
+              class="template-card min-h-[210px] flex flex-col text-left bg-card border border-border hover:border-foreground/30 hover:bg-accent/20 rounded-lg p-4 transition focus-ring">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2.5">
+                  <span class="platform-logo" title="Amazon Ads">
+                    <svg class="w-5 h-5" viewBox="0 0 28 22" fill="none" aria-hidden="true">
+                      <path d="M8.2 14.8V9.4c0-3 1.8-4.7 5.2-4.7 3.5 0 5.4 1.7 5.4 4.8v5.3M8.4 10.2h10.2" stroke="#111827" stroke-width="2.2" stroke-linecap="round"/>
+                      <path d="M5 17c4.8 3.1 11.6 3.2 17 .2" stroke="#FF9900" stroke-width="2" stroke-linecap="round"/>
+                      <path d="m19.8 16.2 2.5.7-1.1 2.3" stroke="#FF9900" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <div class="text-[10px] uppercase tracking-wider text-muted-foreground">单平台</div>
+                    <div class="text-sm font-semibold leading-tight">Amazon Ads</div>
+                  </div>
+                </div>
+                <svg class="w-4 h-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+              </div>
+              <h4 class="font-medium text-sm mb-1.5">零售广告效果分析</h4>
+              <p class="text-xs text-muted-foreground leading-relaxed">追踪花费、点击、归因销售额与 ROAS，评估商品推广效率</p>
+              <div class="mt-auto pt-4 flex items-center justify-end">
+                <span class="text-[10px] text-muted-foreground">12 字段 · 6 指标</span>
+              </div>
+            </button>
+
+            <!-- Meta + TikTok 跨平台 -->
+            <button onclick="openTemplatePreview('performance', ['facebook','tiktok'])"
+              data-platforms="facebook,tiktok" data-multi="true"
+              style="--template-accent:#7C3AED"
+              class="template-card min-h-[210px] flex flex-col text-left bg-card border border-border hover:border-foreground/30 hover:bg-accent/20 rounded-lg p-4 transition focus-ring">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <span class="platform-stack" aria-label="Meta 和 TikTok">
+                    <span class="platform-logo">
+                      <svg class="w-5 h-5" viewBox="0 0 32 20" fill="none" aria-hidden="true"><path d="M3 16.5C4.7 9.2 7.6 3.5 11.2 3.5c4.9 0 7.3 13 11.4 13 2.5 0 4.4-3.7 6.4-10.1" stroke="#1877F2" stroke-width="3" stroke-linecap="round"/></svg>
+                    </span>
+                    <span class="platform-logo">
+                      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13.3 2v11.25a4.65 4.65 0 1 1-4-4.6M13.3 2c.35 2.7 1.9 4.25 4.7 4.55" stroke="#161823" stroke-width="2.3" stroke-linecap="round"/></svg>
+                    </span>
+                  </span>
+                  <div>
+                    <div class="text-[10px] uppercase tracking-wider text-violet-600 font-semibold">跨平台</div>
+                    <div class="text-sm font-semibold leading-tight">Meta × TikTok</div>
+                  </div>
+                </div>
+                <span class="text-[10px] text-muted-foreground border border-border rounded px-2 py-1">2 个数据源</span>
+              </div>
+              <h4 class="font-medium text-sm mb-1.5">跨平台广告效果对比</h4>
+              <p class="text-xs text-muted-foreground leading-relaxed">统一口径对齐两端 KPI，快速比较渠道效率与趋势</p>
+              <div class="mt-auto pt-4 flex items-center gap-1.5">
+                <span class="px-2 py-1 text-[10px] font-medium bg-blue-50 text-blue-700 border border-blue-100 rounded">Meta</span>
+                <span class="px-2 py-1 text-[10px] font-medium bg-slate-100 text-slate-700 border border-slate-200 rounded">TikTok</span>
+              </div>
+            </button>
+
+            <!-- Meta + TikTok + Adjust 跨平台 -->
+            <button onclick="openTemplatePreview('conversion', ['facebook','tiktok','adjust'])"
+              data-platforms="facebook,tiktok,adjust" data-multi="true"
+              style="--template-accent:#7C3AED"
+              class="template-card min-h-[210px] flex flex-col text-left bg-card border border-border hover:border-foreground/30 hover:bg-accent/20 rounded-lg p-4 transition focus-ring">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <span class="platform-stack" aria-label="Meta、TikTok 和 Adjust">
+                    <span class="platform-logo">
+                      <svg class="w-5 h-5" viewBox="0 0 32 20" fill="none" aria-hidden="true"><path d="M3 16.5C4.7 9.2 7.6 3.5 11.2 3.5c4.9 0 7.3 13 11.4 13 2.5 0 4.4-3.7 6.4-10.1" stroke="#1877F2" stroke-width="3" stroke-linecap="round"/></svg>
+                    </span>
+                    <span class="platform-logo">
+                      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13.3 2v11.25a4.65 4.65 0 1 1-4-4.6M13.3 2c.35 2.7 1.9 4.25 4.7 4.55" stroke="#161823" stroke-width="2.3" stroke-linecap="round"/></svg>
+                    </span>
+                    <span class="platform-logo">
+                      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 18 10.5 6h3L19 18M7.4 13h9.2" stroke="#111827" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18.5" cy="5.5" r="2" fill="#6D28D9"/></svg>
+                    </span>
+                  </span>
+                  <div>
+                    <div class="text-[10px] uppercase tracking-wider text-violet-600 font-semibold">跨平台</div>
+                    <div class="text-sm font-semibold leading-tight">投放 × 归因</div>
+                  </div>
+                </div>
+                <span class="text-[10px] text-muted-foreground border border-border rounded px-2 py-1">3 个数据源</span>
+              </div>
+              <h4 class="font-medium text-sm mb-1.5">全链路转化归因</h4>
+              <p class="text-xs text-muted-foreground leading-relaxed">结合媒体投放与 Adjust 归因，分析真实转化和 ROAS</p>
+              <div class="mt-auto pt-4 flex items-center gap-1.5">
+                <span class="px-2 py-1 text-[10px] font-medium bg-blue-50 text-blue-700 border border-blue-100 rounded">Meta</span>
+                <span class="px-2 py-1 text-[10px] font-medium bg-slate-100 text-slate-700 border border-slate-200 rounded">TikTok</span>
+                <span class="px-2 py-1 text-[10px] font-medium bg-violet-50 text-violet-700 border border-violet-100 rounded">Adjust</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- 最近报表 -->
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-semibold">最近报表</h3>
+            <button class="text-xs text-muted-foreground hover:text-foreground">查看全部</button>
+          </div>
+          <div class="bg-card border border-border rounded-lg overflow-hidden">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b border-border">
+                  <th class="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">报表名称</th>
+                  <th class="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">场景</th>
+                  <th class="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">数据源</th>
+                  <th class="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">最后更新</th>
+                  <th class="text-right px-4 py-2.5 text-xs font-medium text-muted-foreground">操作</th>
+                </tr>
+              </thead>
+              <tbody id="recentReportsBody">
+                <tr class="border-b border-border hover:bg-accent/30 transition">
+                  <td class="px-4 py-2.5 text-sm font-medium">FB_User18_20260408</td>
+                  <td class="px-4 py-2.5 text-sm text-muted-foreground">广告效果分析</td>
+                  <td class="px-4 py-2.5 text-xs text-muted-foreground">Meta Ads</td>
+                  <td class="px-4 py-2.5 text-xs text-muted-foreground">2026/05/24 18:00</td>
+                  <td class="px-4 py-2.5 text-right"><button class="text-xs font-medium hover:underline">查看</button></td>
+                </tr>
+                <tr class="border-b border-border hover:bg-accent/30 transition">
+                  <td class="px-4 py-2.5 text-sm font-medium">My Custom Scenario Dashboard</td>
+                  <td class="px-4 py-2.5 text-sm text-muted-foreground">转化与 ROAS</td>
+                  <td class="px-4 py-2.5 text-xs text-muted-foreground">Meta Ads, TikTok Ads</td>
+                  <td class="px-4 py-2.5 text-xs text-muted-foreground">2026/05/23 09:00</td>
+                  <td class="px-4 py-2.5 text-right"><button class="text-xs font-medium hover:underline">查看</button></td>
+                </tr>
+                <tr class="hover:bg-accent/30 transition">
+                  <td class="px-4 py-2.5 text-sm font-medium">fb_report Dashboard</td>
+                  <td class="px-4 py-2.5 text-sm text-muted-foreground">花费 &amp; 预算追踪</td>
+                  <td class="px-4 py-2.5 text-xs text-muted-foreground">Meta Ads</td>
+                  <td class="px-4 py-2.5 text-xs text-muted-foreground">2026/05/22 18:00</td>
+                  <td class="px-4 py-2.5 text-right"><button class="text-xs font-medium hover:underline">查看</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 页面 2: 模板报表预览 ============ -->
+    <section id="page-template-preview" class="page hidden">
+      <div class="min-h-full bg-muted/20">
+        <header class="sticky top-0 z-20 bg-background/95 backdrop-blur border-b border-border">
+          <div class="max-w-[1180px] mx-auto px-8 py-4 flex items-center justify-between gap-6">
+            <div class="min-w-0">
+              <button onclick="navTo('auto-report')" class="text-xs text-muted-foreground hover:text-foreground mb-1.5 inline-flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                返回
+              </button>
+              <h1 id="previewReportName" class="text-xl font-semibold tracking-tight truncate">报表预览</h1>
+              <p id="previewReportMeta" class="text-xs text-muted-foreground mt-1">最近 30 天 · 综合 Dashboard</p>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <button onclick="openConfigDrawer()" class="inline-flex items-center gap-1.5 px-4 h-10 text-sm font-medium rounded-md border border-border bg-background hover:bg-accent transition">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                修改配置
+              </button>
+              <button onclick="generateTemplateReport()" class="inline-flex items-center gap-1.5 px-4 h-10 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+                生成报表
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <div class="max-w-[1180px] mx-auto px-8 py-6">
+          <div id="authorizationPanel" class="mb-5"></div>
+          <div id="templateConfigError" class="hidden mb-4 px-4 py-3 border border-red-200 bg-red-50 text-red-700 rounded-md text-sm" role="alert"></div>
+          <div id="dashboardPreview"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 页面 3: Auto Report 向导 ============ -->
+    <section id="page-wizard" class="page hidden">
+      <div class="h-full flex flex-col">
+        <!-- 顶部 -->
+        <div class="bg-background border-b border-border px-8 py-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <button onclick="navTo('auto-report')" class="text-xs text-muted-foreground hover:text-foreground mb-1 inline-flex items-center gap-1">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                返回 Auto Report
+              </button>
+              <h1 class="text-xl font-semibold tracking-tight">
+                Auto Report
+                <span class="text-muted-foreground mx-1.5 font-normal">/</span>
+                <span id="wizard-scenario-name">新建报表</span>
+              </h1>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs border border-border rounded-md"><span class="text-muted-foreground">账户</span> <b id="summary-fields">0</b></span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs border border-border rounded-md"><span class="text-muted-foreground">维度</span> <b id="summary-segments">0</b></span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs border border-border rounded-md"><span class="text-muted-foreground">指标</span> <b id="summary-metrics">0</b></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-1 flex overflow-hidden">
+          <!-- 左侧 Stepper -->
+          <aside class="w-[260px] bg-background border-r border-border py-8 px-6 overflow-y-auto scrollable">
+            <ol id="stepper" class="relative"></ol>
+          </aside>
+
+          <!-- 右侧步骤内容 -->
+          <section class="flex-1 overflow-y-auto scrollable bg-muted/30" id="stepContent"></section>
+        </div>
+
+        <!-- 底部操作栏 -->
+        <div class="bg-background border-t border-border px-8 py-3 flex items-center justify-between">
+          <button id="btnPrev" onclick="prevStep()" class="inline-flex items-center gap-1.5 px-3 h-9 text-sm rounded-md border border-border bg-background hover:bg-accent transition disabled:opacity-50 disabled:cursor-not-allowed">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+            上一步
+          </button>
+          <div class="text-center">
+            <div id="wizardValidation" class="min-h-[16px] text-xs text-red-600 mb-0.5" role="status"></div>
+            <div class="text-xs text-muted-foreground"><span id="stepIndicator">1</span> / 4</div>
+          </div>
+          <button id="btnNext" onclick="nextStep()" class="inline-flex items-center gap-1.5 px-4 h-9 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed">
+            下一步
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 页面 3: Sources ============ -->
+    <section id="page-sources" class="page hidden">
+      <div class="max-w-7xl mx-auto px-8 py-8">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h1 class="text-2xl font-semibold tracking-tight">Sources</h1>
+            <p class="text-sm text-muted-foreground mt-1">管理数据源平台账号授权</p>
+          </div>
+          <div class="flex gap-2">
+            <button class="inline-flex items-center gap-1.5 px-3 h-9 text-sm rounded-md border border-border bg-background hover:bg-accent">Seeds</button>
+            <button class="inline-flex items-center gap-1.5 px-3 h-9 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              添加数据源
+            </button>
+          </div>
+        </div>
+        <div class="inline-flex bg-muted rounded-md p-1 mb-5">
+          <button class="px-3 h-7 text-sm bg-background shadow-sm rounded font-medium">媒体平台</button>
+          <button class="px-3 h-7 text-sm text-muted-foreground rounded">其他</button>
+        </div>
+        <div class="bg-card border border-border rounded-lg p-5 mb-5">
+          <h3 class="text-sm font-semibold mb-3">可用数据源</h3>
+          <div class="grid grid-cols-3 gap-3" id="sourcesGrid"></div>
+        </div>
+        <div class="bg-card border border-border rounded-lg p-5">
+          <h3 class="text-sm font-semibold mb-3">数据源账户</h3>
+          <table class="w-full">
+            <thead><tr class="border-b border-border"><th class="text-left py-2 text-xs font-medium text-muted-foreground">平台</th><th class="text-left py-2 text-xs font-medium text-muted-foreground">邮箱</th><th class="text-left py-2 text-xs font-medium text-muted-foreground">用户</th><th class="text-left py-2 text-xs font-medium text-muted-foreground">状态</th><th class="text-left py-2 text-xs font-medium text-muted-foreground">创建时间</th></tr></thead>
+            <tbody>
+              <tr class="border-b border-border"><td class="py-2.5 text-sm">Feishu</td><td class="py-2.5 text-sm text-muted-foreground">theodore.cai@tec-do.com</td><td class="py-2.5 text-sm">蔡雨廷</td><td class="py-2.5"><span class="text-xs border border-border px-2 py-0.5 rounded">ACTIVE</span></td><td class="py-2.5 text-sm text-muted-foreground">4/10/2026</td></tr>
+              <tr><td class="py-2.5 text-sm">Meta Ads</td><td class="py-2.5 text-sm text-muted-foreground">mtc00074@tec-do.com</td><td class="py-2.5 text-sm">Angie Yi</td><td class="py-2.5"><span class="text-xs border border-border px-2 py-0.5 rounded">ACTIVE</span></td><td class="py-2.5 text-sm text-muted-foreground">4/9/2026</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-connectors" class="page hidden"><div class="p-10 text-center text-muted-foreground text-sm">Connectors 页面</div></section>
+    <section id="page-destinations" class="page hidden"><div class="p-10 text-center text-muted-foreground text-sm">Destinations 页面</div></section>
+    <section id="page-datasets" class="page hidden"><div class="p-10 text-center text-muted-foreground text-sm">Datasets 页面</div></section>
+
+    <!-- ============ 右侧抽屉 ============ -->
+    <aside id="drawer" class="drawer fixed top-0 right-0 h-full w-[560px] bg-background border-l border-border z-40 flex flex-col shadow-lg">
+      <header class="px-5 py-3.5 border-b border-border flex items-center justify-between">
+        <div>
+          <h3 id="drawerTitle" class="text-base font-semibold tracking-tight">编辑</h3>
+          <p id="drawerSubtitle" class="text-xs text-muted-foreground mt-0.5">—</p>
+        </div>
+        <div class="flex items-center gap-1">
+          <button onclick="resetDrawerDefault()" id="drawerResetBtn" class="text-xs px-2.5 h-7 border border-border rounded-md hover:bg-accent transition inline-flex items-center gap-1">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+            恢复默认
+          </button>
+          <button onclick="cancelDrawer()" aria-label="关闭编辑抽屉" class="w-9 h-9 rounded-md hover:bg-accent flex items-center justify-center text-muted-foreground hover:text-foreground transition">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </header>
+      <div id="drawerContent" class="flex-1 overflow-hidden flex flex-col"></div>
+      <footer id="drawerFooter" class="border-t border-border bg-background"></footer>
+    </aside>
+
+    <!-- ============ 放弃配置确认 ============ -->
+    <div id="discardConfigModal" class="hidden fixed inset-0 bg-black/35 z-[60] flex items-center justify-center backdrop-blur-sm">
+      <div class="w-[400px] bg-background border border-border rounded-lg shadow-lg p-5 fade-in" role="dialog" aria-modal="true" aria-labelledby="discardConfigTitle">
+        <h3 id="discardConfigTitle" class="text-base font-semibold">放弃未应用的修改？</h3>
+        <p class="text-sm text-muted-foreground mt-2">账户、维度、指标或调度中的修改将恢复为打开配置前的状态。</p>
+        <div class="flex justify-end gap-2 mt-5">
+          <button onclick="hideDiscardConfigModal()" class="h-9 px-4 text-sm border border-border rounded-md hover:bg-accent transition">继续编辑</button>
+          <button onclick="confirmDiscardConfig()" class="h-9 px-4 text-sm font-medium bg-red-600 text-white rounded-md hover:bg-red-700 transition">放弃修改</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 成功对话框 ============ -->
+    <div id="successModal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center backdrop-blur-sm">
+      <div class="bg-background border border-border rounded-lg shadow-lg w-[440px] p-6 fade-in">
+        <div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center mb-4">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h3 class="text-lg font-semibold tracking-tight mb-1">报表已创建</h3>
+        <p class="text-sm text-muted-foreground mb-5">配置已保存，首次数据同步正在进行</p>
+        <div class="border border-border rounded-md p-3 mb-5 text-sm space-y-1.5">
+          <div class="flex justify-between"><span class="text-muted-foreground">报表名称</span><span class="font-medium" id="success-name">—</span></div>
+          <div class="flex justify-between"><span class="text-muted-foreground">数据源</span><span class="font-medium" id="success-sources">—</span></div>
+          <div class="flex justify-between"><span class="text-muted-foreground">首次同步</span><span class="font-medium">已开始 · 预计 2 分钟</span></div>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="stayOnWizard()" class="flex-1 px-4 h-10 border border-border rounded-md text-sm hover:bg-accent transition">留在这里</button>
+          <button onclick="viewGeneratedReport()" class="flex-1 px-4 h-10 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90 font-medium transition">查看最近报表</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- =========================== JS =========================== -->
+<script>
+/* ============ 数据模型 ============ */
+const SCENARIOS = {
+  performance: {
+    name: '广告效果分析',
+    desc: '跨平台 KPI 总览：花费、展示、点击、CTR、CPC、CPM 趋势对比',
+    fields: 12, segments: ['Date', 'Day Of Week', 'Device'],
+    metrics: ['Cost Micros', 'Impressions', 'Clicks', 'Ctr', 'Average Cpc', 'Average Cpm'],
+    suggestedDashboard: ['消耗 (Spend)', '展示 (Impressions)', '点击 (Clicks)', 'CTR', 'CPC', 'CPM'],
+  },
+  conversion: {
+    name: '转化与 ROAS',
+    desc: '转化漏斗 + 归因分析 + ROAS 与 CPA 监控',
+    fields: 9, segments: ['Date', 'Conversion Action', 'Device'],
+    metrics: ['Conversions', 'Conversions Value', 'Cost Per Conversion', 'All Conversions', 'Cross Device Conversions', 'Current Model Attributed Conversions', 'Value Per All Conversions', 'Conversions From Interactions Rate', 'Conversions By Conversion Date', 'Conversions Value By Conversion Date', 'All Conversions Value'],
+    suggestedDashboard: ['总转化', '转化价值', 'ROAS', 'CPA', '转化漏斗', '归因路径'],
+  },
+  budget: {
+    name: '花费 & 预算追踪',
+    desc: '日/周/月花费明细、预算使用率、超支预警',
+    fields: 8, segments: ['Date', 'Month', 'Week'],
+    metrics: ['Cost Micros', 'Average Cost', 'Impressions', 'Clicks', 'Average Cpc'],
+    suggestedDashboard: ['总花费', '日均花费', '预算使用率', '花费趋势', '按账号', '按活动'],
+  },
+};
+
+const DASHBOARD_MOCK_DATA = {
+  kpis: [
+    { label: '总花费', value: '¥428,760', change: '+12.4%', direction: 'up' },
+    { label: '展示量', value: '36.82M', change: '+8.7%', direction: 'up' },
+    { label: '点击量', value: '812.4K', change: '+15.2%', direction: 'up' },
+    { label: 'CTR', value: '2.21%', change: '+0.18%', direction: 'up' },
+    { label: '转化数', value: '24,682', change: '-2.6%', direction: 'down' },
+    { label: 'ROAS', value: '4.76', change: '+6.1%', direction: 'up' },
+  ],
+  trend: {
+    current: [42,46,44,51,49,56,61,58,64,68,65,72,76,74,79,83,80,86,91,88,94,98,96,103,107,105,112,117,114,121],
+    previous: [36,39,41,43,45,47,50,52,54,55,57,59,61,63,65,68,70,71,73,75,77,80,81,83,85,87,89,91,93,95],
+    labels: ['05/08','05/12','05/16','05/20','05/24','05/28','06/02','06/06'],
+  },
+  distribution: [
+    { label: '品牌广告', value: 38, color: '#111827' },
+    { label: '效果广告', value: 31, color: '#4B5563' },
+    { label: '再营销', value: 19, color: '#9CA3AF' },
+    { label: '其他', value: 12, color: '#E5E7EB' },
+  ],
+  rows: [
+    { account: 'Brand Main · US', campaign: 'Summer Launch · Prospecting', spend: '¥86,420', impressions: '7.42M', clicks: '168.2K', conversions: '5,482', roas: '5.34' },
+    { account: 'Performance · EU', campaign: 'Always-on · Purchase', spend: '¥74,860', impressions: '6.18M', clicks: '139.5K', conversions: '4,106', roas: '4.92' },
+    { account: 'App Install · APAC', campaign: 'App Growth · Broad', spend: '¥69,310', impressions: '5.96M', clicks: '126.8K', conversions: '3,874', roas: '4.21' },
+    { account: 'TikTok Brand · Global', campaign: 'Creator Spark · Video', spend: '¥61,780', impressions: '5.32M', clicks: '117.6K', conversions: '3,251', roas: '4.08' },
+    { account: 'Google Ads · Search', campaign: 'Brand Search · Exact', spend: '¥54,260', impressions: '4.48M', clicks: '104.3K', conversions: '3,006', roas: '5.72' },
+    { account: 'Google Ads · YouTube', campaign: 'Video Action · Remarketing', spend: '¥45,970', impressions: '4.03M', clicks: '86.1K', conversions: '2,184', roas: '3.86' },
+    { account: 'Retail Media · Core', campaign: 'Sponsored Products · Hero', spend: '¥36,160', impressions: '3.43M', clicks: '70.0K', conversions: '1,762', roas: '4.45' },
+  ],
+};
+
+const PLATFORMS = [
+  { id: 'facebook', name: 'Meta Ads', connected: true, accounts: 5 },
+  { id: 'tiktok', name: 'TikTok Ads', connected: false },
+  { id: 'google', name: 'Google Ads', connected: false },
+  { id: 'amazon', name: 'Amazon Ads', connected: false },
+  { id: 'adjust', name: 'Adjust', connected: false },
+  { id: 'linkedin', name: 'LinkedIn Ads', connected: false },
+  { id: 'twitter', name: 'X (Twitter) Ads', connected: false },
+  { id: 'snapchat', name: 'Snapchat Ads', connected: false },
+];
+
+const NL_EXAMPLES = [
+  '帮我生成 Meta Ads、TikTok、Google 过去 30 天的广告效果对比报表',
+  '我想看过去 90 天 Meta Ads 和 TikTok 各转化事件的 ROAS 与 CPA',
+  '生成本月所有平台的预算使用率和超支预警报表',
+];
+
+const WIZARD_STEPS = [
+  { id: 'goal', name: '确认目标', desc: '场景与报表名' },
+  { id: 'sources', name: '连接数据源', desc: '选择平台与账号' },
+  { id: 'config', name: '智能配置', desc: '账户、维度与指标' },
+  { id: 'generate', name: '预览并生成', desc: '确认并创建报表' },
+];
+
+/* ============ 账户数据（按平台） ============ */
+const PLATFORM_ACCOUNTS = {
+  facebook: [
+    { id: 'act_1729384756', name: 'Brand Main · US', status: 'active', created: '2025-03-12' },
+    { id: 'act_8273645102', name: 'Performance · EU', status: 'active', created: '2025-04-20' },
+    { id: 'act_5647382910', name: 'App Install · APAC', status: 'active', created: '2025-06-08' },
+    { id: 'act_3948572610', name: 'Retargeting · LATAM', status: 'paused', created: '2024-11-15' },
+    { id: 'act_2837465019', name: 'Test Account', status: 'paused', created: '2024-09-01' },
+  ],
+  tiktok: [
+    { id: 'tt_6921837465', name: 'TikTok Brand · Global', status: 'active', created: '2025-02-18' },
+    { id: 'tt_7283649102', name: 'TikTok Performance · US', status: 'active', created: '2025-05-30' },
+  ],
+  google: [
+    { id: 'gads_847-293-1056', name: 'Google Ads · Search', status: 'active', created: '2024-08-22' },
+    { id: 'gads_392-847-2018', name: 'Google Ads · YouTube', status: 'active', created: '2025-01-10' },
+    { id: 'gads_184-739-2837', name: 'Google Ads · Display', status: 'active', created: '2025-04-05' },
+  ],
+  amazon: [
+    { id: 'amz_84291037', name: 'Amazon Ads · US Store', status: 'active', created: '2025-02-12' },
+    { id: 'amz_57382014', name: 'Amazon Ads · EU Store', status: 'active', created: '2025-05-18' },
+  ],
+  adjust: [
+    { id: 'adj_23847109', name: 'Adjust · Global App', status: 'active', created: '2025-03-21' },
+  ],
+  linkedin: [
+    { id: 'li_63729104', name: 'LinkedIn · B2B Global', status: 'active', created: '2025-01-14' },
+  ],
+  twitter: [
+    { id: 'tw_84720193', name: 'X Ads · Brand Global', status: 'active', created: '2025-04-09' },
+  ],
+  snapchat: [
+    { id: 'sc_47290183', name: 'Snapchat · App Growth', status: 'active', created: '2025-05-02' },
+  ],
+};
+
+/* 维度分类（语义分组） */
+const SEGMENT_CATEGORIES = {
+  '时间 Time': ['Date', 'Day Of Week', 'Hour', 'Week', 'Month', 'Month Of Year', 'Quarter', 'Year'],
+  '设备 Device': ['Device', 'Device Preference', 'OS Version'],
+  '地理 Geography': ['Country', 'Region', 'City', 'Metro'],
+  '受众 Audience': ['Age Range', 'Gender'],
+  '转化 Conversion': ['Conversion Action', 'Conversion Action Category', 'Conversion Lag Bucket'],
+  '网络 Network': ['Ad Network Type', 'Click Type', 'Slot'],
+};
+
+/* 指标分类 */
+const METRIC_CATEGORIES = {
+  '花费 Cost': ['Cost Micros', 'Average Cost', 'Average Cpc', 'Average Cpe', 'Average Cpm', 'Average Cpv'],
+  '互动 Engagement': ['Impressions', 'Clicks', 'Ctr', 'Interactions', 'Interaction Rate', 'Engagements'],
+  '转化 Conversion': ['Conversions', 'Conversions Value', 'Cost Per Conversion', 'Value Per Conversion', 'Conversions From Interactions Rate'],
+  '归因 Attribution': ['All Conversions', 'All Conversions Value', 'Cross Device Conversions', 'Current Model Attributed Conversions', 'Value Per All Conversions'],
+  '视频 Video': ['Video Views', 'Video View Rate', 'Average Cpv'],
+};
+
+/* 默认场景下的维度/指标（启动向导时初始化） */
+let selectedSegments = new Set();
+let selectedMetrics = new Set();
+/* 账户选择状态：{ facebook: { mode:'list'|'manual'|'upload', list:Set, manual:'', upload:[] } } */
+let accountState = {};
+
+/* Drawer 状态 */
+let drawerType = null;         // 'accounts' | 'segments' | 'metrics'
+let drawerSnapshot = null;     // 打开时的快照，用于"取消"
+let drawerAccountPlatform = null;  // 当前激活的平台 Tab
+let drawerAccountMode = 'list';    // 'list' | 'manual' | 'upload'
+let drawerCatSearch = '';
+
+/* ============ 状态 ============ */
+let currentScenario = null;
+let currentNL = '';
+let currentStep = 0;
+let maxUnlockedStep = 0;
+let selectedPlatforms = new Set(['facebook']);
+let reportName = '';
+let authPanelExpanded = false;
+let templateAuthorizationError = '';
+let syncFrequency = 'daily';
+let configSegmentSearch = '';
+let configMetricSearch = '';
+let configActiveStep = 0;
+let configDirty = false;
+let configScheduleExpanded = false;
+let configValidationMessage = '';
+
+/* ============ 页面切换 ============ */
+function navTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+  document.getElementById(`page-${page}`).classList.remove('hidden');
+  document.querySelectorAll('.nav-sub').forEach(n => {
+    n.classList.remove('bg-accent','text-foreground');
+    n.classList.add('text-muted-foreground');
+  });
+  // Auto Report 自身样式恢复 (不在循环里因为它是 font-medium)
+  const ar = document.getElementById('nav-auto-report');
+  ar.classList.remove('bg-accent','text-muted-foreground');
+  ar.classList.add('text-foreground');
+  if (page === 'auto-report' || page === 'wizard' || page === 'template-preview') {
+    ar.classList.add('bg-accent');
+  }
+  const nav = document.getElementById(`nav-${page}`);
+  if (nav && page !== 'auto-report') {
+    nav.classList.add('bg-accent','text-foreground');
+    nav.classList.remove('text-muted-foreground');
+  }
+}
+
+/* ============ NL 入口 ============ */
+function useExample(i) { document.getElementById('nlInput').value = NL_EXAMPLES[i]; }
+
+function clearNLError() {
+  document.getElementById('nlError')?.classList.add('hidden');
+}
+
+function filterTemplates(filter) {
+  const cards = [...document.querySelectorAll('#templateGrid .template-card')];
+  let visibleCount = 0;
+
+  cards.forEach(card => {
+    const platforms = (card.dataset.platforms || '').split(',');
+    const isMulti = card.dataset.multi === 'true';
+    const shouldShow = filter === 'all'
+      || (filter === 'multi' ? isMulti : !isMulti && platforms.includes(filter));
+    card.classList.toggle('hidden', !shouldShow);
+    if (shouldShow) visibleCount++;
+  });
+
+  document.querySelectorAll('.template-filter').forEach(button => {
+    button.setAttribute('aria-pressed', button.dataset.templateFilter === filter ? 'true' : 'false');
+  });
+  document.getElementById('templateCount').textContent = `${visibleCount} 个模板`;
+}
+
+function generateFromNL() {
+  const text = document.getElementById('nlInput').value.trim();
+  if (!text) {
+    document.getElementById('nlError')?.classList.remove('hidden');
+    document.getElementById('nlInput')?.focus();
+    return;
+  }
+  clearNLError();
+  currentNL = text;
+  let scen = 'performance';
+  if (/转化|ROAS|归因|CPA/i.test(text)) scen = 'conversion';
+  else if (/预算|花费|开销|spend/i.test(text)) scen = 'budget';
+  selectedPlatforms.clear();
+  if (/meta|facebook|fb|脸书/i.test(text)) selectedPlatforms.add('facebook');
+  if (/tiktok|tt|抖音/i.test(text)) selectedPlatforms.add('tiktok');
+  if (/google|谷歌/i.test(text)) selectedPlatforms.add('google');
+  if (/amazon|亚马逊/i.test(text)) selectedPlatforms.add('amazon');
+  if (selectedPlatforms.size === 0) selectedPlatforms.add('facebook');
+  // 与模板卡片一致：进入模板预览页（带"修改配置/生成报表"与 Dashboard 预览）
+  currentScenario = scen;
+  reportName = `${SCENARIOS[scen].name}_${new Date().toISOString().slice(0,10)}`;
+  templateAuthorizationError = '';
+  resetScenarioDefaults();
+  authPanelExpanded = getPendingPlatforms().length > 0;
+  navTo('template-preview');
+  renderTemplatePreview();
+}
+
+/* ============ 模板预览入口 ============ */
+function getSelectedPlatformModels() {
+  return [...selectedPlatforms]
+    .map(id => PLATFORMS.find(platform => platform.id === id))
+    .filter(Boolean);
+}
+
+function getPendingPlatforms() {
+  return getSelectedPlatformModels().filter(platform => !platform.connected);
+}
+
+function renderPlatformIcon(id, size = 'w-8 h-8') {
+  const icons = {
+    facebook: `<svg class="w-5 h-5" viewBox="0 0 32 20" fill="none" aria-hidden="true"><path d="M3 16.5C4.7 9.2 7.6 3.5 11.2 3.5c4.9 0 7.3 13 11.4 13 2.5 0 4.4-3.7 6.4-10.1" stroke="#1877F2" stroke-width="3" stroke-linecap="round"/></svg>`,
+    google: `<svg class="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.2 3.2a3.1 3.1 0 0 1 4.2 1.15l7.05 12.2a3.05 3.05 0 0 1-5.28 3.05L7.1 7.4A3.1 3.1 0 0 1 8.2 3.2Z" fill="#4285F4"/><path d="M10.9 7.4 5.35 17a3.05 3.05 0 1 0 5.28 3.05l3.15-5.45-2.88-7.2Z" fill="#34A853"/><circle cx="7.98" cy="18.52" r="3.05" fill="#FBBC04"/></svg>`,
+    tiktok: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13.3 2v11.25a4.65 4.65 0 1 1-4-4.6M13.3 2c.35 2.7 1.9 4.25 4.7 4.55" stroke="#161823" stroke-width="2.3" stroke-linecap="round"/></svg>`,
+    amazon: `<svg class="w-5 h-5" viewBox="0 0 28 22" fill="none" aria-hidden="true"><path d="M8.2 14.8V9.4c0-3 1.8-4.7 5.2-4.7 3.5 0 5.4 1.7 5.4 4.8v5.3M8.4 10.2h10.2" stroke="#111827" stroke-width="2.2" stroke-linecap="round"/><path d="M5 17c4.8 3.1 11.6 3.2 17 .2" stroke="#FF9900" stroke-width="2" stroke-linecap="round"/></svg>`,
+    adjust: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 18 10.5 6h3L19 18M7.4 13h9.2" stroke="#111827" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18.5" cy="5.5" r="2" fill="#6D28D9"/></svg>`,
+  };
+  const platform = PLATFORMS.find(item => item.id === id);
+  return `<span class="${size} border border-border rounded-md bg-background inline-flex items-center justify-center flex-shrink-0">${icons[id] || `<span class="text-xs font-semibold">${platform?.name.charAt(0) || '?'}</span>`}</span>`;
+}
+
+function openTemplatePreview(scenarioId, platformIds) {
+  clearNLError();
+  currentScenario = scenarioId;
+  currentNL = '';
+  selectedPlatforms = new Set(platformIds);
+  reportName = `${SCENARIOS[scenarioId].name}_${new Date().toISOString().slice(0,10)}`;
+  templateAuthorizationError = '';
+  resetScenarioDefaults();
+  authPanelExpanded = getPendingPlatforms().length > 0;
+  navTo('template-preview');
+  renderTemplatePreview();
+}
+
+function openAddTemplate() {
+  // 从零新建：复用模板预览页与"修改配置"抽屉，先初始化一套默认配置
+  clearNLError();
+  currentScenario = 'performance';
+  currentNL = '';
+  selectedPlatforms = new Set(['facebook']);
+  reportName = `自定义报表_${new Date().toISOString().slice(0,10)}`;
+  templateAuthorizationError = '';
+  resetScenarioDefaults();
+  authPanelExpanded = getPendingPlatforms().length > 0;
+  navTo('template-preview');
+  renderTemplatePreview();
+  openConfigDrawer();
+}
+
+function renderTemplatePreview() {
+  if (!currentScenario) return;
+  const scenario = SCENARIOS[currentScenario];
+  const platformNames = getSelectedPlatformModels().map(platform => platform.name).join(' × ');
+  document.getElementById('previewReportName').textContent = reportName;
+  document.getElementById('previewReportMeta').textContent = `${platformNames} · 最近 30 天 · ${scenario.name}`;
+  renderAuthorizationPanel();
+  renderDashboardPreview();
+}
+
+function toggleAuthorizationPanel() {
+  authPanelExpanded = !authPanelExpanded;
+  renderAuthorizationPanel();
+}
+
+function renderAuthorizationPanel() {
+  const container = document.getElementById('authorizationPanel');
+  if (!container) return;
+  const platforms = getSelectedPlatformModels();
+  const pending = getPendingPlatforms();
+  const allConnected = pending.length === 0;
+  const tone = allConnected
+    ? 'border-emerald-200 bg-emerald-50/70'
+    : 'border-red-200 bg-red-50/70';
+  const iconTone = allConnected
+    ? 'bg-emerald-600 text-white'
+    : 'bg-red-600 text-white';
+  const title = allConnected
+    ? '数据源已授权成功'
+    : `${pending.length} 个数据源未授权`;
+  const desc = allConnected
+    ? `已连接 ${platforms.length} 个平台，可直接生成报表`
+    : '请完成全部数据源授权后再生成报表';
+
+  container.innerHTML = `
+    <div id="authorizationCard" class="border ${tone} rounded-lg overflow-hidden ${templateAuthorizationError ? 'auth-attention' : ''}">
+      <button type="button" onclick="toggleAuthorizationPanel()" aria-expanded="${authPanelExpanded}"
+        class="w-full px-4 py-3.5 flex items-center gap-3 text-left hover:bg-white/30 transition">
+        <span class="w-7 h-7 rounded-full ${iconTone} flex items-center justify-center flex-shrink-0">
+          ${allConnected
+            ? '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
+            : '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg>'}
+        </span>
+        <span class="flex-1 min-w-0">
+          <span class="block text-sm font-semibold ${allConnected ? 'text-emerald-900' : 'text-red-900'}">${title}</span>
+          <span class="block text-xs mt-0.5 ${allConnected ? 'text-emerald-700' : 'text-red-700'}">${desc}</span>
+        </span>
+        <span class="flex -space-x-1.5 mr-2">
+          ${platforms.map(platform => renderPlatformIcon(platform.id, 'w-7 h-7')).join('')}
+        </span>
+        <svg class="w-4 h-4 transition-transform ${authPanelExpanded ? 'rotate-180' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      ${authPanelExpanded ? `
+        <div class="border-t ${allConnected ? 'border-emerald-200' : 'border-red-200'} bg-background px-4">
+          ${platforms.map(platform => {
+            const accounts = PLATFORM_ACCOUNTS[platform.id] || [];
+            return `
+              <div class="flex items-center gap-3 py-3 border-b border-border last:border-b-0">
+                ${renderPlatformIcon(platform.id)}
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-medium">${platform.name}</div>
+                  <div class="text-xs text-muted-foreground mt-0.5">${accounts.length} 个可用账户</div>
+                </div>
+                ${platform.connected
+                  ? `<span class="inline-flex items-center gap-1 text-xs text-emerald-700 font-medium"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 已授权</span>`
+                  : `<button onclick="authorizePlatform('${platform.id}')" class="h-9 px-3 text-xs font-medium rounded-md bg-red-600 text-white hover:bg-red-700 transition">立即授权</button>`}
+              </div>
+            `;
+          }).join('')}
+          ${templateAuthorizationError ? `<div class="pb-3 text-xs text-red-700" role="alert">${templateAuthorizationError}</div>` : ''}
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+function chartPoints(values, width, height, padding = 10) {
+  const max = Math.max(...values);
+  const min = Math.min(...values);
+  return values.map((value, index) => {
+    const x = padding + index * ((width - padding * 2) / (values.length - 1));
+    const y = padding + (max - value) * ((height - padding * 2) / Math.max(1, max - min));
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+}
+
+function renderDashboardPreview() {
+  const container = document.getElementById('dashboardPreview');
+  if (!container) return;
+  const data = DASHBOARD_MOCK_DATA;
+  const platforms = getSelectedPlatformModels();
+  const currentPoints = chartPoints(data.trend.current, 760, 220, 14);
+  const previousPoints = chartPoints(data.trend.previous, 760, 220, 14);
+  const gradient = data.distribution.reduce((result, item, index, list) => {
+    const start = list.slice(0, index).reduce((sum, entry) => sum + entry.value, 0);
+    const end = start + item.value;
+    result.push(`${item.color} ${start}% ${end}%`);
+    return result;
+  }, []).join(', ');
+
+  container.innerHTML = `
+    <section class="bg-card border border-border rounded-lg overflow-hidden">
+      <div class="px-5 py-4 border-b border-border flex items-center justify-between">
+        <div>
+          <h2 class="text-base font-semibold">Report Preview · Comprehensive Dashboard</h2>
+          <p class="text-xs text-muted-foreground mt-1">${platforms.map(platform => platform.name).join('、')} · 最近 30 天 · 每日同步</p>
+        </div>
+        <span class="text-[11px] px-2 py-1 bg-muted text-muted-foreground rounded">演示数据</span>
+      </div>
+
+      <div class="p-5">
+        <div class="grid grid-cols-6 gap-3 mb-5">
+          ${data.kpis.map(kpi => `
+            <article class="border border-border rounded-md p-3.5 min-w-0">
+              <div class="text-xs text-muted-foreground truncate">${kpi.label}</div>
+              <div class="text-xl font-semibold tracking-tight mt-1.5">${kpi.value}</div>
+              <div class="text-[11px] mt-2 ${kpi.direction === 'down' ? 'text-red-600' : 'text-emerald-600'}">
+                ${kpi.direction === 'down' ? '↓' : '↑'} ${kpi.change} <span class="text-muted-foreground">较上期</span>
+              </div>
+            </article>
+          `).join('')}
+        </div>
+
+        <div class="grid grid-cols-3 gap-4 mb-5">
+          <article class="col-span-2 border border-border rounded-md p-4">
+            <div class="flex items-start justify-between mb-3">
+              <div>
+                <h3 class="text-sm font-semibold">花费趋势</h3>
+                <p class="text-xs text-muted-foreground mt-0.5">按日对比本期与上期</p>
+              </div>
+              <div class="flex items-center gap-3 text-[11px] text-muted-foreground">
+                <span class="inline-flex items-center gap-1.5"><span class="w-4 h-0.5 bg-foreground"></span> 本期</span>
+                <span class="inline-flex items-center gap-1.5"><span class="w-4 h-0.5 bg-slate-400"></span> 上期</span>
+              </div>
+            </div>
+            <div class="relative h-[250px] pl-10 pb-6">
+              <div class="absolute left-0 top-1 bottom-6 flex flex-col justify-between text-[10px] text-muted-foreground">
+                <span>¥120K</span><span>¥90K</span><span>¥60K</span><span>¥30K</span><span>¥0</span>
+              </div>
+              <div class="preview-chart-grid h-full rounded-sm">
+                <svg viewBox="0 0 760 220" class="w-full h-full overflow-visible" preserveAspectRatio="none" aria-label="30 天花费趋势图">
+                  <polyline points="${previousPoints}" fill="none" stroke="#94A3B8" stroke-width="2" stroke-dasharray="6 5" vector-effect="non-scaling-stroke"/>
+                  <polyline points="${currentPoints}" fill="none" stroke="#111827" stroke-width="2.5" vector-effect="non-scaling-stroke"/>
+                  ${[0,5,10,15,20,25,29].map(index => {
+                    const point = currentPoints.split(' ')[index];
+                    const [cx, cy] = point.split(',');
+                    return `<circle cx="${cx}" cy="${cy}" r="3" fill="#111827"/>`;
+                  }).join('')}
+                </svg>
+              </div>
+              <div class="absolute left-10 right-0 bottom-0 flex justify-between text-[10px] text-muted-foreground">
+                ${data.trend.labels.map(label => `<span>${label}</span>`).join('')}
+              </div>
+            </div>
+          </article>
+
+          <article class="border border-border rounded-md p-4">
+            <div>
+              <h3 class="text-sm font-semibold">活动类型分布</h3>
+              <p class="text-xs text-muted-foreground mt-0.5">按花费占比</p>
+            </div>
+            <div class="flex items-center justify-center py-5">
+              <div class="relative w-36 h-36 rounded-full" style="background:conic-gradient(${gradient})">
+                <div class="absolute inset-5 rounded-full bg-background flex flex-col items-center justify-center">
+                  <span class="text-xs text-muted-foreground">总花费</span>
+                  <b class="text-base mt-0.5">¥428.8K</b>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-x-3 gap-y-2">
+              ${data.distribution.map(item => `
+                <div class="flex items-center justify-between gap-2 text-xs">
+                  <span class="flex items-center gap-1.5 min-w-0"><span class="w-2 h-2 rounded-sm flex-shrink-0" style="background:${item.color}"></span><span class="truncate">${item.label}</span></span>
+                  <b>${item.value}%</b>
+                </div>
+              `).join('')}
+            </div>
+          </article>
+        </div>
+
+        <article class="border border-border rounded-md overflow-hidden">
+          <div class="px-4 py-3 border-b border-border flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-semibold">广告活动明细</h3>
+              <p class="text-xs text-muted-foreground mt-0.5">按花费从高到低，展示前 7 个活动</p>
+            </div>
+            <span class="text-xs text-muted-foreground">${getTotalSelectedAccounts()} 个账户</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[920px]">
+              <thead class="bg-muted/40">
+                <tr>
+                  <th class="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">平台</th>
+                  <th class="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">账户</th>
+                  <th class="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">Campaign</th>
+                  <th class="text-right px-4 py-2.5 text-xs font-medium text-muted-foreground">花费</th>
+                  <th class="text-right px-4 py-2.5 text-xs font-medium text-muted-foreground">展示</th>
+                  <th class="text-right px-4 py-2.5 text-xs font-medium text-muted-foreground">点击</th>
+                  <th class="text-right px-4 py-2.5 text-xs font-medium text-muted-foreground">转化</th>
+                  <th class="text-right px-4 py-2.5 text-xs font-medium text-muted-foreground">ROAS</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${data.rows.map((row, index) => {
+                  const platform = platforms[index % platforms.length];
+                  return `
+                    <tr class="border-t border-border hover:bg-accent/20 transition">
+                      <td class="px-4 py-3"><span class="inline-flex items-center gap-2">${renderPlatformIcon(platform.id, 'w-6 h-6')}<span class="text-xs font-medium">${platform.name}</span></span></td>
+                      <td class="px-4 py-3 text-xs text-muted-foreground">${row.account}</td>
+                      <td class="px-4 py-3 text-xs font-medium">${row.campaign}</td>
+                      <td class="px-4 py-3 text-xs text-right">${row.spend}</td>
+                      <td class="px-4 py-3 text-xs text-right text-muted-foreground">${row.impressions}</td>
+                      <td class="px-4 py-3 text-xs text-right text-muted-foreground">${row.clicks}</td>
+                      <td class="px-4 py-3 text-xs text-right text-muted-foreground">${row.conversions}</td>
+                      <td class="px-4 py-3 text-xs text-right font-medium">${row.roas}</td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+    </section>
+  `;
+}
+
+function getConfigurationError() {
+  if (getTotalSelectedAccounts() < 1) return '请至少保留一个有效账户';
+  if (selectedSegments.size < 1) return '请至少选择一个维度';
+  if (selectedMetrics.size < 1) return '请至少选择一个指标';
+  return '';
+}
+
+function generateTemplateReport() {
+  const pending = getPendingPlatforms();
+  if (pending.length) {
+    authPanelExpanded = true;
+    templateAuthorizationError = `请先授权：${pending.map(platform => platform.name).join('、')}`;
+    renderAuthorizationPanel();
+    document.getElementById('authorizationCard')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  const configError = getConfigurationError();
+  const errorBox = document.getElementById('templateConfigError');
+  if (configError) {
+    errorBox.textContent = configError;
+    errorBox.classList.remove('hidden');
+    errorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  errorBox.classList.add('hidden');
+  generateReport();
+}
+
+/* ============ 启动向导 ============ */
+function startWizard(scenarioId, fromNL = false, templatePlatforms = null) {
+  clearNLError();
+  currentScenario = scenarioId;
+  if (templatePlatforms) {
+    selectedPlatforms = new Set(templatePlatforms);
+    currentNL = '';
+  } else if (!fromNL) {
+    selectedPlatforms = new Set(['facebook']);
+    currentNL = '';
+  }
+  currentStep = 0;
+  maxUnlockedStep = 0;
+  reportName = `${SCENARIOS[scenarioId].name}_${new Date().toISOString().slice(0,10)}`;
+  document.getElementById('wizard-scenario-name').textContent = SCENARIOS[scenarioId].name;
+  resetScenarioDefaults();
+  navTo('wizard');
+  renderStepper(); renderStep(); updateSummary(); updateFooter();
+}
+
+/* 重置为场景默认值（账户全部、维度指标按场景预设） */
+function resetScenarioDefaults() {
+  const s = SCENARIOS[currentScenario];
+  selectedSegments = new Set(s.segments);
+  selectedMetrics = new Set(s.metrics);
+  accountState = {};
+  selectedPlatforms.forEach(p => {
+    accountState[p] = {
+      mode: 'list',
+      list: new Set((PLATFORM_ACCOUNTS[p] || []).map(a => a.id)),
+      manual: '',
+      upload: [],
+    };
+  });
+}
+
+function getTotalSelectedAccounts() {
+  let n = 0;
+  selectedPlatforms.forEach(p => {
+    const st = accountState[p];
+    if (!st) return;
+    if (st.mode === 'list') n += st.list.size;
+    else if (st.mode === 'manual') n += parseManualIds(st.manual).valid.length;
+    else if (st.mode === 'upload') n += st.upload.length;
+  });
+  return n;
+}
+
+function parseManualIds(text) {
+  if (!text || !text.trim()) return { valid: [], invalid: [] };
+  const tokens = text.split(',').map(t => t.trim()).filter(Boolean);
+  const valid = [], invalid = [];
+  tokens.forEach(t => {
+    // 接受 act_xxx / tt_xxx / gads_xxx 等格式
+    if (/^(act|tt|gads|amz|adj|li|tw|sc)_[\w-]{4,}$/i.test(t)) valid.push(t);
+    else invalid.push(t);
+  });
+  return { valid, invalid };
+}
+
+/* ============ Stepper ============ */
+function renderStepper() {
+  document.getElementById('stepper').innerHTML = WIZARD_STEPS.map((s, i) => {
+    const isActive = i === currentStep;
+    const isDone = i < currentStep;
+    const isUnlocked = i <= maxUnlockedStep;
+    const isLast = i === WIZARD_STEPS.length - 1;
+    const lineColor = isDone ? 'bg-emerald-500' : 'bg-border';
+    let dotClass = '', dotContent = '';
+    if (isDone) {
+      dotClass = 'bg-emerald-500 text-white border-emerald-500';
+      dotContent = `<svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+    } else if (isActive) {
+      dotClass = 'bg-foreground text-background border-foreground';
+      dotContent = `<span class="text-[11px] font-medium">${i+1}</span>`;
+    } else {
+      dotClass = 'bg-background text-muted-foreground border-border';
+      dotContent = `<span class="text-[11px] font-medium">${i+1}</span>`;
+    }
+    return `
+      <li class="relative ${isLast ? '' : 'pb-6'}">
+        ${!isLast ? `<span class="absolute left-[12px] top-6 w-px h-[calc(100%-24px)] ${lineColor}"></span>` : ''}
+        <button onclick="jumpStep(${i})" ${isUnlocked ? '' : 'disabled'}
+          class="relative w-full text-left flex items-start gap-3 ${isUnlocked ? '' : 'opacity-50 cursor-not-allowed'}">
+          <span class="relative z-10 flex-shrink-0 w-6 h-6 rounded-full border flex items-center justify-center ${dotClass}">${dotContent}</span>
+          <span class="flex-1 min-w-0 pt-0.5">
+            <span class="block text-sm font-medium ${isActive || isDone ? 'text-foreground' : 'text-muted-foreground'}">${s.name}</span>
+            <span class="block text-xs text-muted-foreground mt-0.5 leading-snug">${s.desc}</span>
+          </span>
+        </button>
+      </li>
+    `;
+  }).join('');
+}
+
+function getStepValidationError(step) {
+  if (step === 0 && !reportName.trim()) return '请填写报表名称';
+  if (step === 1) {
+    if (selectedPlatforms.size === 0) return '请至少选择一个广告平台';
+    const pending = [...selectedPlatforms]
+      .map(id => PLATFORMS.find(platform => platform.id === id))
+      .filter(platform => platform && !platform.connected);
+    if (pending.length) return `请先授权：${pending.map(platform => platform.name).join('、')}`;
+  }
+  if (step === 2) {
+    if (selectedSegments.size === 0) return '请至少选择一个维度';
+    if (selectedMetrics.size === 0) return '请至少选择一个指标';
+  }
+  return '';
+}
+
+function jumpStep(i) {
+  if (i > maxUnlockedStep) return;
+  const blockedStep = Array.from({ length: i }, (_, step) => step)
+    .find(step => getStepValidationError(step));
+  if (blockedStep !== undefined) {
+    document.getElementById('wizardValidation').textContent = getStepValidationError(blockedStep);
+    return;
+  }
+  currentStep = i;
+  renderStepper();
+  renderStep();
+  updateFooter();
+}
+
+function nextStep() {
+  if (currentStep === WIZARD_STEPS.length - 1) { generateReport(); return; }
+  const error = getStepValidationError(currentStep);
+  if (error) {
+    document.getElementById('wizardValidation').textContent = error;
+    return;
+  }
+  currentStep++;
+  maxUnlockedStep = Math.max(maxUnlockedStep, currentStep);
+  renderStepper(); renderStep(); updateFooter();
+}
+function prevStep() { if (currentStep > 0) { currentStep--; renderStepper(); renderStep(); updateFooter(); } }
+
+function updateFooter() {
+  document.getElementById('stepIndicator').textContent = currentStep + 1;
+  document.getElementById('btnPrev').disabled = currentStep === 0;
+  const next = document.getElementById('btnNext');
+  const error = getStepValidationError(currentStep);
+  next.disabled = Boolean(error);
+  document.getElementById('wizardValidation').textContent = error;
+  if (currentStep === WIZARD_STEPS.length - 1) {
+    next.innerHTML = `生成报表 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`;
+  } else {
+    next.innerHTML = `下一步 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>`;
+  }
+}
+
+/* ============ 步骤内容 ============ */
+function renderStep() {
+  const el = document.getElementById('stepContent');
+  el.classList.add('fade-in');
+  setTimeout(()=>el.classList.remove('fade-in'), 200);
+  [renderGoal, renderSources, renderConfig, renderGenerate][currentStep](el);
+}
+
+/* —— Step 1: 确认目标 —— */
+function renderGoal(el) {
+  const nlBlock = currentNL ? `
+    <div class="mb-5 border border-border rounded-md p-3.5 bg-muted/40">
+      <div class="text-xs text-muted-foreground mb-1">已识别到的需求</div>
+      <div class="text-sm mb-2">"${currentNL}"</div>
+      <div class="text-xs text-muted-foreground">匹配场景：<b class="text-foreground">${SCENARIOS[currentScenario].name}</b> · 已选平台：<b class="text-foreground">${[...selectedPlatforms].map(p => PLATFORMS.find(x=>x.id===p).name).join('、')}</b></div>
+    </div>` : '';
+
+  el.innerHTML = `
+    <div class="p-8 max-w-3xl">
+      <h3 class="text-base font-semibold tracking-tight mb-1">确认报表目标</h3>
+      <p class="text-sm text-muted-foreground mb-5">确认场景模板并为报表命名</p>
+      ${nlBlock}
+
+      <div class="mb-5">
+        <label class="block text-sm font-medium mb-2">场景模板</label>
+        <div class="grid grid-cols-3 gap-2.5">
+          ${Object.entries(SCENARIOS).map(([k,v])=>`
+            <button onclick="selectScenarioInWizard('${k}')"
+              class="text-left border ${currentScenario===k?'border-foreground bg-accent/40':'border-border'} hover:border-foreground/40 rounded-md p-3 transition">
+              <div class="text-sm font-medium mb-1">${v.name}</div>
+              <div class="text-xs text-muted-foreground leading-snug">${v.desc.slice(0, 36)}</div>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <label class="block text-sm font-medium mb-1.5">报表名称</label>
+        <input id="reportNameInput" type="text" value="${reportName}" oninput="reportName=this.value; updateFooter()"
+          class="w-full h-9 border border-input bg-background rounded-md px-3 text-sm focus-ring outline-none transition"/>
+        <p class="text-xs text-muted-foreground mt-1.5">生成后将在 Dashboard → Views 中可见</p>
+      </div>
+
+      <div class="border border-border rounded-md p-4 bg-card">
+        <div class="text-xs text-muted-foreground mb-3">将自动配置</div>
+        <div class="grid grid-cols-3 gap-4">
+          <div><div class="text-xs text-muted-foreground">账户</div><div class="text-2xl font-semibold tracking-tight mt-0.5">默认全部</div></div>
+          <div><div class="text-xs text-muted-foreground">维度</div><div class="text-2xl font-semibold tracking-tight mt-0.5">${SCENARIOS[currentScenario].segments.length}</div></div>
+          <div><div class="text-xs text-muted-foreground">指标</div><div class="text-2xl font-semibold tracking-tight mt-0.5">${SCENARIOS[currentScenario].metrics.length}</div></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function selectScenarioInWizard(k) {
+  currentScenario = k;
+  reportName = `${SCENARIOS[k].name}_${new Date().toISOString().slice(0,10)}`;
+  document.getElementById('wizard-scenario-name').textContent = SCENARIOS[k].name;
+  // 切场景时重置维度和指标为新场景默认（账户选择保持不变）
+  selectedSegments = new Set(SCENARIOS[k].segments);
+  selectedMetrics = new Set(SCENARIOS[k].metrics);
+  renderStep(); updateSummary();
+}
+
+/* —— Step 2: 连接数据源 —— */
+function renderSources(el) {
+  el.innerHTML = `
+    <div class="p-8 max-w-4xl">
+      <h3 class="text-base font-semibold tracking-tight mb-1">连接数据源</h3>
+      <p class="text-sm text-muted-foreground mb-5">选择 1 个或多个广告平台。支持多平台联合分析，数据将自动合并处理</p>
+
+      <div class="grid grid-cols-2 gap-2.5 mb-5">
+        ${PLATFORMS.map(p=>{
+          const sel = selectedPlatforms.has(p.id);
+          const status = p.connected
+            ? (p.accounts > 0 ? `已授权 ${p.accounts} 个账号` : '已授权，暂无账号')
+            : (sel ? '已选择 · 等待授权' : '未授权');
+          const borderClass = sel
+            ? (p.connected ? 'border-foreground bg-accent/40' : 'border-amber-300 bg-amber-50/40')
+            : 'border-border';
+          return `
+            <div class="border ${borderClass} hover:border-foreground/40 rounded-md transition flex items-stretch">
+              <button type="button" aria-pressed="${sel}" onclick="togglePlatform('${p.id}')"
+                class="text-left p-3 flex items-center gap-3 flex-1 min-w-0">
+                <div class="w-8 h-8 bg-secondary rounded-md flex items-center justify-center flex-shrink-0">
+                  <span class="text-xs font-semibold">${p.name.charAt(0)}</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-medium">${p.name}</div>
+                  <div class="text-xs mt-0.5 ${p.connected ? 'text-foreground' : (sel ? 'text-amber-700' : 'text-muted-foreground')}">${status}</div>
+                </div>
+                ${sel?`<svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`:''}
+              </button>
+              <div class="flex items-center pr-3">
+                ${p.connected
+                  ? `<span class="text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-100 rounded px-2 py-1">已授权</span>`
+                  : `<button type="button" onclick="authorizePlatform('${p.id}')" class="h-9 px-3 text-xs font-medium border border-border rounded-md bg-background hover:bg-accent transition">授权</button>`}
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+
+      <div class="border border-border rounded-md p-3 bg-muted/40 text-xs text-muted-foreground mb-6">
+        选择多个平台后，系统会对齐字段、统一命名并自动合并到一张报表，无需人工处理
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">时间范围</label>
+        <div class="flex items-center gap-2 flex-wrap">
+          <div class="inline-flex bg-muted rounded-md p-1">
+            <button class="px-3 h-7 text-xs bg-background shadow-sm rounded font-medium">相对</button>
+            <button class="px-3 h-7 text-xs text-muted-foreground rounded">绝对</button>
+          </div>
+          <span class="text-sm text-muted-foreground ml-2">最近</span>
+          <input type="number" value="30" class="w-16 h-9 border border-input bg-background rounded-md px-2 text-sm text-center outline-none focus-ring"/>
+          <span class="text-sm text-muted-foreground">天</span>
+          <div class="flex gap-1 ml-2">
+            ${[7,14,30,90].map(d=>`<button class="text-xs px-2.5 h-7 border ${d===30?'border-foreground':'border-border'} rounded-md hover:bg-accent transition">${d}天</button>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function togglePlatform(id) {
+  if (selectedPlatforms.has(id)) {
+    selectedPlatforms.delete(id);
+    delete accountState[id];
+  } else {
+    selectedPlatforms.add(id);
+    accountState[id] = {
+      mode: 'list',
+      list: new Set((PLATFORM_ACCOUNTS[id] || []).map(a => a.id)),
+      manual: '', upload: [],
+    };
+  }
+  renderStep();
+  updateSummary();
+  updateFooter();
+}
+
+function authorizePlatform(id) {
+  const platform = PLATFORMS.find(item => item.id === id);
+  if (!platform) return;
+  platform.connected = true;
+  platform.accounts = (PLATFORM_ACCOUNTS[id] || []).length;
+  if (!selectedPlatforms.has(id)) selectedPlatforms.add(id);
+  if (!accountState[id]) {
+    accountState[id] = {
+      mode: 'list',
+      list: new Set((PLATFORM_ACCOUNTS[id] || []).map(account => account.id)),
+      manual: '',
+      upload: [],
+    };
+  }
+  templateAuthorizationError = '';
+  if (document.getElementById('page-template-preview')?.classList.contains('hidden') === false) {
+    if (getPendingPlatforms().length === 0) authPanelExpanded = false;
+    renderTemplatePreview();
+  } else {
+    renderStep();
+    updateSummary();
+    updateFooter();
+  }
+}
+
+/* —— Step 3: 智能配置 —— */
+function renderConfig(el) {
+  const s = SCENARIOS[currentScenario];
+  const totalAccounts = getTotalSelectedAccounts();
+  const totalAvailable = [...selectedPlatforms].reduce((sum, p) => sum + (PLATFORM_ACCOUNTS[p] || []).length, 0);
+  const accountSummary = totalAccounts === totalAvailable ? '默认全部' : `${totalAccounts} / ${totalAvailable}`;
+
+  el.innerHTML = `
+    <div class="p-8 max-w-3xl">
+      <h3 class="text-base font-semibold tracking-tight mb-1">智能配置</h3>
+      <p class="text-sm text-muted-foreground mb-5">基于场景已预填，可展开查看或编辑</p>
+
+      <div class="border border-border rounded-md p-3 bg-muted/40 text-xs text-muted-foreground mb-3">
+        基于「${s.name}」场景，自动配置 <b class="text-foreground">${selectedSegments.size} 维度 / ${selectedMetrics.size} 指标</b>，跨 ${selectedPlatforms.size} 个平台数据自动对齐合并
+      </div>
+
+      <!-- 账户 -->
+      <details class="border border-border rounded-md bg-card mb-2" open>
+        <summary class="px-4 py-2.5 cursor-pointer flex items-center justify-between text-sm">
+          <span class="flex items-center gap-2"><span class="chevron text-muted-foreground">›</span> <b>账户</b> <span class="text-muted-foreground text-xs">${accountSummary}</span></span>
+          <button onclick="event.preventDefault(); openDrawer('accounts')" class="text-xs px-2.5 h-7 border border-border rounded-md hover:bg-accent transition inline-flex items-center gap-1">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            编辑
+          </button>
+        </summary>
+        <div class="px-4 pb-3 pt-1">
+          ${renderAccountChips()}
+        </div>
+      </details>
+
+      <!-- 维度 -->
+      <details class="border border-border rounded-md bg-card mb-2" open>
+        <summary class="px-4 py-2.5 cursor-pointer flex items-center justify-between text-sm">
+          <span class="flex items-center gap-2"><span class="chevron text-muted-foreground">›</span> <b>维度</b> <span class="text-muted-foreground text-xs">${selectedSegments.size} 个</span></span>
+          <button onclick="event.preventDefault(); openDrawer('segments')" class="text-xs px-2.5 h-7 border border-border rounded-md hover:bg-accent transition inline-flex items-center gap-1">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            编辑
+          </button>
+        </summary>
+        <div class="px-4 pb-3 pt-1 flex flex-wrap gap-1.5">
+          ${[...selectedSegments].map(f=>`<span class="text-xs px-2 py-0.5 bg-secondary text-secondary-foreground rounded">${f}</span>`).join('') || '<span class="text-xs text-muted-foreground">未选择维度</span>'}
+        </div>
+      </details>
+
+      <!-- 指标 -->
+      <details class="border border-border rounded-md bg-card mb-5" open>
+        <summary class="px-4 py-2.5 cursor-pointer flex items-center justify-between text-sm">
+          <span class="flex items-center gap-2"><span class="chevron text-muted-foreground">›</span> <b>指标</b> <span class="text-muted-foreground text-xs">${selectedMetrics.size} 个</span></span>
+          <button onclick="event.preventDefault(); openDrawer('metrics')" class="text-xs px-2.5 h-7 border border-border rounded-md hover:bg-accent transition inline-flex items-center gap-1">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            编辑
+          </button>
+        </summary>
+        <div class="px-4 pb-3 pt-1 flex flex-wrap gap-1.5">
+          ${[...selectedMetrics].map(f=>`<span class="text-xs px-2 py-0.5 bg-secondary text-secondary-foreground rounded">${f}</span>`).join('') || '<span class="text-xs text-muted-foreground">未选择指标</span>'}
+        </div>
+      </details>
+
+      <div class="border border-border rounded-md p-4 bg-card">
+        <h4 class="text-sm font-semibold mb-3">调度与处理</h4>
+        <div class="space-y-3 text-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-muted-foreground">同步频率</span>
+            <select class="text-sm border border-input bg-background rounded-md px-2.5 h-8 outline-none focus-ring">
+              <option>每日 00:00（推荐）</option><option>每小时</option><option>每周</option>
+            </select>
+          </div>
+          <div class="flex items-center justify-between border-t border-border pt-3">
+            <span class="text-muted-foreground">数据自动合并</span>
+            <span class="text-xs inline-flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              已启用 · 跨 ${selectedPlatforms.size} 个平台对齐
+            </span>
+          </div>
+          <div class="flex items-center justify-between border-t border-border pt-3">
+            <span class="text-muted-foreground">存储位置</span>
+            <span class="text-xs">Creatiads 内部存储</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderAccountChips() {
+  const chips = [];
+  selectedPlatforms.forEach(p => {
+    const st = accountState[p];
+    if (!st) return;
+    const platName = PLATFORMS.find(x => x.id === p).name;
+    let count = 0, label = '';
+    if (st.mode === 'list') {
+      count = st.list.size;
+      const total = (PLATFORM_ACCOUNTS[p] || []).length;
+      label = count === total ? `全部 ${total}` : `${count} / ${total}`;
+    } else if (st.mode === 'manual') {
+      const { valid } = parseManualIds(st.manual);
+      count = valid.length;
+      label = `手动 ${count}`;
+    } else if (st.mode === 'upload') {
+      count = st.upload.length;
+      label = `上传 ${count}`;
+    }
+    chips.push(`
+      <span class="inline-flex items-center gap-1.5 px-2 py-1 bg-secondary text-secondary-foreground rounded text-xs">
+        <b>${platName}</b>
+        <span class="text-muted-foreground">·</span>
+        <span>${label}</span>
+      </span>
+    `);
+  });
+  return `<div class="flex flex-wrap gap-1.5">${chips.join('')}</div>`;
+}
+
+/* —— Step 4: 预览生成 —— */
+function renderGenerate(el) {
+  const s = SCENARIOS[currentScenario];
+  const platformList = [...selectedPlatforms].map(p => PLATFORMS.find(x=>x.id===p).name).join('、');
+  el.innerHTML = `
+    <div class="p-8 max-w-4xl">
+      <h3 class="text-base font-semibold tracking-tight mb-1">预览并生成</h3>
+      <p class="text-sm text-muted-foreground mb-5">检查配置并预览即将生成的 Dashboard 布局</p>
+
+      <div class="grid grid-cols-2 gap-3 mb-5">
+        <div class="border border-border rounded-md p-4 bg-card">
+          <div class="text-xs text-muted-foreground mb-2.5">报表配置</div>
+          <dl class="space-y-1.5 text-sm">
+            <div class="flex"><dt class="w-20 text-muted-foreground text-xs">名称</dt><dd class="font-medium text-xs flex-1">${reportName}</dd></div>
+            <div class="flex"><dt class="w-20 text-muted-foreground text-xs">场景</dt><dd class="font-medium text-xs">${s.name}</dd></div>
+            <div class="flex"><dt class="w-20 text-muted-foreground text-xs">数据源</dt><dd class="font-medium text-xs">${platformList}</dd></div>
+            <div class="flex"><dt class="w-20 text-muted-foreground text-xs">规格</dt><dd class="text-xs">${getTotalSelectedAccounts()} 账户 · ${selectedSegments.size} 维度 · ${selectedMetrics.size} 指标</dd></div>
+          </dl>
+        </div>
+        <div class="border border-border rounded-md p-4 bg-card">
+          <div class="text-xs text-muted-foreground mb-2.5">系统将自动执行</div>
+          <ul class="text-xs space-y-1.5">
+            <li class="flex items-center gap-2"><svg class="w-3 h-3 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> 创建 ${selectedPlatforms.size} 个 Source 连接</li>
+            <li class="flex items-center gap-2"><svg class="w-3 h-3 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> 配置 ${selectedPlatforms.size} 个 Connector 并启动同步</li>
+            <li class="flex items-center gap-2"><svg class="w-3 h-3 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> 跨平台字段对齐与数据合并</li>
+            <li class="flex items-center gap-2"><svg class="w-3 h-3 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> 在 Dashboard Views 创建报表</li>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <div class="text-xs text-muted-foreground mb-2">Dashboard 布局预览</div>
+        <div class="border border-border rounded-md p-4 bg-card">
+          <div class="grid grid-cols-6 gap-2 mb-3">
+            ${s.suggestedDashboard.slice(0, 6).map((k,i)=>`
+              <div class="border border-border rounded-md p-2">
+                <div class="text-[9px] text-muted-foreground mb-0.5 truncate">${k}</div>
+                <div class="text-sm font-semibold tracking-tight">${['250.6K','22.29M','516.2K','11.24','2.31','0.48'][i]}</div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <div class="col-span-2 border border-border rounded-md p-3 h-32 relative">
+              <div class="text-[10px] text-muted-foreground mb-1">趋势</div>
+              <div class="absolute inset-3 top-7 flex items-end gap-0.5">
+                ${Array.from({length:30},(_,i)=>{const h = 30 + Math.sin(i/4)*20 + Math.random()*10; return `<div class="flex-1 bg-foreground/80 rounded-sm" style="height:${h}%"></div>`}).join('')}
+              </div>
+            </div>
+            <div class="border border-border rounded-md p-3 h-32 relative">
+              <div class="text-[10px] text-muted-foreground mb-1">分布</div>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="w-16 h-16 rounded-full border-[10px] border-foreground" style="border-right-color: hsl(0 0% 70%); border-bottom-color: hsl(0 0% 85%);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 border border-border rounded-md p-3 text-xs text-muted-foreground bg-muted/40">
+        点击右下角「生成报表」后，系统将在约 2 分钟内完成所有数据拉取与处理，无需人工干预
+      </div>
+    </div>
+  `;
+}
+
+/* ============ Drawer 控制 ============ */
+function openDrawer(type) {
+  document.getElementById('drawer').classList.remove('config-workbench');
+  document.getElementById('drawer').style.width = '560px';
+  drawerType = type;
+  // 拍快照
+  drawerSnapshot = {
+    segments: new Set(selectedSegments),
+    metrics: new Set(selectedMetrics),
+    accounts: JSON.parse(JSON.stringify(
+      Object.fromEntries(Object.entries(accountState).map(([k,v])=>[k, { mode:v.mode, list:[...v.list], manual:v.manual, upload:[...v.upload] }]))
+    )),
+  };
+  // 设置标题
+  const titles = {
+    accounts: { t: '编辑账户', s: '从已授权账户中筛选、手动输入或上传线下表' },
+    segments: { t: '编辑维度', s: '从分类中选择数据聚合维度' },
+    metrics:  { t: '编辑指标', s: '从分类中选择需要的数值指标' },
+  };
+  document.getElementById('drawerTitle').textContent = titles[type].t;
+  document.getElementById('drawerSubtitle').textContent = titles[type].s;
+  // 设置默认子状态
+  if (type === 'accounts') {
+    drawerAccountPlatform = [...selectedPlatforms][0];
+    drawerAccountMode = accountState[drawerAccountPlatform]?.mode || 'list';
+  }
+  drawerCatSearch = '';
+  renderGenericDrawerFooter();
+  renderDrawer();
+  document.getElementById('drawer').classList.add('open');
+}
+
+function openConfigDrawer() {
+  drawerType = 'config';
+  drawerSnapshot = {
+    segments: new Set(selectedSegments),
+    metrics: new Set(selectedMetrics),
+    accounts: JSON.parse(JSON.stringify(
+      Object.fromEntries(Object.entries(accountState).map(([key, value]) => [key, {
+        mode: value.mode,
+        list: [...value.list],
+        manual: value.manual,
+        upload: [...value.upload],
+      }]))
+    )),
+    syncFrequency,
+  };
+  drawerAccountPlatform = [...selectedPlatforms][0];
+  drawerAccountMode = accountState[drawerAccountPlatform]?.mode || 'list';
+  configSegmentSearch = '';
+  configMetricSearch = '';
+  configActiveStep = 0;
+  configDirty = false;
+  configScheduleExpanded = false;
+  configValidationMessage = '';
+  document.getElementById('drawer').style.width = '';
+  document.getElementById('drawer').classList.add('config-workbench');
+  document.getElementById('drawerTitle').textContent = '修改报表配置';
+  document.getElementById('drawerSubtitle').textContent = '按步骤确认账户、维度与指标';
+  document.getElementById('drawerResetBtn').classList.remove('hidden');
+  renderConfigDrawer();
+  document.getElementById('drawer').classList.add('open');
+}
+
+function renderGenericDrawerFooter() {
+  document.getElementById('drawerFooter').innerHTML = `
+    <div class="px-5 py-3 flex items-center justify-between gap-2">
+      <div class="text-xs text-muted-foreground">更改尚未应用</div>
+      <div class="flex gap-2">
+        <button onclick="cancelDrawer()" class="inline-flex items-center px-4 h-9 text-sm rounded-md border border-border bg-background hover:bg-accent transition">取消</button>
+        <button onclick="applyDrawer()" class="inline-flex items-center px-4 h-9 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition">应用</button>
+      </div>
+    </div>
+  `;
+}
+
+function markConfigDirty() {
+  if (drawerType !== 'config') return;
+  configDirty = true;
+  configValidationMessage = '';
+  renderConfigStepNavigation();
+  renderConfigFooter();
+}
+
+function cancelDrawer(force = false) {
+  if (drawerType === 'config' && configDirty && !force) {
+    document.getElementById('discardConfigModal').classList.remove('hidden');
+    return;
+  }
+  if (drawerSnapshot) {
+    selectedSegments = new Set(drawerSnapshot.segments);
+    selectedMetrics = new Set(drawerSnapshot.metrics);
+    accountState = {};
+    Object.entries(drawerSnapshot.accounts).forEach(([k,v]) => {
+      accountState[k] = { mode: v.mode, list: new Set(v.list), manual: v.manual, upload: [...v.upload] };
+    });
+    if (drawerSnapshot.syncFrequency) syncFrequency = drawerSnapshot.syncFrequency;
+  }
+  closeDrawer();
+}
+
+function hideDiscardConfigModal() {
+  document.getElementById('discardConfigModal').classList.add('hidden');
+}
+
+function confirmDiscardConfig() {
+  hideDiscardConfigModal();
+  cancelDrawer(true);
+}
+
+function applyDrawer() {
+  if (drawerType === 'config') {
+    const validation = validateConfigDraft();
+    if (!validation.valid) {
+      configActiveStep = validation.step;
+      configValidationMessage = validation.message;
+      renderConfigDrawer();
+      return;
+    }
+    configDirty = false;
+    const previewError = document.getElementById('templateConfigError');
+    if (previewError) {
+      previewError.textContent = '';
+      previewError.classList.add('hidden');
+    }
+  }
+  closeDrawer();
+}
+
+function closeDrawer() {
+  const closingType = drawerType;
+  document.getElementById('drawer').classList.remove('open');
+  drawerType = null;
+  drawerSnapshot = null;
+  if (closingType === 'config') {
+    renderTemplatePreview();
+  } else {
+    renderStep();
+    updateSummary();
+  }
+}
+
+function resetDrawerDefault() {
+  if (drawerType === 'config') {
+    resetScenarioDefaults();
+    syncFrequency = 'daily';
+    drawerAccountPlatform = [...selectedPlatforms][0];
+    drawerAccountMode = 'list';
+    configDirty = true;
+    configValidationMessage = '';
+    renderConfigDrawer();
+  } else if (drawerType === 'segments') selectedSegments = new Set(SCENARIOS[currentScenario].segments);
+  else if (drawerType === 'metrics') selectedMetrics = new Set(SCENARIOS[currentScenario].metrics);
+  else if (drawerType === 'accounts') {
+    selectedPlatforms.forEach(p => {
+      accountState[p] = { mode: 'list', list: new Set((PLATFORM_ACCOUNTS[p] || []).map(a => a.id)), manual: '', upload: [] };
+    });
+    drawerAccountMode = 'list';
+  }
+  renderDrawer();
+}
+
+function renderDrawer() {
+  if (drawerType === 'config') renderConfigDrawer();
+  else if (drawerType === 'accounts') renderAccountsDrawer();
+  else if (drawerType === 'segments') renderSegmentsDrawer();
+  else if (drawerType === 'metrics') renderMetricsDrawer();
+}
+
+function validateConfigDraft() {
+  if (getTotalSelectedAccounts() < 1) return { valid: false, step: 0, message: '请至少保留一个有效账户' };
+  if (selectedSegments.size < 1) return { valid: false, step: 1, message: '请至少选择一个维度' };
+  if (selectedMetrics.size < 1) return { valid: false, step: 2, message: '请至少选择一个指标' };
+  return { valid: true, step: null, message: '' };
+}
+
+function getConfigStepState(step) {
+  const counts = [getTotalSelectedAccounts(), selectedSegments.size, selectedMetrics.size];
+  return { count: counts[step], complete: counts[step] > 0 };
+}
+
+function setConfigStep(step) {
+  if (step < 0 || step > 2) return;
+  configActiveStep = step;
+  configValidationMessage = '';
+  renderConfigDrawer();
+}
+
+function configPrevStep() {
+  setConfigStep(Math.max(0, configActiveStep - 1));
+}
+
+function configNextStep() {
+  if (configActiveStep < 2) setConfigStep(configActiveStep + 1);
+  else applyDrawer();
+}
+
+function toggleConfigSchedule() {
+  configScheduleExpanded = !configScheduleExpanded;
+  renderConfigFooter();
+}
+
+function updateConfigSchedule(value) {
+  syncFrequency = value;
+  markConfigDirty();
+  renderConfigFooter();
+}
+
+function getPlatformSelectedAccountCount(platformId) {
+  const state = accountState[platformId];
+  if (!state) return 0;
+  if (state.mode === 'manual') return parseManualIds(state.manual).valid.length;
+  if (state.mode === 'upload') return state.upload.length;
+  return state.list.size;
+}
+
+function renderConfigStepNavigation() {
+  const container = document.getElementById('configStepNavigation');
+  if (!container) return;
+  const steps = [
+    { name: '账户', desc: '确定数据范围' },
+    { name: '维度', desc: '确定分析切片' },
+    { name: '指标', desc: '确定核心数值' },
+  ];
+  container.innerHTML = steps.map((step, index) => {
+    const state = getConfigStepState(index);
+    const active = configActiveStep === index;
+    return `
+      <button type="button" onclick="setConfigStep(${index})" aria-current="${active ? 'step' : 'false'}"
+        class="config-step-button flex-1 min-w-0 border rounded-md px-3 py-2.5 text-left transition-colors">
+        <span class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold ${active ? 'bg-foreground text-background' : state.complete ? 'bg-emerald-100 text-emerald-700' : 'bg-red-50 text-red-600'}">
+            ${state.complete && !active
+              ? '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
+              : index + 1}
+          </span>
+          <span class="min-w-0">
+            <span class="block text-sm font-medium">${step.name}</span>
+            <span class="block text-[11px] text-muted-foreground truncate">${state.count} 个已选 · ${step.desc}</span>
+          </span>
+          ${!state.complete ? '<span class="ml-auto w-2 h-2 rounded-full bg-red-500" title="尚未完成"></span>' : ''}
+        </span>
+      </button>
+    `;
+  }).join('');
+}
+
+function getAccountSelectionDetails(platformId) {
+  const state = accountState[platformId];
+  if (!state) return { valid: [], invalid: [] };
+  if (state.mode === 'manual') return parseManualIds(state.manual);
+  if (state.mode === 'upload') return { valid: [...state.upload], invalid: [] };
+  const accounts = PLATFORM_ACCOUNTS[platformId] || [];
+  return {
+    valid: accounts.filter(account => state.list.has(account.id)).map(account => account.name),
+    invalid: [],
+  };
+}
+
+function renderConfigAccountSummary() {
+  const platformCards = [...selectedPlatforms].map(platformId => {
+    const platform = PLATFORMS.find(item => item.id === platformId);
+    const details = getAccountSelectionDetails(platformId);
+    const state = accountState[platformId];
+    const modeLabel = state?.mode === 'manual' ? '手动输入' : state?.mode === 'upload' ? '线下表' : '账户列表';
+    return `
+      <div class="border border-border rounded-md p-3">
+        <div class="flex items-center gap-2">
+          ${renderPlatformIcon(platformId, 'w-7 h-7')}
+          <div class="min-w-0 flex-1">
+            <div class="text-xs font-medium truncate">${platform.name}</div>
+            <div class="text-[10px] text-muted-foreground">${modeLabel}</div>
+          </div>
+          <b class="text-sm">${details.valid.length}</b>
+        </div>
+        <div class="mt-2 space-y-1">
+          ${details.valid.slice(0, 4).map(item => `<div class="text-[11px] text-muted-foreground truncate">• ${item}</div>`).join('')}
+          ${details.valid.length > 4 ? `<div class="text-[11px] text-muted-foreground">还有 ${details.valid.length - 4} 个</div>` : ''}
+          ${details.valid.length === 0 ? '<div class="text-[11px] text-red-600">尚无有效账户</div>' : ''}
+          ${details.invalid.length ? `<div class="text-[11px] text-red-600">${details.invalid.length} 个 ID 格式无效</div>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+  return `
+    <div id="configAccountSummary" class="h-full flex flex-col">
+      <div class="px-4 py-3 border-b border-border bg-muted/30">
+        <div class="flex items-center justify-between">
+          <div>
+            <h5 class="text-sm font-semibold">已选账户</h5>
+            <p class="text-xs text-muted-foreground mt-0.5">应用后将使用这些账户生成报表</p>
+          </div>
+          <span class="text-xs font-medium">${getTotalSelectedAccounts()} 个有效</span>
+        </div>
+      </div>
+      <div class="flex-1 overflow-y-auto scrollable p-3 space-y-2">${platformCards}</div>
+      <div class="px-4 py-3 border-t border-border text-xs ${getTotalSelectedAccounts() ? 'text-emerald-700 bg-emerald-50/60' : 'text-red-700 bg-red-50/60'}">
+        ${getTotalSelectedAccounts()
+          ? '账户配置完整，可以继续下一步'
+          : '请至少保留一个有效账户'}
+      </div>
+    </div>
+  `;
+}
+
+function renderConfigAccountEditor() {
+  if (!drawerAccountPlatform || !selectedPlatforms.has(drawerAccountPlatform)) {
+    drawerAccountPlatform = [...selectedPlatforms][0];
+  }
+  const platformTabs = [...selectedPlatforms].map(platformId => {
+    const platform = PLATFORMS.find(item => item.id === platformId);
+    const active = platformId === drawerAccountPlatform;
+    return `
+      <button onclick="switchDrawerPlatform('${platformId}')" data-state="${active ? 'active' : 'inactive'}" class="config-platform-tab h-9 px-3 rounded-md border text-xs font-medium inline-flex items-center gap-2 transition-colors">
+        ${renderPlatformIcon(platformId, 'w-6 h-6')}
+        ${platform.name}
+        <span class="text-muted-foreground">${getPlatformSelectedAccountCount(platformId)}</span>
+      </button>
+    `;
+  }).join('');
+  const availablePlatforms = PLATFORMS.filter(p => !selectedPlatforms.has(p.id));
+  const addPlatformBtn = availablePlatforms.length > 0 ? `
+    <div class="relative inline-block">
+      <button onclick="toggleAddPlatformMenu()" id="addPlatformBtn" class="h-9 px-3 rounded-md border border-dashed text-xs font-medium inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+        添加平台
+      </button>
+      <div id="addPlatformMenu" class="hidden absolute top-full left-0 mt-1 w-56 bg-background border border-border rounded-md shadow-lg z-10 py-1">
+        ${availablePlatforms.map(p => `
+          <button onclick="addPlatformToConfig('${p.id}')" class="w-full px-3 py-2 text-left text-xs hover:bg-accent flex items-center justify-between gap-2 transition-colors">
+            <div class="flex items-center gap-2">
+              ${renderPlatformIcon(p.id, 'w-5 h-5')}
+              <span class="font-medium">${p.name}</span>
+            </div>
+            <span class="text-[10px] px-1.5 py-0.5 rounded ${p.connected ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-amber-50 text-amber-700 border border-amber-200'}">${p.connected ? '已连接' : '需授权'}</span>
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  ` : '';
+  const modes = [
+    { id: 'list', label: '列表筛选' },
+    { id: 'manual', label: '手动输入' },
+    { id: 'upload', label: '线下表上传' },
+  ];
+  const modeContent = drawerAccountMode === 'manual'
+    ? renderAccountManualMode()
+    : drawerAccountMode === 'upload'
+      ? renderAccountUploadMode()
+      : renderAccountListMode();
+  return `
+    <div class="h-full flex flex-col">
+      <div class="px-5 py-4 border-b border-border">
+        <div class="flex flex-wrap gap-2">${platformTabs}${addPlatformBtn}</div>
+        <div class="inline-flex bg-muted rounded-md p-1 mt-3">
+          ${modes.map(mode => `
+            <button onclick="switchAccountMode('${mode.id}')" class="px-3 h-7 text-xs rounded ${drawerAccountMode === mode.id ? 'bg-background shadow-sm font-medium' : 'text-muted-foreground hover:text-foreground'}">${mode.label}</button>
+          `).join('')}
+        </div>
+      </div>
+      <div class="config-selection-layout flex-1 overflow-hidden">
+        <div class="min-w-0 border-r border-border overflow-hidden flex flex-col">
+          <div class="h-full flex flex-col">${modeContent}</div>
+        </div>
+        <aside class="min-w-0 overflow-hidden">${renderConfigAccountSummary()}</aside>
+      </div>
+    </div>
+  `;
+}
+
+function renderConfigOrderedSelection(kind) {
+  const selected = kind === 'segments' ? selectedSegments : selectedMetrics;
+  const label = kind === 'segments' ? '维度' : '指标';
+  const items = [...selected];
+  return `
+    <div class="h-full flex flex-col">
+      <div class="px-4 py-3 border-b border-border bg-muted/30 flex items-start justify-between gap-3">
+        <div>
+          <h5 class="text-sm font-semibold">已选${label}</h5>
+          <p class="text-xs text-muted-foreground mt-0.5">拖拽调整最终展示顺序</p>
+        </div>
+        <button onclick="clearConfigSelection('${kind}')" ${items.length ? '' : 'disabled'}
+          class="text-xs text-muted-foreground hover:text-red-600 disabled:opacity-40">清空</button>
+      </div>
+      <div class="flex-1 overflow-y-auto scrollable p-3">
+        ${items.length ? items.map((item, index) => `
+          <div class="drag-item flex items-center gap-2 px-3 py-2.5 border border-border rounded-md bg-card mb-2 cursor-grab"
+            draggable="true"
+            ondragstart="onDragStart(event, ${index})"
+            ondragover="onDragOver(event, ${index})"
+            ondragleave="onDragLeave(event)"
+            ondrop="onDrop(event, '${kind}', ${index})"
+            ondragend="onDragEnd(event)">
+            <span class="w-5 h-5 rounded bg-muted text-[10px] font-semibold flex items-center justify-center">${index + 1}</span>
+            <svg class="w-3 h-3 text-muted-foreground flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg>
+            <span class="text-xs font-medium flex-1 min-w-0 truncate">${item}</span>
+            <button aria-label="移除 ${item}" onclick="toggleConfigItem('${kind}','${item}',false)" class="w-7 h-7 rounded hover:bg-red-50 text-muted-foreground hover:text-red-600 flex items-center justify-center">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+        `).join('') : `
+          <div class="h-full min-h-[240px] flex flex-col items-center justify-center text-center px-6">
+            <div class="w-9 h-9 rounded-full bg-red-50 text-red-600 flex items-center justify-center mb-3">!</div>
+            <div class="text-sm font-medium">尚未选择${label}</div>
+            <div class="text-xs text-muted-foreground mt-1">请从左侧选择至少一个${label}</div>
+          </div>
+        `}
+      </div>
+      <div class="px-4 py-3 border-t border-border text-xs ${items.length ? 'text-emerald-700 bg-emerald-50/60' : 'text-red-700 bg-red-50/60'}">
+        ${items.length ? `已选择 ${items.length} 个${label}，顺序已保存到草稿` : `至少需要 1 个${label}`}
+      </div>
+    </div>
+  `;
+}
+
+function renderConfigCategoryEditor(kind) {
+  const categories = kind === 'segments' ? SEGMENT_CATEGORIES : METRIC_CATEGORIES;
+  const selected = kind === 'segments' ? selectedSegments : selectedMetrics;
+  const label = kind === 'segments' ? '维度' : '指标';
+  const query = kind === 'segments' ? configSegmentSearch : configMetricSearch;
+  return `
+    <div class="config-selection-layout h-full overflow-hidden">
+      <div class="min-w-0 border-r border-border flex flex-col overflow-hidden">
+        <div class="px-5 py-4 border-b border-border">
+          <div class="flex items-center gap-2">
+            <div class="relative flex-1">
+              <svg class="w-4 h-4 absolute left-2.5 top-2.5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="search" value="${query}" oninput="filterConfigItems('${kind}', this.value)" placeholder="搜索${label}..."
+                class="w-full h-9 pl-9 pr-3 border border-input bg-background rounded-md text-sm outline-none focus-ring"/>
+            </div>
+            <button onclick="restoreConfigRecommended('${kind}')" class="h-9 px-3 text-xs border border-border rounded-md hover:bg-accent transition">恢复推荐</button>
+          </div>
+          <p class="text-xs text-muted-foreground mt-2">勾选后会立即加入右侧，应用前仍可取消全部修改。</p>
+        </div>
+        <div id="config-${kind}-options" class="flex-1 overflow-y-auto scrollable p-4 grid grid-cols-2 content-start gap-3">
+          ${Object.entries(categories).map(([category, items]) => `
+            <details class="border border-border rounded-md bg-background" open>
+              <summary class="px-3 py-2.5 cursor-pointer flex items-center justify-between text-xs font-medium">
+                <span class="flex items-center gap-1.5"><span class="chevron text-muted-foreground">›</span>${category}</span>
+                <span class="text-muted-foreground">${items.filter(item => selected.has(item)).length}/${items.length}</span>
+              </summary>
+              <div class="px-2 pb-2">
+                ${items.map(item => `
+                  <label data-config-item="${item.toLowerCase()}" data-config-item-name="${item}" class="flex items-center gap-2 px-2 py-2 rounded hover:bg-accent/50 cursor-pointer">
+                    <input type="checkbox" ${selected.has(item) ? 'checked' : ''} onchange="toggleConfigItem('${kind}','${item}',this.checked)" class="w-3.5 h-3.5 rounded"/>
+                    <span class="text-xs">${item}</span>
+                    ${selected.has(item) ? '<span class="ml-auto text-[10px] text-emerald-700">已选</span>' : ''}
+                  </label>
+                `).join('')}
+              </div>
+            </details>
+          `).join('')}
+        </div>
+      </div>
+      <aside class="min-w-0 overflow-hidden">${renderConfigOrderedSelection(kind)}</aside>
+    </div>
+  `;
+}
+
+function renderConfigStepContent() {
+  const container = document.getElementById('configStepContent');
+  if (!container) return;
+  const titles = [
+    ['配置账户', '选择参与报表的数据账户和输入方式'],
+    ['配置维度', '决定报表按哪些字段切分和聚合'],
+    ['配置指标', '决定 Dashboard 展示与计算哪些核心数值'],
+  ];
+  const content = configActiveStep === 0
+    ? renderConfigAccountEditor()
+    : renderConfigCategoryEditor(configActiveStep === 1 ? 'segments' : 'metrics');
+  container.innerHTML = `
+    <div class="px-5 py-3.5 border-b border-border flex items-center justify-between bg-background">
+      <div>
+        <h4 class="text-sm font-semibold">${titles[configActiveStep][0]}</h4>
+        <p class="text-xs text-muted-foreground mt-0.5">${titles[configActiveStep][1]}</p>
+      </div>
+      <span class="text-xs text-muted-foreground">步骤 ${configActiveStep + 1} / 3</span>
+    </div>
+    ${configValidationMessage ? `<div class="mx-5 mt-3 px-3 py-2.5 border border-red-200 bg-red-50 text-red-700 rounded-md text-xs" role="alert">${configValidationMessage}</div>` : ''}
+    <div class="flex-1 overflow-hidden">${content}</div>
+  `;
+  const manualTextarea = document.getElementById('manualTextarea');
+  if (manualTextarea) manualTextarea.addEventListener('input', onManualInput);
+  setupUploadDrop();
+  const search = configActiveStep === 1 ? configSegmentSearch : configActiveStep === 2 ? configMetricSearch : '';
+  if (search && configActiveStep > 0) filterConfigItems(configActiveStep === 1 ? 'segments' : 'metrics', search);
+}
+
+function getSyncFrequencyLabel() {
+  return syncFrequency === 'hourly' ? '每小时' : syncFrequency === 'weekly' ? '每周一 00:00' : '每日 00:00';
+}
+
+function renderConfigFooter() {
+  const footer = document.getElementById('drawerFooter');
+  if (!footer || drawerType !== 'config') return;
+  footer.innerHTML = `
+    <div>
+      <button onclick="toggleConfigSchedule()" aria-expanded="${configScheduleExpanded}" class="w-full px-5 py-2.5 border-b border-border flex items-center justify-between text-left hover:bg-accent/30 transition">
+        <span>
+          <span class="text-xs font-medium">调度设置</span>
+          <span class="text-xs text-muted-foreground ml-2">${getSyncFrequencyLabel()} · 自动合并 · 内部存储</span>
+        </span>
+        <svg class="w-4 h-4 transition-transform ${configScheduleExpanded ? 'rotate-180' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      ${configScheduleExpanded ? `
+        <div class="px-5 py-3 border-b border-border bg-muted/20 grid grid-cols-3 gap-3">
+          <label class="text-xs">
+            <span class="block text-muted-foreground mb-1.5">同步频率</span>
+            <select onchange="updateConfigSchedule(this.value)" class="w-full h-9 px-2.5 border border-input bg-background rounded-md text-sm outline-none focus-ring">
+              <option value="daily" ${syncFrequency === 'daily' ? 'selected' : ''}>每日 00:00（推荐）</option>
+              <option value="hourly" ${syncFrequency === 'hourly' ? 'selected' : ''}>每小时</option>
+              <option value="weekly" ${syncFrequency === 'weekly' ? 'selected' : ''}>每周一 00:00</option>
+            </select>
+          </label>
+          <div class="text-xs">
+            <span class="block text-muted-foreground mb-1.5">数据自动合并</span>
+            <div class="h-9 border border-border rounded-md bg-background px-3 flex items-center gap-1.5 text-emerald-700"><span>✓</span> 已启用</div>
+          </div>
+          <div class="text-xs">
+            <span class="block text-muted-foreground mb-1.5">存储位置</span>
+            <div class="h-9 border border-border rounded-md bg-background px-3 flex items-center">Creatiads 内部存储</div>
+          </div>
+        </div>
+      ` : ''}
+      <div class="px-5 py-3 flex items-center justify-between gap-3">
+        <div class="text-xs ${configDirty ? 'text-amber-700' : 'text-muted-foreground'}">
+          ${configDirty ? '● 有未应用的修改' : '尚未修改配置'}
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="cancelDrawer()" class="h-9 px-4 text-sm border border-border rounded-md hover:bg-accent transition">取消</button>
+          <button onclick="configPrevStep()" ${configActiveStep === 0 ? 'disabled' : ''} class="h-9 px-3 text-sm border border-border rounded-md hover:bg-accent transition disabled:opacity-40 disabled:cursor-not-allowed">上一步</button>
+          <button onclick="configNextStep()" class="h-9 px-4 text-sm font-medium bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition">
+            ${configActiveStep === 2 ? '应用配置' : '下一步'}
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderConfigDrawer() {
+  const content = document.getElementById('drawerContent');
+  content.innerHTML = `
+    <div class="px-5 py-3 border-b border-border bg-muted/20">
+      <div id="configStepNavigation" class="flex gap-2"></div>
+    </div>
+    <div id="configStepContent" class="flex-1 overflow-hidden flex flex-col"></div>
+  `;
+  renderConfigStepNavigation();
+  renderConfigStepContent();
+  renderConfigFooter();
+}
+
+function filterConfigItems(kind, value) {
+  if (kind === 'segments') configSegmentSearch = value;
+  else configMetricSearch = value;
+  const query = value.trim().toLowerCase();
+  document.querySelectorAll(`#config-${kind}-options [data-config-item]`).forEach(item => {
+    item.classList.toggle('hidden', query && !item.dataset.configItem.includes(query));
+  });
+}
+
+function toggleConfigItem(kind, item, checked) {
+  const selected = kind === 'segments' ? selectedSegments : selectedMetrics;
+  if (checked) selected.add(item); else selected.delete(item);
+  markConfigDirty();
+  renderConfigStepContent();
+  renderConfigStepNavigation();
+}
+
+function clearConfigSelection(kind) {
+  if (kind === 'segments') selectedSegments = new Set();
+  else selectedMetrics = new Set();
+  markConfigDirty();
+  renderConfigStepContent();
+}
+
+function restoreConfigRecommended(kind) {
+  if (kind === 'segments') selectedSegments = new Set(SCENARIOS[currentScenario].segments);
+  else selectedMetrics = new Set(SCENARIOS[currentScenario].metrics);
+  markConfigDirty();
+  renderConfigStepContent();
+}
+
+/* ============ 账户抽屉 ============ */
+function renderAccountsDrawer() {
+  const platformTabs = [...selectedPlatforms].map(p => {
+    const isActive = p === drawerAccountPlatform;
+    const platName = PLATFORMS.find(x => x.id === p).name;
+    const st = accountState[p];
+    let n = 0;
+    if (st.mode === 'list') n = st.list.size;
+    else if (st.mode === 'manual') n = parseManualIds(st.manual).valid.length;
+    else n = st.upload.length;
+    return `
+      <button onclick="switchDrawerPlatform('${p}')"
+        class="px-3 h-9 text-sm rounded-md border ${isActive?'border-foreground bg-accent':'border-transparent text-muted-foreground hover:bg-accent/50'} transition inline-flex items-center gap-2">
+        ${platName}
+        <span class="text-xs ${isActive?'text-muted-foreground':'text-muted-foreground'}">${n}</span>
+      </button>
+    `;
+  }).join('');
+  
+  const availablePlatforms = PLATFORMS.filter(p => !selectedPlatforms.has(p.id));
+  const addPlatformBtn = availablePlatforms.length > 0 ? `
+    <div class="relative inline-block">
+      <button onclick="toggleAddPlatformMenu()" id="addPlatformBtn" class="h-9 px-3 rounded-md border border-dashed text-xs font-medium inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+        添加平台
+      </button>
+      <div id="addPlatformMenu" class="hidden absolute top-full left-0 mt-1 w-56 bg-background border border-border rounded-md shadow-lg z-10 py-1">
+        ${availablePlatforms.map(p => `
+          <button onclick="addPlatformToDrawer('${p.id}')" class="w-full px-3 py-2 text-left text-xs hover:bg-accent flex items-center justify-between gap-2 transition-colors">
+            <div class="flex items-center gap-2">
+              ${renderPlatformIcon(p.id, 'w-5 h-5')}
+              <span class="font-medium">${p.name}</span>
+            </div>
+            <span class="text-[10px] px-1.5 py-0.5 rounded ${p.connected ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-amber-50 text-amber-700 border border-amber-200'}">${p.connected ? '已连接' : '需授权'}</span>
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  ` : '';
+
+  const modes = [
+    { id: 'list', name: '列表筛选' },
+    { id: 'manual', name: '手动输入' },
+    { id: 'upload', name: '线下表上传' },
+  ];
+  const modeTabs = modes.map(m => `
+    <button onclick="switchAccountMode('${m.id}')"
+      class="px-3 h-7 text-xs rounded ${drawerAccountMode===m.id?'bg-background shadow-sm font-medium':'text-muted-foreground hover:text-foreground'} transition">
+      ${m.name}
+    </button>
+  `).join('');
+
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="px-5 pt-4 pb-3 border-b border-border">
+      <div class="flex flex-wrap gap-1">${platformTabs}${addPlatformBtn}</div>
+    </div>
+    <div class="px-5 pt-3 pb-2 border-b border-border">
+      <div class="inline-flex bg-muted rounded-md p-1">${modeTabs}</div>
+    </div>
+    <div class="flex-1 overflow-hidden relative">
+      <div class="tab-pane ${drawerAccountMode==='list'?'active':''} h-full flex flex-col">${renderAccountListMode()}</div>
+      <div class="tab-pane ${drawerAccountMode==='manual'?'active':''} h-full flex flex-col">${renderAccountManualMode()}</div>
+      <div class="tab-pane ${drawerAccountMode==='upload'?'active':''} h-full flex flex-col">${renderAccountUploadMode()}</div>
+    </div>
+  `;
+  // 绑定输入事件
+  const ta = document.getElementById('manualTextarea');
+  if (ta) ta.addEventListener('input', onManualInput);
+  setupUploadDrop();
+}
+
+function toggleAddPlatformMenu() {
+  const menu = document.getElementById('addPlatformMenu');
+  if (!menu) return;
+  menu.classList.toggle('hidden');
+  // 点击外部关闭菜单
+  if (!menu.classList.contains('hidden')) {
+    setTimeout(() => {
+      const closeMenu = (e) => {
+        if (!e.target.closest('#addPlatformBtn') && !e.target.closest('#addPlatformMenu')) {
+          menu.classList.add('hidden');
+          document.removeEventListener('click', closeMenu);
+        }
+      };
+      document.addEventListener('click', closeMenu);
+    }, 0);
+  }
+}
+
+function addPlatformToConfig(platformId) {
+  addPlatformCommon(platformId);
+}
+
+function addPlatformToDrawer(platformId) {
+  addPlatformCommon(platformId);
+}
+
+function addPlatformCommon(platformId) {
+  const platform = PLATFORMS.find(p => p.id === platformId);
+  if (!platform) return;
+  
+  // 关闭菜单
+  const menu = document.getElementById('addPlatformMenu');
+  if (menu) menu.classList.add('hidden');
+  
+  const reRender = () => {
+    if (drawerType === 'config') {
+      markConfigDirty();
+      renderConfigDrawer();
+    } else {
+      renderDrawer();
+    }
+  };
+  
+  // 如果未授权，先触发授权流程（authorizePlatform 会自动加入 selectedPlatforms 和初始化 accountState）
+  if (!platform.connected) {
+    authorizePlatform(platformId);
+    drawerAccountPlatform = platformId;
+    drawerAccountMode = 'list';
+    reRender();
+    return;
+  }
+  
+  // 已连接：直接添加到选中平台
+  selectedPlatforms.add(platformId);
+  if (!accountState[platformId]) {
+    accountState[platformId] = {
+      mode: 'list',
+      list: new Set((PLATFORM_ACCOUNTS[platformId] || []).map(a => a.id)),
+      manual: '',
+      upload: [],
+    };
+  }
+  drawerAccountPlatform = platformId;
+  drawerAccountMode = accountState[platformId].mode;
+  reRender();
+}
+
+function switchDrawerPlatform(p) {
+  drawerAccountPlatform = p;
+  drawerAccountMode = accountState[p].mode;
+  if (drawerType === 'config') renderConfigDrawer();
+  else renderAccountsDrawer();
+}
+
+function switchAccountMode(m) {
+  if (accountState[drawerAccountPlatform].mode === m) return;
+  accountState[drawerAccountPlatform].mode = m;
+  drawerAccountMode = m;
+  if (drawerType === 'config') markConfigDirty();
+  if (drawerType === 'config') renderConfigDrawer();
+  else renderAccountsDrawer();
+}
+
+/* ---- Mode 1: 列表筛选 ---- */
+let listSearch = '', listStatusFilter = 'all', listShowSelectedOnly = false;
+function renderAccountListMode() {
+  const p = drawerAccountPlatform;
+  const all = PLATFORM_ACCOUNTS[p] || [];
+  const st = accountState[p];
+  const sel = st.list;
+  // 筛选
+  let visible = all.filter(a => {
+    if (listStatusFilter !== 'all' && a.status !== listStatusFilter) return false;
+    if (listSearch && !(a.name + ' ' + a.id).toLowerCase().includes(listSearch.toLowerCase())) return false;
+    if (listShowSelectedOnly && !sel.has(a.id)) return false;
+    return true;
+  });
+  const visibleSelectedCount = visible.filter(a => sel.has(a.id)).length;
+  const allVisibleSelected = visible.length > 0 && visibleSelectedCount === visible.length;
+  return `
+    <div class="px-5 py-3 border-b border-border space-y-2">
+      <div class="relative">
+        <svg class="w-4 h-4 absolute left-2.5 top-2.5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" value="${listSearch}" oninput="listSearch=this.value; refreshListMode()" placeholder="搜索账户名或 ID..."
+          class="w-full h-9 pl-9 pr-3 border border-input bg-background rounded-md text-sm outline-none focus-ring"/>
+      </div>
+      <div class="flex items-center gap-2 text-xs">
+        <select onchange="listStatusFilter=this.value; refreshListMode()" class="h-7 px-2 border border-input bg-background rounded text-xs outline-none focus-ring">
+          <option value="all" ${listStatusFilter==='all'?'selected':''}>全部状态</option>
+          <option value="active" ${listStatusFilter==='active'?'selected':''}>Active</option>
+          <option value="paused" ${listStatusFilter==='paused'?'selected':''}>Paused</option>
+        </select>
+        <label class="flex items-center gap-1.5 cursor-pointer">
+          <input type="checkbox" ${listShowSelectedOnly?'checked':''} onchange="listShowSelectedOnly=this.checked; refreshListMode()" class="w-3.5 h-3.5"/>
+          <span>仅看已选</span>
+        </label>
+        <div class="ml-auto text-muted-foreground">已选 <b class="text-foreground">${sel.size}</b> / 共 <b class="text-foreground">${all.length}</b></div>
+      </div>
+      <div class="flex items-center gap-2 text-xs">
+        <button onclick="selectAllVisible()" class="px-2 h-6 border border-border rounded hover:bg-accent">${allVisibleSelected?'取消全选':'全选当前'}</button>
+        <button onclick="invertSelection()" class="px-2 h-6 border border-border rounded hover:bg-accent">反选</button>
+      </div>
+    </div>
+    <div class="flex-1 overflow-y-auto scrollable px-2 py-1.5">
+      ${visible.length === 0 ? '<div class="text-center text-xs text-muted-foreground py-10">无匹配账户</div>' :
+        visible.map(a => {
+          const checked = sel.has(a.id);
+          return `
+            <label class="flex items-center gap-2.5 px-3 py-2 rounded-md hover:bg-accent/50 cursor-pointer">
+              <input type="checkbox" ${checked?'checked':''} onchange="toggleAccount('${a.id}', this.checked)" class="w-4 h-4 rounded"/>
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-medium truncate">${a.name}</div>
+                <div class="text-xs text-muted-foreground truncate">${a.id} · ${a.created}</div>
+              </div>
+              <span class="text-[10px] px-1.5 py-0.5 border border-border rounded ${a.status==='active'?'':'text-muted-foreground'}">${a.status}</span>
+            </label>
+          `;
+        }).join('')
+      }
+    </div>
+  `;
+}
+
+function refreshListMode() {
+  if (drawerType === 'config') {
+    renderConfigDrawer();
+    return;
+  }
+  const container = document.querySelector('#drawerContent .tab-pane.active');
+  if (container) container.innerHTML = renderAccountListMode();
+}
+
+function toggleAccount(id, on) {
+  const s = accountState[drawerAccountPlatform].list;
+  if (on) s.add(id); else s.delete(id);
+  if (drawerType === 'config') markConfigDirty();
+  refreshListMode();
+}
+
+function selectAllVisible() {
+  const p = drawerAccountPlatform;
+  const all = PLATFORM_ACCOUNTS[p] || [];
+  const sel = accountState[p].list;
+  let visible = all.filter(a => {
+    if (listStatusFilter !== 'all' && a.status !== listStatusFilter) return false;
+    if (listSearch && !(a.name + ' ' + a.id).toLowerCase().includes(listSearch.toLowerCase())) return false;
+    if (listShowSelectedOnly && !sel.has(a.id)) return false;
+    return true;
+  });
+  const allSelected = visible.every(a => sel.has(a.id));
+  if (allSelected) visible.forEach(a => sel.delete(a.id));
+  else visible.forEach(a => sel.add(a.id));
+  if (drawerType === 'config') markConfigDirty();
+  refreshListMode();
+}
+
+function invertSelection() {
+  const p = drawerAccountPlatform;
+  const all = PLATFORM_ACCOUNTS[p] || [];
+  const sel = accountState[p].list;
+  all.forEach(a => { if (sel.has(a.id)) sel.delete(a.id); else sel.add(a.id); });
+  if (drawerType === 'config') markConfigDirty();
+  refreshListMode();
+}
+
+/* ---- Mode 2: 手动输入 ---- */
+function renderAccountManualMode() {
+  const st = accountState[drawerAccountPlatform];
+  const parsed = parseManualIds(st.manual);
+  const platName = PLATFORMS.find(x => x.id === drawerAccountPlatform).name;
+  const placeholderFmt = drawerAccountPlatform === 'facebook' ? 'act_1234567890' : drawerAccountPlatform === 'tiktok' ? 'tt_1234567890' : 'gads_123-456-7890';
+  return `
+    <div class="px-5 py-4 border-b border-border">
+      <div class="text-xs text-muted-foreground mb-2">输入 <b class="text-foreground">${platName}</b> 账户 ID，使用 <b class="text-foreground">英文逗号</b> 分隔，支持换行</div>
+      <textarea id="manualTextarea" rows="6" placeholder="${placeholderFmt}, ${placeholderFmt}, ..."
+        class="w-full p-3 border border-input bg-background rounded-md text-sm font-mono outline-none focus-ring resize-none">${st.manual}</textarea>
+    </div>
+    <div class="flex-1 overflow-y-auto scrollable px-5 py-3" id="manualPreview">
+      ${renderManualPreview(parsed)}
+    </div>
+  `;
+}
+
+function renderManualPreview(parsed) {
+  if (parsed.valid.length === 0 && parsed.invalid.length === 0) {
+    return '<div class="text-xs text-muted-foreground text-center py-8">输入账户 ID 后会在此显示校验结果</div>';
+  }
+  return `
+    <div class="text-xs text-muted-foreground mb-2">校验结果：<b class="text-foreground">${parsed.valid.length}</b> 个有效，<b class="${parsed.invalid.length>0?'text-red-600':'text-foreground'}">${parsed.invalid.length}</b> 个无效</div>
+    <div class="flex flex-wrap gap-1.5">
+      ${parsed.valid.map(id=>`<span class="pill-valid inline-flex items-center text-xs px-2 py-1 border rounded">${id}</span>`).join('')}
+      ${parsed.invalid.map(id=>`<span class="pill-invalid inline-flex items-center text-xs px-2 py-1 border rounded gap-1" title="格式不符合">⚠ ${id}</span>`).join('')}
+    </div>
+    ${parsed.invalid.length>0?'<div class="text-xs text-red-600 mt-2">⚠ 标红的 ID 格式无效，请使用 act_xxx / tt_xxx / gads_xxx 等格式</div>':''}
+  `;
+}
+
+function onManualInput(e) {
+  accountState[drawerAccountPlatform].manual = e.target.value;
+  const parsed = parseManualIds(e.target.value);
+  const el = document.getElementById('manualPreview');
+  if (el) el.innerHTML = renderManualPreview(parsed);
+  if (drawerType === 'config') {
+    configDirty = true;
+    configValidationMessage = '';
+    const summary = document.getElementById('configAccountSummary');
+    if (summary) summary.outerHTML = renderConfigAccountSummary();
+    renderConfigStepNavigation();
+    renderConfigFooter();
+  }
+}
+
+/* ---- Mode 3: 线下表上传 ---- */
+function renderAccountUploadMode() {
+  const st = accountState[drawerAccountPlatform];
+  return `
+    <div class="px-5 py-4 border-b border-border">
+      <div class="drop-zone border-2 border-dashed border-border rounded-lg p-6 text-center transition" id="dropZone">
+        <svg class="w-8 h-8 mx-auto text-muted-foreground mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <div class="text-sm font-medium mb-1">拖拽 CSV / Excel 文件到此处</div>
+        <div class="text-xs text-muted-foreground mb-3">或点击下方按钮选择文件，第一列将作为账户 ID</div>
+        <button onclick="mockUpload()" class="px-3 h-8 text-xs border border-border rounded-md hover:bg-accent transition inline-flex items-center gap-1.5">
+          <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          选择文件
+        </button>
+      </div>
+    </div>
+    <div class="flex-1 overflow-y-auto scrollable px-5 py-3">
+      ${st.upload.length > 0 ? renderUploadPreview(st.upload) : '<div class="text-xs text-muted-foreground text-center py-8">尚未上传文件</div>'}
+    </div>
+  `;
+}
+
+function renderUploadPreview(rows) {
+  const preview = rows.slice(0, 5);
+  return `
+    <div class="flex items-center justify-between mb-2">
+      <div class="text-xs text-muted-foreground">已解析 <b class="text-foreground">${rows.length}</b> 个账户 ID · 预览前 5 行</div>
+      <button onclick="clearUpload()" class="text-xs text-muted-foreground hover:text-red-600">清空</button>
+    </div>
+    <div class="border border-border rounded-md overflow-hidden">
+      <table class="w-full text-xs">
+        <thead class="bg-muted/50">
+          <tr><th class="text-left px-3 py-1.5 font-medium">#</th><th class="text-left px-3 py-1.5 font-medium">账户 ID</th><th class="text-left px-3 py-1.5 font-medium">状态</th></tr>
+        </thead>
+        <tbody>
+          ${preview.map((id, i) => `
+            <tr class="border-t border-border">
+              <td class="px-3 py-1.5 text-muted-foreground">${i+1}</td>
+              <td class="px-3 py-1.5 font-mono">${id}</td>
+              <td class="px-3 py-1.5"><span class="pill-valid inline-flex text-[10px] px-1.5 py-0.5 border rounded">已识别</span></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+    ${rows.length > 5 ? `<div class="text-xs text-muted-foreground mt-2">还有 ${rows.length - 5} 行未显示</div>` : ''}
+  `;
+}
+
+function setupUploadDrop() {
+  const zone = document.getElementById('dropZone');
+  if (!zone) return;
+  ['dragenter','dragover'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.add('drag-active'); }));
+  ['dragleave','drop'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.remove('drag-active'); }));
+  zone.addEventListener('drop', () => mockUpload());
+}
+
+function mockUpload() {
+  // 模拟解析 CSV
+  const samples = Array.from({length: 12}, (_, i) => {
+    const prefix = drawerAccountPlatform === 'facebook' ? 'act_' : drawerAccountPlatform === 'tiktok' ? 'tt_' : 'gads_';
+    return prefix + (Math.floor(Math.random() * 9e9) + 1e9).toString();
+  });
+  accountState[drawerAccountPlatform].upload = samples;
+  if (drawerType === 'config') markConfigDirty();
+  if (drawerType === 'config') renderConfigDrawer();
+  else renderAccountsDrawer();
+}
+
+function clearUpload() {
+  accountState[drawerAccountPlatform].upload = [];
+  if (drawerType === 'config') markConfigDirty();
+  if (drawerType === 'config') renderConfigDrawer();
+  else renderAccountsDrawer();
+}
+
+/* ============ 维度抽屉 ============ */
+function renderSegmentsDrawer() { renderCatDrawer('segments'); }
+function renderMetricsDrawer() { renderCatDrawer('metrics'); }
+
+function renderCatDrawer(kind) {
+  const cats = kind === 'segments' ? SEGMENT_CATEGORIES : METRIC_CATEGORIES;
+  const sel = kind === 'segments' ? selectedSegments : selectedMetrics;
+  const totalCount = Object.values(cats).flat().length;
+
+  const leftPanel = Object.entries(cats).map(([cat, items]) => {
+    const visible = drawerCatSearch ? items.filter(i => i.toLowerCase().includes(drawerCatSearch.toLowerCase())) : items;
+    if (visible.length === 0) return '';
+    const catSelectedCount = items.filter(i => sel.has(i)).length;
+    return `
+      <details class="border-b border-border last:border-b-0" open>
+        <summary class="px-4 py-2 cursor-pointer flex items-center justify-between text-xs hover:bg-accent/30">
+          <span class="flex items-center gap-2 font-medium">
+            <span class="chevron text-muted-foreground">›</span>${cat}
+          </span>
+          <span class="text-muted-foreground">${catSelectedCount}/${items.length}</span>
+        </summary>
+        <div class="px-2 pb-2">
+          ${visible.map(item => {
+            const checked = sel.has(item);
+            return `
+              <label class="flex items-center gap-2.5 px-2 py-1.5 rounded-md hover:bg-accent/50 cursor-pointer">
+                <input type="checkbox" ${checked?'checked':''} onchange="toggleCatItem('${kind}','${item}', this.checked)" class="w-3.5 h-3.5 rounded"/>
+                <span class="text-xs">${item}</span>
+              </label>
+            `;
+          }).join('')}
+        </div>
+      </details>
+    `;
+  }).join('');
+
+  const selectedList = [...sel];
+  const rightPanel = selectedList.length === 0
+    ? `<div class="text-xs text-muted-foreground text-center py-8">尚未选择 ${kind === 'segments' ? '维度' : '指标'}</div>`
+    : selectedList.map((item, i) => `
+        <div class="drag-item flex items-center gap-2 px-2.5 py-2 border border-border rounded-md bg-card mb-1.5 cursor-grab"
+          draggable="true"
+          ondragstart="onDragStart(event, ${i})"
+          ondragover="onDragOver(event, ${i})"
+          ondragleave="onDragLeave(event)"
+          ondrop="onDrop(event, '${kind}', ${i})"
+          ondragend="onDragEnd(event)">
+          <svg class="w-3 h-3 text-muted-foreground flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg>
+          <span class="text-xs flex-1 truncate">${item}</span>
+          <button onclick="toggleCatItem('${kind}','${item}', false)" class="text-muted-foreground hover:text-red-600 transition">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+      `).join('');
+
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="px-5 pt-4 pb-3 border-b border-border">
+      <div class="relative">
+        <svg class="w-4 h-4 absolute left-2.5 top-2.5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" value="${drawerCatSearch}" oninput="drawerCatSearch=this.value; renderCatDrawer('${kind}')"
+          placeholder="搜索 ${kind === 'segments' ? '维度' : '指标'}..."
+          class="w-full h-9 pl-9 pr-3 border border-input bg-background rounded-md text-sm outline-none focus-ring"/>
+      </div>
+    </div>
+    <div class="flex-1 overflow-hidden flex">
+      <!-- 左：分类列表 -->
+      <div class="w-[55%] border-r border-border overflow-y-auto scrollable">${leftPanel}</div>
+      <!-- 右：已选 + 拖拽 -->
+      <div class="w-[45%] flex flex-col">
+        <div class="px-3 py-2 border-b border-border flex items-center justify-between bg-muted/30">
+          <span class="text-xs font-medium">已选 ${sel.size}</span>
+          <span class="text-[10px] text-muted-foreground">拖拽调整顺序</span>
+        </div>
+        <div class="flex-1 overflow-y-auto scrollable p-2">${rightPanel}</div>
+      </div>
+    </div>
+  `;
+  // 保持搜索框焦点
+  const inp = document.querySelector('#drawerContent input[type="text"]');
+  if (inp && document.activeElement && document.activeElement.tagName !== 'INPUT') {
+    // 不强抢焦点
+  }
+}
+
+function toggleCatItem(kind, item, on) {
+  const sel = kind === 'segments' ? selectedSegments : selectedMetrics;
+  if (on) sel.add(item); else sel.delete(item);
+  renderCatDrawer(kind);
+}
+
+/* 拖拽排序 */
+let dragFromIdx = null;
+function onDragStart(e, idx) {
+  dragFromIdx = idx;
+  e.target.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onDragOver(e, idx) {
+  e.preventDefault();
+  e.currentTarget.classList.add('drag-over');
+}
+function onDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+function onDrop(e, kind, idx) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (dragFromIdx === null || dragFromIdx === idx) return;
+  const sel = kind === 'segments' ? selectedSegments : selectedMetrics;
+  const arr = [...sel];
+  const [moved] = arr.splice(dragFromIdx, 1);
+  arr.splice(idx, 0, moved);
+  if (kind === 'segments') selectedSegments = new Set(arr);
+  else selectedMetrics = new Set(arr);
+  dragFromIdx = null;
+  if (drawerType === 'config') {
+    markConfigDirty();
+    renderConfigStepContent();
+  } else {
+    renderCatDrawer(kind);
+  }
+}
+function onDragEnd(e) {
+  e.target.classList.remove('dragging');
+  document.querySelectorAll('.drag-item').forEach(el => el.classList.remove('drag-over'));
+}
+
+/* ============ Summary ============ */
+function updateSummary() {
+  if (!currentScenario) return;
+  document.getElementById('summary-fields').textContent = getTotalSelectedAccounts();
+  document.getElementById('summary-segments').textContent = selectedSegments.size;
+  document.getElementById('summary-metrics').textContent = selectedMetrics.size;
+}
+
+/* ============ 生成 & 成功 ============ */
+function generateReport() {
+  document.getElementById('success-name').textContent = reportName;
+  document.getElementById('success-sources').textContent = [...selectedPlatforms].map(p => PLATFORMS.find(x=>x.id===p).name).join('、');
+  addGeneratedReportToRecent();
+  document.getElementById('successModal').classList.remove('hidden');
+}
+
+function addGeneratedReportToRecent() {
+  const tbody = document.getElementById('recentReportsBody');
+  if (!tbody) return;
+  const existing = [...tbody.querySelectorAll('tr')].some(row => row.dataset.reportName === reportName);
+  if (existing) return;
+
+  const row = document.createElement('tr');
+  row.dataset.reportName = reportName;
+  row.className = 'border-b border-border hover:bg-accent/30 transition';
+  const values = [
+    reportName,
+    SCENARIOS[currentScenario].name,
+    [...selectedPlatforms].map(id => PLATFORMS.find(platform => platform.id === id).name).join(', '),
+    new Date().toLocaleString('zh-CN', { hour12: false }),
+  ];
+
+  values.forEach((value, index) => {
+    const cell = document.createElement('td');
+    cell.className = index === 0
+      ? 'px-4 py-2.5 text-sm font-medium'
+      : 'px-4 py-2.5 text-xs text-muted-foreground';
+    cell.textContent = value;
+    row.appendChild(cell);
+  });
+
+  const actionCell = document.createElement('td');
+  actionCell.className = 'px-4 py-2.5 text-right';
+  const action = document.createElement('button');
+  action.className = 'text-xs font-medium hover:underline';
+  action.textContent = '查看';
+  actionCell.appendChild(action);
+  row.appendChild(actionCell);
+  tbody.prepend(row);
+}
+
+function stayOnWizard() {
+  document.getElementById('successModal').classList.add('hidden');
+}
+
+function viewGeneratedReport() {
+  document.getElementById('successModal').classList.add('hidden');
+  navTo('auto-report');
+  requestAnimationFrame(() => {
+    document.getElementById('recentReportsBody')?.closest('div')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+}
+
+/* ============ Sources 页面 ============ */
+function renderSourcesGrid() {
+  const grid = document.getElementById('sourcesGrid');
+  if (!grid) return;
+  grid.innerHTML = PLATFORMS.map(p=>`
+    <div class="border border-border rounded-md p-3 hover:bg-accent/30 transition">
+      <div class="flex items-start gap-2.5">
+        <div class="w-9 h-9 bg-secondary rounded-md flex items-center justify-center flex-shrink-0">
+          <span class="text-xs font-semibold">${p.name.charAt(0)}</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium flex items-center gap-1.5">${p.name} ${p.connected?'<span class="text-[10px] px-1.5 py-0.5 border border-border rounded">已连接</span>':'<span class="text-[10px] px-1.5 py-0.5 text-muted-foreground border border-border rounded">可接入</span>'}</div>
+          <div class="text-xs text-muted-foreground mt-0.5">${p.name} 数据源接入</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ============ 初始化 ============ */
+navTo('auto-report');
+renderSourcesGrid();
+</script>
+</body>
+</html>

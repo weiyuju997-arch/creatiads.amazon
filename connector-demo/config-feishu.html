@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>飞书连接器 — Creatiads</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #fff; color: #1f2937; font-size: 14px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, textarea, select { font-family: inherit; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+
+.panel { display: flex; flex-direction: column; height: 100vh; }
+
+/* 头部 */
+.fs-head { display: flex; align-items: flex-start; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid #f0f0f0; flex-shrink: 0; }
+.fs-head-left { display: flex; align-items: center; gap: 12px; }
+.fs-icon { width: 40px; height: 40px; border-radius: 10px; background: #00d6b9; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.fs-title { font-size: 17px; font-weight: 700; color: #111827; }
+.fs-sub { font-size: 12.5px; color: #9ca3af; margin-top: 2px; }
+.fs-close { width: 30px; height: 30px; border-radius: 7px; color: #9ca3af; font-size: 22px; line-height: 1; display: flex; align-items: center; justify-content: center; }
+.fs-close:hover { background: #f3f4f6; color: #4b5563; }
+
+/* 表单体 */
+.fs-body { flex: 1; overflow-y: auto; padding: 24px 32px; }
+.fs-body::-webkit-scrollbar { width: 7px; }
+.fs-body::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+
+.field { margin-bottom: 18px; }
+.field-label { display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 7px; }
+.field-label .req { color: #ef4444; }
+.text-input, .fs-select, .fs-textarea {
+  width: 100%; padding: 9px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 13px; transition: all .15s; background: #fff;
+}
+.text-input:focus, .fs-select:focus, .fs-textarea:focus { outline: none; border-color: #18181b; box-shadow: 0 0 0 3px rgba(24,24,27,.08); }
+.fs-textarea { min-height: 64px; resize: vertical; line-height: 1.6; }
+.fs-select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 11px center; padding-right: 32px; }
+.field-hint { font-size: 11.5px; color: #9ca3af; margin-top: 6px; }
+
+/* 频率下拉（复用主面板风格） */
+.freq-select { position: relative; }
+.freq-trigger { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; font-size: 13px; color: #18181b; transition: all .15s; }
+.freq-trigger:hover { border-color: #a1a1aa; }
+.freq-select.open .freq-trigger { border-color: #18181b; box-shadow: 0 0 0 3px rgba(24,24,27,.08); }
+.freq-trigger svg { color: #9ca3af; flex-shrink: 0; transition: transform .2s; }
+.freq-select.open .freq-trigger svg { transform: rotate(180deg); }
+.freq-times { color: #9ca3af; font-weight: 400; }
+.freq-menu { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.1); z-index: 30; padding: 4px; display: none; }
+.freq-select.open .freq-menu { display: block; }
+.freq-opt { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; color: #374151; transition: background .12s; }
+.freq-opt:hover { background: #f9fafb; }
+.freq-opt.active { color: #18181b; font-weight: 500; }
+
+/* Sink 配置（与媒体平台统一：分段切换 + Destination 选择） */
+.seg { display: inline-flex; background: #f4f4f5; border-radius: 8px; padding: 3px; gap: 2px; }
+.seg-btn { padding: 7px 16px; border-radius: 6px; font-size: 12.5px; color: #6b7280; font-weight: 500; transition: all .15s; }
+.seg-btn:hover { color: #18181b; }
+.seg-btn.active { background: #fff; color: #18181b; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+.adv-static { display: flex; align-items: center; justify-content: space-between; padding: 11px 2px 0; font-size: 12.5px; }
+.adv-static .k { color: #6b7280; }
+.adv-static .v { color: #374151; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+.badge-built { font-size: 10px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; padding: 1px 7px; border-radius: 10px; font-weight: 600; }
+.sink-detail-col { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+.sub-label { font-size: 12px; color: #6b7280; font-weight: 500; }
+.sub-link { font-size: 12px; color: #18181b; font-weight: 600; text-decoration: underline; cursor: pointer; align-self: flex-start; }
+.text-input.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; }
+
+/* 底部 */
+.fs-foot { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 14px 24px; border-top: 1px solid #f0f0f0; background: #fafafa; flex-shrink: 0; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; transition: all .15s; border: 1px solid transparent; }
+.btn-ghost { background: #fff; color: #4b5563; border-color: #e5e7eb; }
+.btn-ghost:hover { background: #f9fafb; }
+.btn-outline { background: #fff; color: #18181b; border-color: #d4d4d8; }
+.btn-outline:hover { border-color: #18181b; }
+.btn-primary { background: #18181b; color: #fff; }
+.btn-primary:hover { background: #000; }
+.btn-primary:disabled { background: #d1d5db; cursor: not-allowed; }
+</style>
+</head>
+<body>
+<div class="panel">
+  <div class="fs-head">
+    <div class="fs-head-left">
+      <div class="fs-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div>
+        <div class="fs-title">飞书连接器</div>
+        <div class="fs-sub">设置新的数据源连接器</div>
+      </div>
+    </div>
+    <button class="fs-close" onclick="closeSelf()">&times;</button>
+  </div>
+
+  <div class="fs-body" id="fsBody"></div>
+
+  <div class="fs-foot">
+    <button class="btn btn-ghost" onclick="closeSelf()">取消</button>
+    <button class="btn btn-outline" id="btnCreateOnly" onclick="submitFeishu(false)">Create Without ETL</button>
+    <button class="btn btn-primary" id="btnFetch" onclick="submitFeishu(true)">Fetch Preview &amp; Continue →</button>
+  </div>
+</div>
+
+<script>
+const IS_EMBED = (function(){ try { return window.self !== window.top; } catch(e){ return true; } })();
+
+const FS_ACCOUNTS = [
+  { id: 'fs_1', name: '产品组 (martin.wei@tec-do.com)' },
+  { id: 'fs_2', name: '运营组 (ops@tec-do.com)' }
+];
+const FREQ_OPTIONS = [
+  { id: 'every_5min',  label: '每 5 分钟',   times: '288次/天' },
+  { id: 'every_15min', label: '每 15 分钟',  times: '96次/天' },
+  { id: 'hourly',      label: '每小时',      times: '24次/天' },
+  { id: 'daily',       label: '每天 00:00:00',    times: '1次/天' },
+  { id: 'weekly',      label: '每周一 00:00:00',  times: '1次/周' }
+];
+/* 自定义落库数据库（在 Destinations 中创建），与媒体平台一致 */
+const DESTINATIONS = [
+  { id: 'dest_mysql_prod',   name: '我的 MySQL 生产库', type: 'MySQL' },
+  { id: 'dest_pg_analytics', name: 'Analytics PG 库',   type: 'PostgreSQL' },
+  { id: 'dest_bq_warehouse', name: 'BigQuery 数仓',      type: 'BigQuery' }
+];
+
+const fs = {
+  name: '飞书连接器',
+  desc: '',
+  account: 'fs_1',
+  url: '',
+  freq: 'daily',
+  sinkMode: 'creatiads',     // creatiads 内置 | custom 自定义数据库
+  sinkDest: '',              // 自定义时选中的 destination id
+  sinkTable: ''              // 自定义时填写的落库表名
+};
+
+function freqObj(){ return FREQ_OPTIONS.find(f=>f.id===fs.freq); }
+
+function render() {
+  const f = freqObj();
+  document.getElementById('fsBody').innerHTML = `
+    <div class="field">
+      <div class="field-label">名称 <span class="req">*</span></div>
+      <input class="text-input" value="${fs.name}" oninput="fs.name=this.value;validate()">
+    </div>
+
+    <div class="field">
+      <div class="field-label">描述</div>
+      <textarea class="fs-textarea" placeholder="可选描述" oninput="fs.desc=this.value">${fs.desc}</textarea>
+    </div>
+
+    <div class="field">
+      <div class="field-label">飞书链接 - Account <span class="req">*</span></div>
+      <select class="fs-select" onchange="fs.account=this.value">
+        ${FS_ACCOUNTS.map(a=>`<option value="${a.id}" ${fs.account===a.id?'selected':''}>${a.name}</option>`).join('')}
+      </select>
+    </div>
+
+    <div class="field">
+      <div class="field-label">飞书链接 <span class="req">*</span></div>
+      <input class="text-input" placeholder="https://xxx.feishu.cn/sheets/..." value="${fs.url}" oninput="fs.url=this.value;validate()">
+      <div class="field-hint">粘贴飞书电子表格或多维表格的分享链接</div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">调度频率</div>
+      <div class="freq-select" id="freqSelect">
+        <button class="freq-trigger" onclick="toggleFreqMenu(event)">
+          <span>${f.label} <span class="freq-times">(${f.times})</span></span>
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="freq-menu" id="freqMenu">
+          ${FREQ_OPTIONS.map(o=>`
+            <div class="freq-opt ${fs.freq===o.id?'active':''}" onclick="setFreq('${o.id}')">
+              <span>${o.label} <span class="freq-times">(${o.times})</span></span>
+              ${fs.freq===o.id?'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>':''}
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">Sink 配置</div>
+      <div class="seg">
+        <button class="seg-btn ${fs.sinkMode==='creatiads'?'active':''}" onclick="setSink('creatiads')">Creatiads 内置</button>
+        <button class="seg-btn ${fs.sinkMode==='custom'?'active':''}" onclick="setSink('custom')">自定义数据库</button>
+      </div>
+      ${fs.sinkMode==='creatiads' ? `
+        <div class="adv-static"><span class="k">落库表</span><span class="v"><code>conn_feishu_sheet</code> <span class="badge-built">默认内置</span></span></div>
+      ` : `
+        <div class="sink-detail-col">
+          <label class="sub-label">选择数据库 <span class="req">*</span></label>
+          <select class="fs-select" onchange="fs.sinkDest=this.value;validate()">
+            <option value="" ${!fs.sinkDest?'selected':''} disabled>请选择已创建的 Destination…</option>
+            ${DESTINATIONS.map(d=>`<option value="${d.id}" ${fs.sinkDest===d.id?'selected':''}>${d.name}（${d.type}）</option>`).join('')}
+          </select>
+          <a class="sub-link" onclick="alert('跳转到 Destinations 页面创建新数据库')">+ 在 Destinations 新建数据库</a>
+          <label class="sub-label" style="margin-top:10px;">落库数据表名 <span class="req">*</span></label>
+          <input class="text-input mono" placeholder="例如 feishu_sheet_daily" value="${fs.sinkTable}" oninput="fs.sinkTable=this.value;validate()">
+        </div>
+      `}
+    </div>
+  `;
+  validate();
+}
+
+function setFreq(id){ fs.freq=id; closeFreqMenu(); render(); }
+function toggleFreqMenu(e){ e.stopPropagation(); document.getElementById('freqSelect').classList.toggle('open'); }
+function closeFreqMenu(){ const el=document.getElementById('freqSelect'); if(el) el.classList.remove('open'); }
+document.addEventListener('click', closeFreqMenu);
+function setSink(m){ fs.sinkMode=m; render(); }
+
+function validate() {
+  const sinkOk = fs.sinkMode==='creatiads' || (fs.sinkDest && fs.sinkTable.trim());
+  const ok = fs.name.trim() && fs.url.trim() && sinkOk;
+  document.getElementById('btnFetch').disabled = !ok;
+  document.getElementById('btnCreateOnly').disabled = !ok;
+}
+
+function submitFeishu(withEtl) {
+  const acct = FS_ACCOUNTS.find(a=>a.id===fs.account);
+  const sink = fs.sinkMode==='creatiads'
+    ? 'Creatiads 内置（conn_feishu_sheet）'
+    : `${(DESTINATIONS.find(d=>d.id===fs.sinkDest)||{}).name} → ${fs.sinkTable}`;
+  alert(`已创建飞书连接器「${fs.name}」\nAccount ${acct.name}\n链接 ${fs.url}\n${freqObj().label}同步 · 落库 ${sink}\n${withEtl?'将拉取预览并继续':'仅创建（不做 ETL）'}`);
+  closeSelf();
+}
+
+function closeSelf() {
+  if (IS_EMBED) { try { window.parent.postMessage({ type: 'connector-config-close' }, '*'); } catch(e){} }
+}
+
+render();
+</script>
+</body>
+</html>

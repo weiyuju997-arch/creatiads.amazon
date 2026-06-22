@@ -1,0 +1,650 @@
+/* =========================================================
+ * 配置弹窗交互
+ * 改造点：同一个配置弹窗 + 同一套逻辑，
+ * 从"逼用户逐项配"变成"默认配好、可改"。
+ * ========================================================= */
+
+const state = {
+  name: ACTIVE_META.name + ' Connector',
+  platformAcctId: getLatestAuthorizedAccount().id,    // 默认最近一次授权的平台账户
+  // 选中的广告账户：默认 tab 是"全选"，故默认选中全部广告账户（含已暂停）
+  adAccounts: new Set(getLatestAuthorizedAccount().adAccounts.map(a => a.id)),
+  adAcctTab: 'all',                   // 广告账户当前 tab：all / list / manual / import
+  adAcctSearch: '',                   // 列表 tab 的搜索词
+  manualText: '',                     // 手动输入 tab 的原始文本
+  manualIds: new Set(),               // 上次从手动文本解析出的 id（用于增量同步）
+  freq: 'daily',
+  // 日期范围：相对天数 / 绝对日期 二选一
+  dateMode: 'relative',     // relative | absolute
+  relativeDays: 7,
+  absStart: '2026-05-26',
+  absEnd: '2026-06-01',
+  // 高级调度
+  schedType: 'normal',      // normal 正常 | paused 暂停
+  rerunPolicy: 'both',      // both 成功或失败皆可重跑 | fail 仅失败 | none 不可重跑
+  autoRerun: true,
+  rerunTimes: 3,
+  rerunInterval: 2,
+  effective: 'forever',     // forever 永久 | range 指定时间
+  effStart: '2026-06-01',
+  effEnd: '2026-12-31',
+  // 数据落库
+  sinkMode: 'creatiads',    // creatiads 默认内置 | custom 自定义数据库
+  sinkDest: '',             // 自定义时选中的 destination id
+  sinkTable: '',            // 自定义时填写的落库表名
+  selected: new Set(COMMON_FIELDS),   // 默认勾选常用字段
+  advOpen: false,                     // 高级配置（左栏）默认折叠
+  wallOpen: false,                    // 完整字段墙（右栏）默认折叠
+  wallSearch: ''
+};
+
+/* 广告账户选择方式 tab */
+const AD_ACCT_TABS = [
+  { id: 'all',    label: '全选' },
+  { id: 'list',   label: '列表选择' },
+  { id: 'manual', label: '手动输入' },
+  { id: 'import', label: '表格导入' }
+];
+
+/* ---------- 工具 ---------- */
+function selDims()   { return [...state.selected].filter(id => FIELD_INDEX[id] && FIELD_INDEX[id].kind === 'dim'); }
+function selMetrics(){ return [...state.selected].filter(id => FIELD_INDEX[id] && FIELD_INDEX[id].kind === 'metric'); }
+function freqObj()   { return FREQ_OPTIONS.find(f => f.id === state.freq); }
+function sinkName()  { return ACTIVE_META.sink; }
+
+/* 渲染弹窗头部（标题/副标题/图标/品牌色），匹配当前平台 */
+function renderHeader() {
+  const t = document.getElementById('mhTitle');
+  const s = document.getElementById('mhSub');
+  const ic = document.getElementById('mhIcon');
+  if (t) t.textContent = ACTIVE_META.title;
+  if (s) s.textContent = ACTIVE_META.api;
+  if (ic) { ic.textContent = ACTIVE_META.short; ic.style.background = ACTIVE_META.color; }
+}
+
+/* 问号 icon + tooltip */
+function help(text) {
+  const safe = text.replace(/"/g, '&quot;');
+  return `<span class="help-ic" data-tip="${safe}">
+    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+  </span>`;
+}
+
+/* ========================================================
+ * 左栏：配置（默认填好，唯一要确认的是账户）
+ * ====================================================== */
+function renderLeft() {
+  const f = freqObj();
+  const pa = getPlatformAccount(state.platformAcctId);
+  document.getElementById('colLeft').innerHTML = `
+    <div class="smart-note">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg>
+      <span>已为你填好默认配置，<b>确认账户</b>后即可创建。需要更细可展开下方与右侧。</span>
+    </div>
+
+    <div class="field">
+      <div class="field-label">连接器名称 <span class="auto-tag">自动生成</span></div>
+      <input class="text-input" id="inName" value="${state.name}" oninput="state.name=this.value;renderFoot()">
+    </div>
+
+    <!-- 平台账户：授权登录号 -->
+    <div class="field">
+      <div class="field-label">平台账户 <span class="req">*</span></div>
+      <div class="acct-select" id="paSelect">
+        <button class="acct-select-trigger" onclick="togglePaMenu(event)">
+          <span class="pa-info">
+            <span class="pa-name">${pa.name}</span>
+            <span class="pa-login">${pa.login}</span>
+          </span>
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acct-select-menu" id="paMenu">
+          ${PLATFORM_ACCOUNTS.map(p => `
+            <div class="acct-select-opt ${p.id===state.platformAcctId?'active':''}" onclick="selectPlatformAcct('${p.id}')">
+              <span class="pa-info">
+                <span class="pa-name">${p.name}</span>
+                <span class="pa-login">${p.login} · ${p.adAccounts.length} 个广告账户</span>
+              </span>
+              ${p.id===state.platformAcctId?'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':''}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      <div class="field-hint">授权登录账号，旗下含多个广告账户</div>
+    </div>
+
+    <!-- 广告账户：实际拉数对象，支持多选；四种方式做成内嵌 tab -->
+    <div class="field">
+      <div class="field-label">广告账户 <span class="req">*</span>
+        <span class="acct-count-tag" id="adAcctCountTag"></span>
+      </div>
+      <div class="acct-tabs">
+        ${AD_ACCT_TABS.map(t => `
+          <button class="acct-tab ${state.adAcctTab===t.id?'active':''}" onclick="switchAdAcctTab('${t.id}')">
+            ${t.label}
+          </button>`).join('')}
+      </div>
+      <div class="acct-tab-panel" id="adAcctPanel"></div>
+      ${state.adAcctTab==='all' ? '' : '<div class="pill-list" id="adAcctPills" style="margin-top:10px;"></div>'}
+    </div>
+
+    <div class="field">
+      <div class="field-label">同步频率</div>
+      <div class="freq-select" id="freqSelect">
+        <button class="freq-trigger" onclick="toggleFreqMenu(event)">
+          <span>${f.label} <span class="freq-times">(${f.times})</span></span>
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="freq-menu" id="freqMenu">
+          ${FREQ_OPTIONS.map(o => `
+            <div class="freq-opt ${state.freq===o.id?'active':''}" onclick="setFreq('${o.id}')">
+              <span>${o.label} <span class="freq-times">(${o.times})</span></span>
+              ${state.freq===o.id?'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>':''}
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- 日期范围：相对/绝对 二选一 -->
+    <div class="field">
+      <div class="field-label">日期范围</div>
+      <div class="seg">
+        <button class="seg-btn ${state.dateMode==='relative'?'active':''}" onclick="setDateMode('relative')">相对天数</button>
+        <button class="seg-btn ${state.dateMode==='absolute'?'active':''}" onclick="setDateMode('absolute')">绝对日期</button>
+      </div>
+      ${state.dateMode==='relative' ? `
+        <div class="rel-row">
+          <span>最近</span>
+          <input class="num-input" type="number" min="1" max="365" value="${state.relativeDays}" oninput="state.relativeDays=Math.max(1,+this.value||1);renderFoot()">
+          <span>天（滚动窗口）</span>
+        </div>` : `
+        <div class="abs-row">
+          <input class="date-input" type="date" value="${state.absStart}" oninput="state.absStart=this.value">
+          <span class="abs-sep">至</span>
+          <input class="date-input" type="date" value="${state.absEnd}" oninput="state.absEnd=this.value">
+        </div>`}
+    </div>
+
+    <!-- 高级配置：点击拉出二级抽屉 -->
+    <button class="adv-entry" onclick="openAdvDrawer()">
+      <span class="adv-entry-left">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>
+          <span class="adv-entry-title">高级配置</span>
+          <span class="adv-entry-sub">调度类型 · 重跑 · 生效 · 落库</span>
+        </span>
+      </span>
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+  `;
+  renderAdAcctPanel();
+  renderAdAcctPills();
+  renderFoot();
+}
+
+/* ========================================================
+ * 高级配置二级抽屉
+ * ====================================================== */
+function advDrawerHTML() {
+  return `
+    <div class="adv-group-title">调度</div>
+    <div class="adv-field">
+      <span class="adv-k">调度类型 ${help('正常调度：到点真正执行、拉取并写入数据。暂停调度：任务与配置保留，但到点不触发执行，可随时恢复。')}</span>
+      <div class="seg seg-sm">
+        ${[['normal','正常调度'],['paused','暂停调度']].map(([v,l])=>`<button class="seg-btn ${state.schedType===v?'active':''}" onclick="setAdv('schedType','${v}')">${l}</button>`).join('')}
+      </div>
+    </div>
+
+    <div class="adv-group-title">重跑</div>
+    <div class="adv-field">
+      <span class="adv-k">重跑属性 ${help('定义这个任务允许在什么情况下重新运行。部分任务重复运行会造成重复写入，可设为不可重跑。')}</span>
+      <select class="adv-select" onchange="setAdv('rerunPolicy', this.value)">
+        <option value="both" ${state.rerunPolicy==='both'?'selected':''}>运行成功或失败后皆可重跑</option>
+        <option value="fail" ${state.rerunPolicy==='fail'?'selected':''}>仅运行失败后可重跑</option>
+        <option value="none" ${state.rerunPolicy==='none'?'selected':''}>不可重跑</option>
+      </select>
+    </div>
+    <div class="adv-field">
+      <span class="adv-k">失败自动重跑 ${help('任务失败后系统自动重试，无需人工介入。常用于应对网络抖动、API 限流等临时故障。')}</span>
+      <label class="adv-switch"><input type="checkbox" ${state.autoRerun?'checked':''} onchange="setAdv('autoRerun', this.checked)"><span class="adv-switch-track"></span></label>
+    </div>
+    ${state.autoRerun ? `
+    <div class="adv-field">
+      <span class="adv-k">重跑次数 ${help('最多自动重试的次数，达到上限仍失败才判定为失败并告警。')}</span>
+      <div class="stepper"><button onclick="stepAdv('rerunTimes',-1,1,10)">−</button><span>${state.rerunTimes}</span><button onclick="stepAdv('rerunTimes',1,1,10)">+</button><span class="stepper-unit">次</span></div>
+    </div>
+    <div class="adv-field">
+      <span class="adv-k">重跑间隔 ${help('每次自动重试之间的等待时间，给临时故障留出恢复的时间。')}</span>
+      <div class="stepper"><button onclick="stepAdv('rerunInterval',-1,1,60)">−</button><span>${state.rerunInterval}</span><button onclick="stepAdv('rerunInterval',1,1,60)">+</button><span class="stepper-unit">分钟</span></div>
+    </div>` : ''}
+    <div class="adv-field">
+      <span class="adv-k">生效日期 ${help('永久生效：一直按此调度运行直到手动停止。指定时间：仅在设定的起止日期内调度，过期自动停止，适合临时任务。')}</span>
+      <div class="seg seg-sm">
+        ${[['forever','永久生效'],['range','指定时间']].map(([v,l])=>`<button class="seg-btn ${state.effective===v?'active':''}" onclick="setAdv('effective','${v}')">${l}</button>`).join('')}
+      </div>
+    </div>
+    ${state.effective==='range' ? `
+    <div class="adv-subrow">
+      <input class="date-input" type="date" value="${state.effStart}" oninput="state.effStart=this.value">
+      <span class="abs-sep">至</span>
+      <input class="date-input" type="date" value="${state.effEnd}" oninput="state.effEnd=this.value">
+    </div>` : ''}
+
+    <div class="adv-group-title">数据落库</div>
+    <div class="adv-field">
+      <span class="adv-k">落库目标 ${help('默认写入 Creatiads 内置存储，开箱即用。也可选择自定义数据库（需先在 Destinations 中创建），并指定落库的数据表名。')}</span>
+      <div class="seg seg-sm">
+        ${[['creatiads','Creatiads 内置'],['custom','自定义数据库']].map(([v,l])=>`<button class="seg-btn ${state.sinkMode===v?'active':''}" onclick="setSinkMode('${v}')">${l}</button>`).join('')}
+      </div>
+    </div>
+    ${state.sinkMode==='creatiads' ? `
+    <div class="adv-static"><span class="k">落库表</span><span class="v"><code>${sinkName()}</code> <span class="badge-built">默认内置</span></span></div>
+    ` : `
+    <div class="adv-subrow col">
+      <label class="sub-label">选择数据库 <span class="req">*</span></label>
+      <select class="adv-select wide" onchange="setAdv('sinkDest', this.value)">
+        <option value="" ${!state.sinkDest?'selected':''} disabled>请选择已创建的 Destination…</option>
+        ${DESTINATIONS.map(d => `<option value="${d.id}" ${state.sinkDest===d.id?'selected':''}>${d.name}（${d.type}）</option>`).join('')}
+      </select>
+      <a class="sub-link" onclick="alert('跳转到 Destinations 页面创建新数据库')">+ 在 Destinations 新建数据库</a>
+      <label class="sub-label" style="margin-top:10px;">落库数据表名 <span class="req">*</span></label>
+      <input class="text-input mono" placeholder="例如 fb_ad_insights_daily" value="${state.sinkTable}" oninput="state.sinkTable=this.value;renderFoot()">
+    </div>
+    `}
+    <div class="field-hint" style="margin-top:10px;">以上为采集任务的运行细节，已按当前平台的常见用法配好，一般无需改动。</div>
+  `;
+}
+
+function renderAdvDrawer() {
+  const body = document.getElementById('advDrawerBody');
+  if (body) body.innerHTML = advDrawerHTML();
+}
+
+function openAdvDrawer() {
+  document.getElementById('advDrawerOverlay').classList.add('show');
+  renderAdvDrawer();
+  void document.getElementById('advDrawer').offsetWidth;
+  document.getElementById('advDrawer').classList.add('open');
+}
+function closeAdvDrawer() {
+  document.getElementById('advDrawer').classList.remove('open');
+  document.getElementById('advDrawerOverlay').classList.remove('show');
+}
+
+/* 当前平台账户下的广告账户列表 */
+function currentAdAccounts() { return getPlatformAccount(state.platformAcctId).adAccounts; }
+
+/* ---------- 广告账户 tab 切换（不清除已选） ---------- */
+function switchAdAcctTab(id) {
+  state.adAcctTab = id;
+  if (id === 'all') {
+    // "全选"：选中全部广告账户（含已暂停）
+    currentAdAccounts().forEach(a => state.adAccounts.add(a.id));
+  }
+  renderLeft();
+}
+
+/* ---------- 渲染当前 tab 的内嵌内容 ---------- */
+function renderAdAcctPanel() {
+  const panel = document.getElementById('adAcctPanel');
+  if (!panel) return;
+  const tab = state.adAcctTab;
+  const list = currentAdAccounts();
+  const manualText = state.manualText;
+  const manualCount = state.manualIds.size;
+
+  if (tab === 'all') {
+    const allSelected = list.every(a => state.adAccounts.has(a.id));
+    const pausedCnt = list.filter(a => a.status === 'paused').length;
+    panel.innerHTML = `
+      <div class="panel-all">
+        <div class="panel-all-row">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#16a34a" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>已选中全部 <b>${list.length}</b> 个广告账户${pausedCnt?`（含 ${pausedCnt} 个已暂停）`:''}</span>
+        </div>
+        ${allSelected ? '' : `<button class="panel-link" onclick="adAcctSelectAll()">重新全选全部账户</button>`}
+      </div>`;
+    return;
+  }
+
+  if (tab === 'list') {
+    const q = state.adAcctSearch.trim().toLowerCase();
+    const filtered = list.filter(a => !q || a.name.toLowerCase().includes(q) || a.id.includes(q));
+    const allSel = list.length > 0 && list.every(a => state.adAccounts.has(a.id));
+    panel.innerHTML = `
+      <input class="panel-search" placeholder="搜索名称或 ID…" value="${state.adAcctSearch}" oninput="onAdAcctSearch(this.value)">
+      <label class="panel-check-all">
+        <input type="checkbox" ${allSel?'checked':''} onchange="adAcctToggleAll(this.checked)">
+        <span>全选全部账户（${list.length}）</span>
+      </label>
+      <div class="panel-list">
+        ${filtered.map(a => `
+          <label class="panel-row ${a.status==='paused'?'paused':''}">
+            <input type="checkbox" ${state.adAccounts.has(a.id)?'checked':''} onchange="toggleAdAcct('${a.id}')">
+            <span class="pr-main">
+              <span class="pr-name">${a.name}</span>
+              <span class="pr-id">${a.id}</span>
+            </span>
+            <span class="pr-status ${a.status}">${a.status==='active'?'启用':'已暂停'}</span>
+          </label>`).join('') || '<div class="panel-empty">无匹配账户</div>'}
+      </div>`;
+    return;
+  }
+
+  if (tab === 'manual') {
+    panel.innerHTML = `
+      <div class="panel-tip">输入广告账户 ID，用逗号、空格或换行分隔即可，下方实时统计。</div>
+      <textarea class="panel-textarea" id="manualInput" placeholder="act_1615110053147843, act_1016242634912777, act_1605548210691226" oninput="applyManualInput(this.value)">${manualText}</textarea>
+      <div class="panel-feedback" id="manualFeedback">${manualCount ? `<span class="fb-ok">已输入 ${manualCount} 个账户</span>` : ''}</div>`;
+    return;
+  }
+
+  if (tab === 'import') {
+    panel.innerHTML = `
+      <div class="panel-tip">上传 CSV / Excel，需含一列广告账户 ID（列名 account_id 或 id）。解析结果会追加到已选。</div>
+      <div class="panel-dropzone" onclick="simulateImport()">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#9ca3af" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <div class="dz-title">点击选择文件或拖拽到此处</div>
+        <div class="dz-sub">支持 .csv / .xlsx</div>
+      </div>
+      <div class="panel-template"><span>没有模板？</span><button onclick="downloadCsvTemplate()">下载 CSV 模板</button></div>
+      <div class="panel-feedback" id="importFeedback"></div>`;
+    return;
+  }
+}
+
+function onAdAcctSearch(v) {
+  state.adAcctSearch = v;
+  renderAdAcctPanel();   // 只重渲染面板，保留输入焦点之外的状态
+}
+function adAcctToggleAll(checked) {
+  const all = currentAdAccounts();
+  if (checked) all.forEach(a => state.adAccounts.add(a.id));
+  else all.forEach(a => state.adAccounts.delete(a.id));
+  renderAdAcctPanel();
+  renderAdAcctPills();
+  renderFoot();
+}
+function applyManualInput(text) {
+  state.manualText = text;
+  // 解析：按逗号/空格/分号/换行分隔，去重；不做归属校验
+  const ids = [...new Set(text.split(/[\s,;]+/).map(s => s.trim()).filter(Boolean))];
+  // 先移除上一轮手动输入的 id，再加入本轮，避免删文本后残留
+  state.manualIds.forEach(id => state.adAccounts.delete(id));
+  state.manualIds = new Set(ids);
+  ids.forEach(id => state.adAccounts.add(id));
+  // 只更新反馈文字，避免重渲染打断输入
+  const fb = document.getElementById('manualFeedback');
+  if (fb) fb.innerHTML = ids.length ? `<span class="fb-ok">已输入 ${ids.length} 个账户</span>` : '';
+  renderAdAcctPills();
+  renderFoot();
+}
+function simulateImport() {
+  const all = currentAdAccounts();
+  all.forEach(a => state.adAccounts.add(a.id));
+  const fb = document.getElementById('importFeedback');
+  if (fb) fb.innerHTML = `<span class="fb-ok">已从文件解析并选中 ${all.length} 个广告账户</span>`;
+  renderAdAcctPills();
+  renderFoot();
+}
+
+/* 下载广告账户导入 CSV 模板（带 UTF-8 BOM，Excel 不乱码） */
+function downloadCsvTemplate() {
+  const rows = [
+    'account_id,account_name',
+    'act_1729384756,Brand Main · US',
+    'act_8273645102,Performance · EU',
+    'act_5647382910,App Install · APAC'
+  ];
+  const csv = '\uFEFF' + rows.join('\r\n') + '\r\n';
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '广告账户导入模板.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function renderAdAcctPills() {
+  // 计数标签独立更新（全选模式下 pill 容器不存在，也要保证标签正确）
+  const tag = document.getElementById('adAcctCountTag');
+  if (tag) tag.textContent = `已选 ${state.adAccounts.size}`;
+
+  const wrap = document.getElementById('adAcctPills');
+  if (!wrap) return;
+  const selectedIds = [...state.adAccounts];
+
+  if (selectedIds.length === 0) {
+    wrap.innerHTML = `<span class="acct-empty">未选择广告账户，请用上方方式选择</span>`;
+    return;
+  }
+  // 已知账户显示名称，自由输入的 id 直接显示 id
+  const label = id => (AD_ACCOUNT_INDEX[id] ? AD_ACCOUNT_INDEX[id].name : id);
+  const MAX = 6;
+  let html = selectedIds.slice(0, MAX).map(id =>
+    `<span class="pill">${label(id)}<span class="x" onclick="toggleAdAcct('${id}')">&times;</span></span>`
+  ).join('');
+  if (selectedIds.length > MAX) {
+    html += `<span class="pill-more" onclick="switchAdAcctTab('list')">+${selectedIds.length - MAX} 更多</span>`;
+  }
+  wrap.innerHTML = html;
+}
+
+function selectPlatformAcct(id) {
+  state.platformAcctId = id;
+  // 切换平台账户时，默认全选其下全部广告账户（含已暂停）
+  state.adAccounts = new Set(getPlatformAccount(id).adAccounts.map(a => a.id));
+  closePaMenu();
+  renderLeft();
+}
+function togglePaMenu(e) {
+  e.stopPropagation();
+  document.getElementById('paSelect').classList.toggle('open');
+}
+function closePaMenu() {
+  const el = document.getElementById('paSelect');
+  if (el) el.classList.remove('open');
+}
+document.addEventListener('click', () => { closePaMenu(); closeFreqMenu(); });
+
+function toggleAdAcct(id) {
+  if (state.adAccounts.has(id)) { state.adAccounts.delete(id); state.manualIds.delete(id); }
+  else state.adAccounts.add(id);
+  if (state.adAcctTab === 'list') renderAdAcctPanel();
+  renderAdAcctPills();
+  renderFoot();
+}
+function adAcctSelectAll() {
+  currentAdAccounts().forEach(a => state.adAccounts.add(a.id));
+  renderAdAcctPanel();
+  renderAdAcctPills();
+  renderFoot();
+}
+function setFreq(id){ state.freq=id; closeFreqMenu(); renderLeft(); }
+function toggleFreqMenu(e){ e.stopPropagation(); document.getElementById('freqSelect').classList.toggle('open'); }
+function closeFreqMenu(){ const el=document.getElementById('freqSelect'); if(el) el.classList.remove('open'); }
+function setDateMode(m){ state.dateMode=m; renderLeft(); }
+function setAdv(key, val){ state[key]=val; renderAdvDrawer(); renderFoot(); }
+function setSinkMode(m){ state.sinkMode=m; renderAdvDrawer(); renderFoot(); }
+function stepAdv(key, delta, min, max){ state[key]=Math.min(max, Math.max(min, state[key]+delta)); renderAdvDrawer(); renderFoot(); }
+
+/* ========================================================
+ * 右栏：字段（默认只显示常用且已勾选；可展开完整墙）
+ * ====================================================== */
+function renderRight() {
+  // 精简区：把常用字段按 维度/指标 分两组展示，全部默认勾选、可点掉
+  const commonDims = COMMON_FIELDS.filter(id => FIELD_INDEX[id].kind === 'dim');
+  const commonMetrics = COMMON_FIELDS.filter(id => FIELD_INDEX[id].kind === 'metric');
+
+  document.getElementById('colRight').innerHTML = `
+    <div class="right-head">
+      <div class="right-title">采集字段</div>
+    </div>
+    <div class="right-sub">默认采集最常用的字段，点一下即可去掉。需要更多再展开完整字段。</div>
+
+    <div class="field-section-label">维度 Dimensions<span class="cnt">已选 ${selDims().length}</span><span class="ln"></span></div>
+    <div class="chip-grid">
+      ${commonDims.map(id => chip(id)).join('')}
+    </div>
+
+    <div class="field-section-label">指标 Metrics<span class="cnt">已选 ${selMetrics().length}</span><span class="ln"></span></div>
+    <div class="chip-grid">
+      ${commonMetrics.map(id => chip(id)).join('')}
+    </div>
+
+    <button class="expand-all ${state.wallOpen?'open':''}" onclick="toggleWall()">
+      <svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      ${state.wallOpen ? '收起完整字段' : '展开全部字段（按分类）'}
+    </button>
+
+    <div class="full-wall ${state.wallOpen?'open':''}" id="fullWall"></div>
+  `;
+  if (state.wallOpen) renderWall();
+}
+
+/* 精简区 chip：选中态有颜色，未选灰色 */
+function chip(id) {
+  const f = FIELD_INDEX[id];
+  const on = state.selected.has(id);
+  const cls = on ? f.kind : 'off';
+  return `<span class="fchip ${cls}" onclick="toggleField('${id}')">
+    <span class="dot"></span>${f.name}
+    <span class="ck">${on ? '✓' : '+'}</span>
+  </span>`;
+}
+
+/* 完整字段墙：按截图分类，含搜索 */
+function renderWall() {
+  const q = state.wallSearch.trim().toLowerCase();
+  const wall = document.getElementById('fullWall');
+  let html = `<input class="wall-search" placeholder="搜索字段…" value="${state.wallSearch}" oninput="onWallSearch(this.value)">`;
+  FIELD_CATEGORIES.forEach(cat => {
+    const fields = cat.fields.filter(f => !q || f.name.toLowerCase().includes(q) || f.id.includes(q));
+    if (fields.length === 0) return;
+    const selCount = cat.fields.filter(f => state.selected.has(f.id)).length;
+    html += `<div class="wall-cat">
+      <div class="wall-cat-head">
+        <span class="wall-cat-name">${cat.name}</span>
+        <span class="wall-cat-cnt"><b>${selCount}</b>/${cat.fields.length}</span>
+      </div>
+      <div class="chip-grid">
+        ${fields.map(f => chip(f.id)).join('')}
+      </div>
+    </div>`;
+  });
+  wall.innerHTML = html;
+}
+
+function toggleField(id) {
+  state.selected.has(id) ? state.selected.delete(id) : state.selected.add(id);
+  renderRight();   // 重渲染右栏（精简区 + 墙）
+  renderFoot();
+}
+function toggleWall(){ state.wallOpen=!state.wallOpen; renderRight(); }
+function onWallSearch(v){ state.wallSearch=v; renderWall(); }
+
+/* ========================================================
+ * 底部摘要
+ * ====================================================== */
+function dateRangeLabel() {
+  return state.dateMode === 'relative'
+    ? `最近 ${state.relativeDays} 天`
+    : `${state.absStart} ~ ${state.absEnd}`;
+}
+
+function renderFoot() {
+  const dims = selDims().length, metrics = selMetrics().length;
+  document.getElementById('footSummary').innerHTML =
+    `将采集 <b>${state.adAccounts.size}</b> 个广告账户 · <b>${dims}</b> 维度 + <b>${metrics}</b> 指标 · ${dateRangeLabel()} · ${freqObj().label}同步`;
+  const btn = document.getElementById('btnCreate');
+  const sinkOk = state.sinkMode === 'creatiads' || (state.sinkDest && state.sinkTable.trim());
+  const ok = state.adAccounts.size > 0 && state.selected.size > 0 && sinkOk;
+  btn.disabled = !ok;
+}
+
+/* ---------- 创建 ---------- */
+document.getElementById('btnCreate').addEventListener('click', () => {
+  if (document.getElementById('btnCreate').disabled) return;
+  const pa = getPlatformAccount(state.platformAcctId);
+  const sink = state.sinkMode === 'creatiads'
+    ? `Creatiads 内置（${sinkName()}）`
+    : `${(DESTINATIONS.find(d=>d.id===state.sinkDest)||{}).name} → ${state.sinkTable}`;
+  alert(`已创建连接器「${state.name}」\n平台账户 ${pa.name}（${pa.login}）\n广告账户 ${state.adAccounts.size} 个 · ${selDims().length} 维度 + ${selMetrics().length} 指标\n日期范围 ${dateRangeLabel()} · ${freqObj().label}同步\n落库 ${sink} · 状态 ACTIVE，首次同步即将开始`);
+  if (IS_EMBED) { try { window.parent.postMessage({ type: 'connector-config-created', name: state.name }, '*'); } catch(e){} }
+  closeDrawer();
+});
+
+/* ---------- 顶部对比切换 ---------- */
+function mountCompareBar() {
+  const bar = document.createElement('div');
+  bar.className = 'compare-bar';
+  bar.innerHTML = `
+    <button class="active">精简版（默认配好）</button>
+    <button onclick="alert('对照：原版进来时左侧需手填名称/调度/Sink/Action，右侧 7 类字段全部 0/N 空白，需逐个勾选。')">原版痛点说明</button>
+  `;
+  document.body.appendChild(bar);
+}
+
+/* ---------- 全局 tooltip（渲染到 body，规避滚动区裁切） ---------- */
+function setupGlobalTip() {
+  const tip = document.createElement('div');
+  tip.id = 'globalTip';
+  document.body.appendChild(tip);
+
+  document.addEventListener('mouseover', e => {
+    const ic = e.target.closest('.help-ic');
+    if (!ic) return;
+    const text = ic.getAttribute('data-tip');
+    if (!text) return;
+    tip.textContent = text;
+    tip.classList.add('show');
+    const r = ic.getBoundingClientRect();
+    // 默认显示在上方，空间不够则显示在下方
+    tip.classList.remove('above', 'below');
+    const tipH = tip.offsetHeight;
+    let top, place;
+    if (r.top - tipH - 10 > 0) { top = r.top - tipH - 10; place = 'above'; } // tip 在图标上方，箭头在底部朝下
+    else { top = r.bottom + 10; place = 'below'; }                            // tip 在图标下方，箭头在顶部朝上
+    tip.classList.add(place);
+    let left = r.left + r.width / 2 - tip.offsetWidth / 2;
+    left = Math.max(8, Math.min(left, window.innerWidth - tip.offsetWidth - 8));
+    tip.style.top = top + 'px';
+    tip.style.left = left + 'px';
+  });
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest('.help-ic')) tip.classList.remove('show');
+  });
+}
+
+/* ---------- 抽屉开关 ---------- */
+const IS_EMBED = (function(){ try { return window.self !== window.top; } catch(e){ return true; } })();
+
+function openDrawer() {
+  if (IS_EMBED) return; // 嵌入模式下由父级抽屉负责显隐
+  document.getElementById('drawerMask').classList.remove('hidden');
+  void document.getElementById('configDrawer').offsetWidth;
+  document.getElementById('drawerMask').classList.add('show');
+  document.getElementById('configDrawer').classList.add('open');
+}
+function closeDrawer() {
+  if (IS_EMBED) {
+    // 通知父窗口关闭抽屉
+    try { window.parent.postMessage({ type: 'connector-config-close' }, '*'); } catch(e){}
+    return;
+  }
+  document.getElementById('drawerMask').classList.remove('show');
+  document.getElementById('configDrawer').classList.remove('open');
+  setTimeout(() => document.getElementById('drawerMask').classList.add('hidden'), 200);
+}
+
+/* ---------- 初始化 ---------- */
+if (IS_EMBED) document.body.classList.add('embed');
+renderHeader();
+renderLeft();
+renderRight();
+mountCompareBar();
+setupGlobalTip();
+openDrawer();  // demo 默认展开抽屉（嵌入模式下为空操作）

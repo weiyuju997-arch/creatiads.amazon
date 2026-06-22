@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配置广告洞察连接器 — Creatiads</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          border: 'hsl(214.3 31.8% 91.4%)',
+          input: 'hsl(214.3 31.8% 91.4%)',
+          ring: 'hsl(222.2 84% 4.9%)',
+          background: 'hsl(0 0% 100%)',
+          foreground: 'hsl(222.2 84% 4.9%)',
+          primary: { DEFAULT: 'hsl(222.2 47.4% 11.2%)', foreground: 'hsl(210 40% 98%)' },
+          secondary: { DEFAULT: 'hsl(210 40% 96.1%)', foreground: 'hsl(222.2 47.4% 11.2%)' },
+          muted: { DEFAULT: 'hsl(210 40% 96.1%)', foreground: 'hsl(215.4 16.3% 46.9%)' },
+          accent: { DEFAULT: 'hsl(210 40% 96.1%)', foreground: 'hsl(222.2 47.4% 11.2%)' },
+          card: { DEFAULT: 'hsl(0 0% 100%)', foreground: 'hsl(222.2 84% 4.9%)' },
+        },
+        borderRadius: { lg: '0.5rem', md: '0.375rem', sm: '0.25rem' },
+      }
+    }
+  }
+</script>
+<style>
+body { 
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; 
+  font-feature-settings: "rlig" 1, "calt" 1;
+  background: #f3f4f6;
+  color: hsl(222.2 84% 4.9%);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, textarea, select { font-family: inherit; }
+
+/* ===== 背景占位（模拟连接器列表页） ===== */
+.bg-stage { position: fixed; inset: 0; padding: 28px 36px; background: #f3f4f6; }
+.bg-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.bg-title { font-size: 22px; font-weight: 700; color: #111827; }
+.bg-add-btn { padding: 9px 16px; border-radius: 8px; background: #18181b; color: #fff; font-size: 13px; font-weight: 500; }
+.bg-add-btn:hover { background: #000; }
+.bg-row { height: 56px; background: #fff; border: 1px solid #f0f0f0; border-radius: 10px; margin-bottom: 10px; }
+
+/* ===== 抽屉蒙层与抽屉 ===== */
+.drawer-mask { position: fixed; inset: 0; background: rgba(15,23,42,0.35); z-index: 100; opacity: 0; transition: opacity .2s; }
+.drawer-mask.show { opacity: 1; }
+.drawer-mask.hidden { display: none; }
+
+.drawer { 
+  position: fixed; 
+  top: 0; 
+  right: 0; 
+  height: 100vh; 
+  width: min(60vw, 960px); 
+  min-width: 760px;
+  max-width: 960px;
+  background: hsl(0 0% 100%); 
+  box-shadow: -8px 0 40px rgba(0,0,0,0.18); 
+  display: flex; 
+  flex-direction: column; 
+  overflow: hidden; 
+  transform: translateX(100%); 
+  transition: transform .3s cubic-bezier(0.32, 0.72, 0, 1); 
+  z-index: 101; 
+}
+.drawer.open { transform: translateX(0); }
+
+/* 嵌入模式 */
+body.embed { background: #fff; }
+body.embed .bg-stage,
+body.embed .drawer-mask { display: none !important; }
+body.embed .drawer { position: static; width: 100%; height: 100vh; max-width: none; min-width: 0; transform: none !important; box-shadow: none; }
+
+@media (max-width: 1100px) {
+  .drawer {
+    width: 100vw !important;
+    min-width: 0;
+    max-width: none;
+  }
+}
+
+/* ===== Drawer Header ===== */
+.drawer-header {
+  flex-shrink: 0;
+  padding: 20px 24px;
+  border-bottom: 1px solid hsl(214.3 31.8% 91.4%);
+  background: hsl(0 0% 100%);
+}
+.drawer-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.drawer-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.drawer-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #1877f2;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.drawer-title-group {
+  display: flex;
+  flex-direction: column;
+}
+.drawer-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: hsl(222.2 84% 4.9%);
+  line-height: 1.4;
+}
+.drawer-subtitle {
+  font-size: 13px;
+  color: hsl(215.4 16.3% 46.9%);
+  margin-top: 2px;
+}
+.drawer-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(215.4 16.3% 46.9%);
+  font-size: 20px;
+  line-height: 1;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+.drawer-close:hover {
+  background: hsl(210 40% 96.1%);
+  color: hsl(222.2 84% 4.9%);
+}
+
+/* ===== 步骤导航 ===== */
+.config-step-nav {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+.config-step-button {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 12px 16px;
+  border: 1px solid hsl(214.3 31.8% 91.4%);
+  border-radius: 8px;
+  background: hsl(0 0% 100%);
+  color: hsl(215.4 16.3% 46.9%);
+  transition: all .15s;
+  text-align: left;
+  cursor: pointer;
+}
+.config-step-button:hover {
+  background: hsl(210 40% 96.1% / .65);
+  border-color: hsl(214.3 31.8% 87%);
+}
+.config-step-button[aria-current="step"] {
+  border-color: hsl(214.3 31.8% 87%);
+  background: hsl(210 40% 96.1%);
+  box-shadow: 0 1px 2px 0 hsl(222.2 47.4% 11.2% / .06);
+  color: hsl(222.2 84% 4.9%);
+}
+.config-step-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px hsl(0 0% 100%), 0 0 0 4px hsl(222.2 84% 4.9%);
+}
+.config-step-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.config-step-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+.config-step-button[aria-current="step"] .config-step-title {
+  color: hsl(222.2 84% 4.9%);
+}
+
+/* ===== 抽屉主体 ===== */
+.drawer-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 配置内容布局（左右两栏） */
+.config-selection-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(280px, 2fr);
+  min-height: 0;
+  flex: 1;
+  overflow: hidden;
+}
+.config-left-pane {
+  border-right: 1px solid hsl(214.3 31.8% 91.4%);
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+.config-right-pane {
+  overflow-y: auto;
+  padding: 20px 24px;
+  background: hsl(210 40% 98%);
+}
+
+/* 滚动条 */
+.config-left-pane::-webkit-scrollbar,
+.config-right-pane::-webkit-scrollbar {
+  width: 6px;
+}
+.config-left-pane::-webkit-scrollbar-thumb,
+.config-right-pane::-webkit-scrollbar-thumb {
+  background: hsl(214.3 31.8% 85%);
+  border-radius: 3px;
+}
+.config-left-pane::-webkit-scrollbar-track,
+.config-right-pane::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* 步骤内容面板 */
+.config-step-pane {
+  display: none;
+}
+.config-step-pane.active {
+  display: contents;
+}
+
+/* ===== 调度设置收缩区 ===== */
+.schedule-settings {
+  border-top: 1px solid hsl(214.3 31.8% 91.4%);
+  background: hsl(0 0% 100%);
+  flex-shrink: 0;
+}
+.schedule-settings-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  text-align: left;
+  transition: background .15s;
+  cursor: pointer;
+}
+.schedule-settings-trigger:hover {
+  background: hsl(210 40% 98%);
+}
+.schedule-settings-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: hsl(222.2 84% 4.9%);
+}
+.schedule-settings-summary {
+  font-size: 12px;
+  color: hsl(215.4 16.3% 46.9%);
+  margin-top: 2px;
+}
+.schedule-settings-chevron {
+  width: 16px;
+  height: 16px;
+  color: hsl(215.4 16.3% 46.9%);
+  transition: transform .2s;
+}
+.schedule-settings[open] .schedule-settings-chevron {
+  transform: rotate(180deg);
+}
+.schedule-settings-content {
+  padding: 0 24px 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+/* ===== 底部操作栏 ===== */
+.drawer-footer {
+  flex-shrink: 0;
+  padding: 14px 24px;
+  border-top: 1px solid hsl(214.3 31.8% 91.4%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: hsl(0 0% 100%);
+}
+.drawer-footer-summary {
+  font-size: 12px;
+  color: hsl(215.4 16.3% 46.9%);
+}
+.drawer-footer-summary b {
+  color: hsl(222.2 84% 4.9%);
+  font-weight: 600;
+}
+.drawer-footer-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ===== 通用按钮 ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all .15s;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.btn-default {
+  background: hsl(0 0% 100%);
+  color: hsl(222.2 84% 4.9%);
+  border-color: hsl(214.3 31.8% 91.4%);
+}
+.btn-default:hover:not(:disabled) {
+  background: hsl(210 40% 96.1%);
+}
+.btn-primary {
+  background: hsl(222.2 47.4% 11.2%);
+  color: hsl(210 40% 98%);
+}
+.btn-primary:hover:not(:disabled) {
+  background: hsl(222.2 47.4% 6%);
+}
+.btn-ghost {
+  background: transparent;
+  color: hsl(222.2 84% 4.9%);
+}
+.btn-ghost:hover:not(:disabled) {
+  background: hsl(210 40% 96.1%);
+}
+
+/* ===== 表单字段 ===== */
+.field { margin-bottom: 18px; }
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: hsl(222.2 84% 4.9%);
+  margin-bottom: 8px;
+}
+.field-label .req { color: hsl(0 84% 60%); }
+.field-label .auto-tag {
+  font-size: 10px;
+  font-weight: 500;
+  color: hsl(215.4 16.3% 46.9%);
+  background: hsl(210 40% 96.1%);
+  border: 1px solid hsl(214.3 31.8% 91.4%);
+  padding: 1px 7px;
+  border-radius: 10px;
+  margin-left: auto;
+}
+.text-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid hsl(214.3 31.8% 91.4%);
+  border-radius: 6px;
+  font-size: 13px;
+  background: hsl(0 0% 100%);
+  color: hsl(222.2 84% 4.9%);
+  transition: all .15s;
+}
+.text-input:focus {
+  outline: none;
+  border-color: hsl(222.2 84% 4.9%);
+  box-shadow: 0 0 0 2px hsl(222.2 84% 4.9% / 0.08);
+}
+.text-input.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12.5px;
+}
+.field-hint {
+  font-size: 12px;
+  color: hsl(215.4 16.3% 46.9%);
+  margin-top: 6px;
+}
+
+/* ===== 右侧汇总面板 ===== */
+.summary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.summary-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: hsl(222.2 84% 4.9%);
+}
+.summary-count {
+  font-size: 12px;
+  color: hsl(215.4 16.3% 46.9%);
+}
+.summary-count b {
+  color: hsl(142 70% 30%);
+  font-weight: 600;
+}
+.summary-subtitle {
+  font-size: 12px;
+  color: hsl(215.4 16.3% 46.9%);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+.summary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.summary-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  background: hsl(0 0% 100%);
+  border: 1px solid hsl(214.3 31.8% 91.4%);
+  border-radius: 6px;
+  font-size: 12px;
+}
+.summary-item-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: hsl(222.2 84% 4.9%);
+  font-weight: 500;
+}
+.summary-item-id {
+  font-size: 11px;
+  color: hsl(215.4 16.3% 46.9%);
+  font-family: ui-monospace, monospace;
+}
+.summary-item-remove {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(215.4 16.3% 46.9%);
+  transition: all .15s;
+  flex-shrink: 0;
+}
+.summary-item-remove:hover {
+  background: hsl(0 84% 95%);
+  color: hsl(0 72% 41%);
+}
+.summary-empty {
+  padding: 32px 16px;
+  text-align: center;
+  font-size: 12px;
+  color: hsl(215.4 16.3% 46.9%);
+  font-style: italic;
+}
+
+/* ===== 账户选择下拉 ===== */
+.acct-select { position: relative; }
+.acct-select-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid hsl(214.3 31.8% 91.4%);
+  border-radius: 6px;
+  background: hsl(0 0% 100%);
+  transition: all .15s;
+  text-align: left;
+  cursor: pointer;
+}
+.acct-select-trigger:hover {
+  border-color: hsl(214.3 31.8% 87%);
+}
+.acct-select.open .acct-select-trigger {
+  border-color: hsl(222.2 84% 4.9%);
+  box-shadow: 0 0 0 2px hsl(222.2 84% 4.9% / 0.08);
+}
+.acct-select-trigger svg {
+  color: hsl(215.4 16.3% 46.9%);
+  flex-shrink: 0;
+  transition: transform .2s;
+}
+.acct-select.open .acct-select-trigger svg {
+  transform: rotate(180deg);
+}
+.pa-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.pa-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: hsl(222.2 84% 4.9%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pa-login {
+  font-size: 11.5px;
+  color: hsl(215.4 16.3% 46.9%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.acct-select-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: hsl(0 0% 100%);
+  border: 1px solid hsl(214.3 31.8% 91.4%);
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.1);
+  z-index: 30;
+  padding: 4px;
+  display: none;
+}
+.acct-select.open .acct-select-menu {
+  display: block;
+}
+.acct-select-opt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background .12s;
+}
+.acct-select-opt:hover {
+  background: hsl(210 40% 96.1%);
+}
+.acct-select-opt.active {
+  background: hsl(210 40% 96.1%);
+}
+
+/* ===== 广告账户 Tab ===== */
+.acct-tabs {
+  display: flex;
+  gap: 2px;
+  border-bottom: 1px solid hsl(214.3 31.8% 91.4%);
+  margin-bottom: 12px;
+  margin-top: 16px;
+}
+.acct-tab {
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: hsl(215.4 16.3% 46.9%);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all .15s;
+  cursor: pointer;
+  background: none;
+}
+.acct-tab:hover {
+  color: hsl(222.2 84% 4.9%);
+}
+.acct-tab.active {
+  color: hsl(222.2 84% 4.9%);
+  font-weight: 600;
+  border-bottom-color: hsl(222.2 84% 4.9%);
+}
+.acct-tab-panel {
+  display: none;
+}
+.acct-tab-panel.active {
+  display: block;
+}
+
+/* Tab: 全选 */
+.panel-all {
+  padding: 12px 14px;
+  background: hsl(143 64% 95%);
+  border: 1px solid hsl(143 64% 85%);
+  border-radius: 6px;
+}
+.panel-all-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: hsl(142 70% 30%);
+  line-height: 1.5;
+}
+.panel-all-row svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.panel-all-row b {
+  font-weight: 700;
+}
+
+/* Tab: 列表选择 */
+.panel-search {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid hsl(214.3 31.8% 91.4%);
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+.panel-search:focus {
+  outline: none;
+  border-color: hsl(222.2 84% 4.9%);
+}
+.panel-check-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: hsl(222.2 84% 4.9%);
+  cursor: pointer;
+  padding: 4px 0 8px;
+}
+.panel-check-all input {
+  accent-color: hsl(142 70% 30%);
+}
+.panel-list {
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid hsl(214.3 31.8% 91.4%);
+  border-radius: 6px;
+  background: hsl(0 0% 100%);
+}
+.panel-list::-webkit-scrollbar {
+  width: 6px;
+}
+.panel-list::-webkit-scrollbar-thumb {
+  background: hsl(214.3 31.8% 85%);
+  border-radius: 3px;
+}
+.panel-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background .1s;
+  border-bottom: 1px solid hsl(214.3 31.8% 96%);
+}
+.panel-row:last-child {
+  border-bottom: none;
+}
+.panel-row:hover {
+  background: hsl(210 40% 98%);
+}
+.panel-row input {
+  accent-color: hsl(142 70% 30%);
+  flex-shrink: 0;
+}
+.panel-row.paused {
+  opacity: .65;
+}
+.pr-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.pr-name {
+  font-size: 13px;
+  color: hsl(222.2 84% 4.9%);
+  font-weight: 500;
+}
+.pr-id {
+  font-size: 11px;
+  color: hsl(215.4 16.3% 46.9%);
+  font-family: ui-monospace, monospace;
+  margin-top: 2px;
+}
+.pr-status {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+.pr-status.active {
+  background: hsl(143 64% 95%);
+  color: hsl(142 70% 30%);
+}
+.pr-status.paused {
+  background: hsl(210 40% 96.1%);
+  color: hsl(215.4 16.3% 46.9%);
+}
+.panel-empty {
+  padding: 20px;
+  text-align: center;
+  font-size: 12px;
+  color: hsl(215.4 16.3% 46.9%);
+}
+
+/* Tab: 手动输入 / 导入 */
+.panel-tip {
+  font-size: 12px;
+  color: hsl(215.4 16.3% 46.9%);
+  line-height: 1.5;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  background: hsl(210 40% 98%);
+  border-radius: 6px;
+}
+.panel-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 10px 12px;
+  border: 1px solid hsl(214.3 31.8% 91.4%);
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: ui-monospace, monospace;
+  line-height: 1.6;
+  resize: vertical;
+  background: hsl(0 0% 100%);
+}
+.panel-textarea:focus {
+  outline: none;
+  border-color: hsl(222.2 84% 4.9%);
+}
+.panel-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 24px 16px;
+  border: 2px dashed hsl(214.3 31.8% 91.4%);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.panel-dropzone:hover {
+  border-color: hsl(222.2 84% 4.9%);
+  background: hsl(210 40% 98%);
+}
+.dz-title {
+  font-size: 13px;
+  color: hsl(222.2 84% 4.9%);
+  font-weight: 500;
+}
+.dz-sub {
+  font-size: 11px;
+  color: hsl(215.4 16.3% 46.9%);
+}
+
+/* Tab 反馈区 */
+.panel-feedback {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+.fb-ok {
+  color: hsl(142 70% 30%);
+  background: hsl(143 64% 95%);
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+.fb-err {
+  color: hsl(0 72% 41%);
+  background: hsl(0 84% 95%);
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+/* ===== 字段搜索 ===== */
+.field-search-wrap {
+  margin-bottom: 16px;
+}
+.field-search {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  border: 1px solid hsl(214.3 31.8% 91.4%);
+  border-radius: 6px;
+  font-size: 13px;
+  background: hsl(0 0% 100%) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 12px center;
+  transition: all .15s;
+}
+.field-search:focus {
+  outline: none;
+  border-color: hsl(222.2 84% 4.9%);
+}
+
+/* ===== 字段分类 ===== */
+.field-category {
+  margin-bottom: 20px;
+}
+.field-category:last-child {
+  margin-bottom: 0;
+}
+.field-category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.field-category-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: hsl(215.4 16.3% 46.9%);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.field-category-count {
+  font-size: 11px;
+  color: hsl(215.4 16.3% 46.9%);
+}
+.field-category-count b {
+  color: hsl(142 70% 30%);
+  font-weight: 600;
+}
+.field-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ===== 字段 chip ===== */
+.field-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border-radius: 16px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+  border: 1px solid;
+  user-select: none;
+}
+.field-chip .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.field-chip .check-icon {
+  font-size: 11px;
+  color: hsl(142 70% 30%);
+}
+/* 维度 - 选中 */
+.field-chip.dim {
+  border-color: hsl(214.3 31.8% 91.4%);
+  background: hsl(0 0% 100%);
+  color: hsl(222.2 84% 4.9%);
+}
+.field-chip.dim .dot {
+  background: hsl(217 91% 60%);
+}
+/* 指标 - 选中 */
+.field-chip.metric {
+  border-color: hsl(214.3 31.8% 91.4%);
+  background: hsl(0 0% 100%);
+  color: hsl(222.2 84% 4.9%);
+}
+.field-chip.metric .dot {
+  background: hsl(142 70% 30%);
+}
+/* 未选中 */
+.field-chip.off {
+  border-color: hsl(214.3 31.8% 91.4%);
+  background: hsl(0 0% 100%);
+  color: hsl(215.4 16.3% 46.9%);
+}
+.field-chip.off .dot {
+  background: hsl(214.3 31.8% 85%);
+}
+.field-chip.off .check-icon {
+  color: hsl(215.4 16.3% 46.9%);
+}
+.field-chip:hover {
+  border-color: hsl(214.3 31.8% 87%);
+  background: hsl(210 40% 98%);
+}
+
+/* ===== 下拉选择器（通用） ===== */
+.select-field {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid hsl(214.3 31.8% 91.4%);
+  border-radius: 6px;
+  font-size: 13px;
+  background: hsl(0 0% 100%);
+  color: hsl(222.2 84% 4.9%);
+  cursor: pointer;
+  transition: all .15s;
+}
+.select-field:focus {
+  outline: none;
+  border-color: hsl(222.2 84% 4.9%);
+}
+
+/* ===== 分段控制 ===== */
+.seg {
+  display: inline-flex;
+  background: hsl(210 40% 96.1%);
+  border-radius: 6px;
+  padding: 3px;
+  gap: 2px;
+}
+.seg-btn {
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 12.5px;
+  color: hsl(215.4 16.3% 46.9%);
+  font-weight: 500;
+  transition: all .15s;
+  cursor: pointer;
+  background: none;
+}
+.seg-btn:hover {
+  color: hsl(222.2 84% 4.9%);
+}
+.seg-btn.active {
+  background: hsl(0 0% 100%);
+  color: hsl(222.2 84% 4.9%);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0,0,0,.08);
+}
+
+/* ===== 问号 tooltip ===== */
+.help-ic {
+  display: inline-flex;
+  align-items: center;
+  color: hsl(215.4 16.3% 46.9%);
+  cursor: help;
+  vertical-align: -2px;
+  margin-left: 4px;
+}
+.help-ic:hover {
+  color: hsl(222.2 84% 4.9%);
+}
+#globalTip {
+  position: fixed;
+  z-index: 9999;
+  max-width: 240px;
+  background: hsl(222.2 47.4% 11.2%);
+  color: hsl(210 40% 98%);
+  font-size: 11.5px;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: 8px 10px;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.22);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .12s;
+  text-align: left;
+}
+#globalTip.show {
+  opacity: 1;
+}
+#globalTip::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+}
+#globalTip.above::after {
+  top: 100%;
+  border-top-color: hsl(222.2 47.4% 11.2%);
+}
+#globalTip.below::after {
+  bottom: 100%;
+  border-bottom-color: hsl(222.2 47.4% 11.2%);
+}
+
+/* ===== 动画 ===== */
+.fade-in {
+  animation: fadeIn .2s ease;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== 日期输入 ===== */
+.rel-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: hsl(222.2 84% 4.9%);
+}
+.num-input {
+  width: 64px;
+  padding: 6px 8px;
+  border: 1px solid hsl(214.3 31.8% 91.4%);
+  border-radius: 6px;
+  font-size: 13px;
+  text-align: center;
+  background: hsl(0 0% 100%);
+}
+.num-input:focus {
+  outline: none;
+  border-color: hsl(222.2 84% 4.9%);
+}
+.abs-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.date-input {
+  padding: 7px 10px;
+  border: 1px solid hsl(214.3 31.8% 91.4%);
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  background: hsl(0 0% 100%);
+}
+.date-input:focus {
+  outline: none;
+  border-color: hsl(222.2 84% 4.9%);
+}
+.abs-sep {
+  color: hsl(215.4 16.3% 46.9%);
+  font-size: 12px;
+}
+
+/* ===== 开关 ===== */
+.adv-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+.adv-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.adv-switch-track {
+  width: 36px;
+  height: 20px;
+  background: hsl(214.3 31.8% 85%);
+  border-radius: 12px;
+  transition: background .15s;
+  position: relative;
+}
+.adv-switch-track::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: hsl(0 0% 100%);
+  border-radius: 50%;
+  transition: transform .15s;
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+.adv-switch input:checked + .adv-switch-track {
+  background: hsl(222.2 47.4% 11.2%);
+}
+.adv-switch input:checked + .adv-switch-track::after {
+  transform: translateX(16px);
+}
+
+/* ===== 智能提示条 ===== */
+.smart-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  background: hsl(210 40% 98%);
+  border: 1px solid hsl(214.3 31.8% 91.4%);
+  border-radius: 6px;
+  font-size: 12px;
+  color: hsl(222.2 84% 4.9%);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.smart-note svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+</style>
+</head>
+<body>
+
+<!-- 背景占位（模拟连接器列表页） -->
+<div class="bg-stage">
+  <div class="bg-topbar">
+    <div class="bg-title">平台连接器</div>
+    <button class="bg-add-btn" onclick="openDrawer()">+ 添加连接器</button>
+  </div>
+  <div class="bg-row"></div><div class="bg-row"></div><div class="bg-row"></div>
+  <div class="bg-row"></div><div class="bg-row"></div><div class="bg-row"></div>
+</div>
+
+<!-- 抽屉蒙层 -->
+<div class="drawer-mask hidden" id="drawerMask" onclick="closeDrawer()"></div>
+
+<!-- 配置抽屉 -->
+<aside class="drawer" id="configDrawer">
+  <!-- Header -->
+  <div class="drawer-header">
+    <div class="drawer-header-top">
+      <div class="drawer-header-left">
+        <div class="drawer-icon" id="drawerIcon">f</div>
+        <div class="drawer-title-group">
+          <div class="drawer-title" id="drawerTitle">配置广告洞察连接器</div>
+          <div class="drawer-subtitle" id="drawerSubtitle">Facebook Marketing API · 广告洞察</div>
+        </div>
+      </div>
+      <button class="drawer-close" onclick="closeDrawer()">×</button>
+    </div>
+    
+    <!-- 步骤导航 -->
+    <div class="config-step-nav" id="stepNav">
+      <button class="config-step-button" data-step="accounts" aria-current="step" onclick="switchStep('accounts')">
+        <span class="config-step-label">步骤 1</span>
+        <span class="config-step-title">账户 Accounts</span>
+      </button>
+      <button class="config-step-button" data-step="dimensions" onclick="switchStep('dimensions')">
+        <span class="config-step-label">步骤 2</span>
+        <span class="config-step-title">维度 Dimensions</span>
+      </button>
+      <button class="config-step-button" data-step="metrics" onclick="switchStep('metrics')">
+        <span class="config-step-label">步骤 3</span>
+        <span class="config-step-title">指标 Metrics</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="drawer-body">
+    <!-- 步骤 1: 账户 -->
+    <div class="config-step-pane active" id="pane-accounts">
+      <div class="config-selection-layout">
+        <div class="config-left-pane" id="accountsLeft"></div>
+        <div class="config-right-pane" id="accountsRight"></div>
+      </div>
+    </div>
+
+    <!-- 步骤 2: 维度 -->
+    <div class="config-step-pane" id="pane-dimensions">
+      <div class="config-selection-layout">
+        <div class="config-left-pane" id="dimensionsLeft"></div>
+        <div class="config-right-pane" id="dimensionsRight"></div>
+      </div>
+    </div>
+
+    <!-- 步骤 3: 指标 -->
+    <div class="config-step-pane" id="pane-metrics">
+      <div class="config-selection-layout">
+        <div class="config-left-pane" id="metricsLeft"></div>
+        <div class="config-right-pane" id="metricsRight"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 调度设置收缩区 -->
+  <details class="schedule-settings" id="scheduleSettings">
+    <summary class="schedule-settings-trigger">
+      <div>
+        <div class="schedule-settings-label">调度设置 Schedule Settings</div>
+        <div class="schedule-settings-summary" id="scheduleSummary">每天 00:00:00 · 相对日期 · 追加数据</div>
+      </div>
+      <svg class="schedule-settings-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </summary>
+    <div class="schedule-settings-content" id="scheduleContent"></div>
+  </details>
+
+  <!-- Footer -->
+  <div class="drawer-footer">
+    <div class="drawer-footer-summary" id="footerSummary">
+      已选择 <b>0</b> 个账户，<b>0</b> 个维度，<b>0</b> 个指标
+    </div>
+    <div class="drawer-footer-actions">
+      <button class="btn btn-default" id="btnPrev" onclick="prevStep()" disabled>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        上一步
+      </button>
+      <button class="btn btn-default" id="btnNext" onclick="nextStep()">
+        下一步
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+      <button class="btn btn-primary" id="btnApply" onclick="applyConfig()" style="display:none;">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        应用并创建
+      </button>
+    </div>
+  </div>
+</aside>
+
+<!-- 全局 tooltip -->
+<div id="globalTip"></div>
+
+<script src="config-data.js"></script>
+<script src="config-app.js"></script>
+</body>
+</html>
