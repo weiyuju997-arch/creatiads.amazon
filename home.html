@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazon DSP · 主页</title>
+  <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- 顶部 tab -->
+    <div class="top-tabs">
+      <button class="top-tab active" data-tab="orders">订单</button>
+      <button class="top-tab" data-tab="lineitems">订单项</button>
+    </div>
+
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <button class="btn primary" id="btnCreate">＋ 创建<span id="createSuffix">订单</span></button>
+      <div class="bulk-wrap">
+        <button class="btn" id="btnBulkEdit" disabled>批量操作 ▾</button>
+        <div class="bulk-menu" id="bulkMenu" hidden>
+          <button type="button" class="bulk-menu-item" data-action="enable" disabled>开启</button>
+          <button type="button" class="bulk-menu-item" data-action="disable" disabled>关闭</button>
+          <button type="button" class="bulk-menu-item" data-action="delete" disabled>删除</button>
+          <button type="button" class="bulk-menu-item" data-action="duplicate" disabled>复制</button>
+          <button type="button" class="bulk-menu-item" data-action="edit-budget">修改预算</button>
+          <button type="button" class="bulk-menu-item" data-action="edit-config" disabled>修改广告系列配置</button>
+          <button type="button" class="bulk-menu-item" data-action="find-replace" disabled>查找并替换</button>
+        </div>
+      </div>
+      <input class="search" id="searchInput" placeholder="搜索…" />
+      <div class="filter-wrap">
+        <button class="btn ghost" id="btnFilter">状态 <span id="filterSummary">: 全部</span> ▾</button>
+        <div class="filter-popover" id="filterPopover" hidden>
+          <div class="filter-head">
+            <span class="filter-title">状态</span>
+            <button class="filter-clear" id="filterClear" type="button">删除</button>
+          </div>
+          <div class="filter-body">
+            <a class="filter-selectall" id="filterSelectAll">全选</a>
+            <label><input type="checkbox" value="ACTIVE" checked />进行中</label>
+            <label><input type="checkbox" value="ENDED" />已结束</label>
+            <label><input type="checkbox" value="NOT_RUNNING" checked />未投放</label>
+            <label><input type="checkbox" value="LINEITEM_NOT_RUNNING" checked />订单项未运行</label>
+            <label><input type="checkbox" value="PROCESSING" checked />正在处理</label>
+          </div>
+          <div class="filter-foot">
+            <button class="btn ghost" id="filterCancel" type="button">取消</button>
+            <button class="btn dark" id="filterApply" type="button">应用</button>
+          </div>
+        </div>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn ghost">列：效果 ▾</button>
+        <button class="btn ghost">06-10 → 2025-06-16</button>
+        <button class="btn ghost">下载和上传 ▾</button>
+      </div>
+    </div>
+
+    <!-- 表格 -->
+    <div class="table-wrap" id="tableWrap"></div>
+  </div>
+
+  <!-- 批量操作右侧抽屉 -->
+  <div class="drawer-mask" id="drawerMask" hidden></div>
+  <aside class="drawer" id="bulkDrawer" hidden>
+    <div class="drawer-head">
+      <span class="drawer-title" id="drawerTitle">批量操作</span>
+      <button class="drawer-close" id="drawerClose" type="button">×</button>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+    <div class="drawer-foot">
+      <button class="btn ghost" id="drawerCancel" type="button">取消</button>
+      <button class="btn primary" id="drawerApply" type="button">应用</button>
+    </div>
+  </aside>
+
+  <script src="home.js"></script>
+</body>
+</html>
