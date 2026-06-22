@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ad Studio · Facebook 合创广告</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="ads-app">
+    <!-- 顶部标题 -->
+    <header class="ads-header">
+      <button class="ads-back" id="adsBack" type="button">←</button>
+      <div>
+        <h1>Facebook 合创广告</h1>
+        <p>使用创作者提供的 Ad Code 批量创建合创广告</p>
+      </div>
+    </header>
+
+    <!-- 模式切换 tabs -->
+    <div class="ads-tabs">
+      <button class="ads-tab active" data-tab="new">新建推广系列</button>
+      <button class="ads-tab" data-tab="reuse">使用日间推广系列</button>
+    </div>
+
+    <!-- 顶部基础信息 -->
+    <div class="ads-base">
+      <div class="ads-field">
+        <label>模板</label>
+        <select id="adsTemplate">
+          <option value="">选择模板</option>
+          <option value="t1">合创广告 - 标准</option>
+          <option value="t2">合创广告 - 进阶</option>
+        </select>
+      </div>
+      <div class="ads-field">
+        <label>任务名称</label>
+        <input id="adsTaskName" placeholder="例如：春季促销合创广告" />
+      </div>
+    </div>
+
+    <!-- 推广系列与预算 -->
+    <section class="ads-card">
+      <h3 class="ads-card-title">推广系列与预算</h3>
+      <div class="ads-field">
+        <div class="ads-row-head">
+          <label>推广系列名称</label>
+          <a class="ads-link">编辑</a>
+        </div>
+        <input value="AList - [推广名称]_[投放策略]_[起日期]" />
+      </div>
+      <div class="ads-grid-2">
+        <div class="ads-field">
+          <label class="ads-toggle"><input type="checkbox" id="campaignStatus" /> 广告系列状态：开启</label>
+        </div>
+        <div class="ads-field">
+          <label class="ads-toggle"><input type="checkbox" id="adsetStatus" /> 广告组状态：开启</label>
+        </div>
+      </div>
+      <div class="ads-field">
+        <label>优化策略</label>
+        <select>
+          <option>广告组合作</option>
+          <option>预算优先</option>
+          <option>KPI 优先</option>
+        </select>
+        <small class="ads-hint">广告组级 - 仅当广告组创建活动时才适用此组件</small>
+      </div>
+      <div class="ads-field">
+        <label>预算</label>
+        <div class="ads-budget">
+          <select>
+            <option>单日预算</option>
+            <option>总预算</option>
+          </select>
+          <span class="ads-currency-prefix">$</span>
+          <input type="number" value="20.00" />
+          <span class="ads-currency-suffix">USD</span>
+        </div>
+        <small class="ads-hint">每天的最大花费金额，可少于此值</small>
+      </div>
+      <div class="ads-field">
+        <label>行程</label>
+        <div class="ads-sub-label">开始日期</div>
+        <input type="datetime-local" />
+        <label class="ads-toggle ads-toggle-inline" style="margin-top:8px">
+          <input type="checkbox" id="setEndDate" /> 设置结束日期
+        </label>
+      </div>
+    </section>
+
+    <!-- 受众定向 -->
+    <section class="ads-card">
+      <h3 class="ads-card-title">受众定向</h3>
+      <div class="ads-field">
+        <label class="ads-switch-label">
+          <span class="ads-switch"><input type="checkbox" checked /><span class="ads-switch-track"></span></span>
+          <span>
+            <strong>遵从（信用账号定义）</strong>
+            <small class="ads-hint">为您的合创广告自动设置位置、年龄、性别、兴趣，无需借助 Meta AI 自动优化。</small>
+          </span>
+        </label>
+      </div>
+      <div class="ads-field">
+        <label>目标国家</label>
+        <input value="US" />
+      </div>
+    </section>
+
+    <!-- 创意设置 -->
+    <section class="ads-card">
+      <h3 class="ads-card-title">创意设置</h3>
+      <div class="ads-section-sub">合创广告配置</div>
+      <div class="ads-grid-2">
+        <div class="ads-field">
+          <label>Facebook 主页 ID</label>
+          <input value="110001241469329" />
+          <small class="ads-hint">已加载 1 个 Pages</small>
+        </div>
+        <div class="ads-field">
+          <label>Instagram 账户 ID</label>
+          <input value="9001055519921 70" />
+          <small class="ads-hint">可选，广告主的 Instagram 账户 ID</small>
+        </div>
+        <div class="ads-field">
+          <label>行为号召</label>
+          <select>
+            <option>未指定</option>
+            <option>立即购买</option>
+            <option>了解更多</option>
+            <option>注册</option>
+          </select>
+        </div>
+        <div class="ads-field">
+          <label>在投放中显示身份</label>
+          <select>
+            <option>双身份（品牌 + 创作者）</option>
+            <option>仅品牌</option>
+            <option>仅创作者</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="ads-section-sub" style="margin-top:18px">
+        <span>广告变体</span>
+        <div class="ads-section-actions">
+          <button class="ads-btn-link" type="button">批量解析</button>
+          <a class="ads-link">确定全部</a>
+        </div>
+      </div>
+      <small class="ads-hint">每行 = 1 个广告，从 Excel 粘贴 6 列即可</small>
+      <div class="ads-table-wrap">
+        <table class="ads-table">
+          <thead>
+            <tr>
+              <th>广告主 ID</th>
+              <th>Content ID</th>
+              <th>Content Name</th>
+              <th>Tracking ID</th>
+              <th>模板名称</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="adVariantBody">
+            <tr>
+              <td><input value="账户ID" /></td>
+              <td><input value="C001" /></td>
+              <td><input value="内容名" /></td>
+              <td><input value="TRK001" /></td>
+              <td><input value="模板1" /></td>
+              <td><button class="ads-row-del" type="button">×</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button class="ads-btn-link" id="addVariantRow" type="button">+ 添加一行</button>
+
+      <div class="ads-section-sub" style="margin-top:18px">进阶高级模式</div>
+      <label class="ads-toggle ads-toggle-inline">
+        <input type="checkbox" /> 进阶模式开启
+      </label>
+      <small class="ads-hint">开启后会显示 Meta 推荐的更多广告组优化项与定向策略。</small>
+    </section>
+
+    <!-- 中央配置 -->
+    <section class="ads-card">
+      <h3 class="ads-card-title">中央配置</h3>
+      <div class="ads-field">
+        <label>广告组合命名规则</label>
+        <input value="[推广名称]_[traffic 流量来源]_[内容ID]_[内容名称]_[投放日期]_code（序号）" />
+        <small class="ads-hint">分隔符</small>
+      </div>
+      <div class="ads-field">
+        <div class="ads-row-head">
+          <label>广告命名规则</label>
+          <a class="ads-link">编辑</a>
+        </div>
+        <input value="[内容名称]_meta_[投放策略]_[流量类型]_[内容ID]_[内容名称]_[adcode]_[AdCode]_[投放日期]_amazon" />
+      </div>
+      <div class="ads-field">
+        <label class="ads-toggle ads-toggle-inline"><input type="checkbox" /> 广告状态：暂停</label>
+      </div>
+    </section>
+
+    <!-- 叉乘预览 -->
+    <section class="ads-card ads-preview">
+      <h3 class="ads-card-title">叉乘预览</h3>
+      <div class="ads-preview-stats">
+        <div class="ads-stat"><div class="ads-stat-num" id="advCount">0</div><div class="ads-stat-lbl">广告账户</div></div>
+        <div class="ads-stat primary"><div class="ads-stat-num" id="adCount">0</div><div class="ads-stat-lbl"><span id="adCountText">0 个广告</span></div></div>
+      </div>
+    </section>
+
+    <!-- 底部按钮 -->
+    <footer class="ads-foot">
+      <button class="ads-btn-ghost" id="btnSaveTpl" type="button">📄 保存模板</button>
+      <button class="ads-btn-ghost" id="btnPreview" type="button">预览广告</button>
+      <button class="ads-btn-primary" id="btnSubmit" type="button">提交广告</button>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
