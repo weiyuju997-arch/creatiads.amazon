@@ -1,0 +1,199 @@
+{
+  "platform": "GOOGLE",
+  "connectorType": "GOOGLE_ADS_ACCOUNT_METADATA",
+  "type": "metadata",
+  "dimensionGroups": {
+    "Customer Basic Info": [
+      {
+        "apiName": "customer.id",
+        "dbColumn": "id",
+        "description": "Customer ID"
+      },
+      {
+        "apiName": "customer.descriptive_name",
+        "dbColumn": "descriptive_name",
+        "description": "Customer descriptive name"
+      },
+      {
+        "apiName": "customer.resource_name",
+        "dbColumn": "resource_name",
+        "description": "Customer resource name"
+      },
+      {
+        "apiName": "customer.status",
+        "dbColumn": "status",
+        "description": "Customer status"
+      },
+      {
+        "apiName": "customer.currency_code",
+        "dbColumn": "currency_code",
+        "description": "Currency code"
+      },
+      {
+        "apiName": "customer.time_zone",
+        "dbColumn": "time_zone",
+        "description": "Time zone"
+      },
+      {
+        "apiName": "customer.auto_tagging_enabled",
+        "dbColumn": "auto_tagging_enabled",
+        "description": "Whether auto-tagging is enabled"
+      },
+      {
+        "apiName": "customer.manager",
+        "dbColumn": "manager",
+        "description": "Whether this is a manager account"
+      },
+      {
+        "apiName": "customer.test_account",
+        "dbColumn": "test_account",
+        "description": "Whether this is a test account"
+      },
+      {
+        "apiName": "customer.has_partners_badge",
+        "dbColumn": "has_partners_badge",
+        "description": "Whether has partners badge"
+      },
+      {
+        "apiName": "customer.optimization_score",
+        "dbColumn": "optimization_score",
+        "description": "Customer optimization score"
+      },
+      {
+        "apiName": "customer.optimization_score_weight",
+        "dbColumn": "optimization_score_weight",
+        "description": "Customer optimization score weight"
+      },
+      {
+        "apiName": "customer.final_url_suffix",
+        "dbColumn": "final_url_suffix",
+        "description": "Customer final URL suffix"
+      },
+      {
+        "apiName": "customer.tracking_url_template",
+        "dbColumn": "tracking_url_template",
+        "description": "Customer tracking URL template"
+      },
+      {
+        "apiName": "customer.video_brand_safety_suitability",
+        "dbColumn": "video_brand_safety_suitability",
+        "description": "Customer video brand safety suitability"
+      },
+      {
+        "apiName": "customer.pay_per_conversion_eligibility_failure_reasons",
+        "dbColumn": "pay_per_conversion_eligibility_failure_reasons",
+        "description": "Pay per conversion eligibility failure reasons"
+      },
+      {
+        "apiName": "customer.remarketing_setting.google_global_site_tag",
+        "dbColumn": "google_global_site_tag",
+        "description": "Google global site tag"
+      },
+      {
+        "apiName": "customer.call_reporting_setting.call_reporting_enabled",
+        "dbColumn": "call_reporting_enabled",
+        "description": "Whether call reporting is enabled"
+      },
+      {
+        "apiName": "customer.call_reporting_setting.call_conversion_reporting_enabled",
+        "dbColumn": "call_conversion_reporting_enabled",
+        "description": "Whether call conversion reporting is enabled"
+      },
+      {
+        "apiName": "customer.call_reporting_setting.call_conversion_action",
+        "dbColumn": "call_conversion_action",
+        "description": "Call conversion action resource name"
+      },
+      {
+        "apiName": "customer.conversion_tracking_setting.conversion_tracking_id",
+        "dbColumn": "conversion_tracking_id",
+        "description": "Conversion tracking ID"
+      },
+      {
+        "apiName": "customer.conversion_tracking_setting.conversion_tracking_status",
+        "dbColumn": "conversion_tracking_status",
+        "description": "Conversion tracking status"
+      },
+      {
+        "apiName": "customer.conversion_tracking_setting.cross_account_conversion_tracking_id",
+        "dbColumn": "cross_account_conversion_tracking_id",
+        "description": "Cross-account conversion tracking ID"
+      },
+      {
+        "apiName": "customer.conversion_tracking_setting.accepted_customer_data_terms",
+        "dbColumn": "accepted_customer_data_terms",
+        "description": "Whether customer data terms are accepted"
+      },
+      {
+        "apiName": "customer.conversion_tracking_setting.enhanced_conversions_for_leads_enabled",
+        "dbColumn": "enhanced_conversions_for_leads_enabled",
+        "description": "Whether enhanced conversions for leads is enabled"
+      },
+      {
+        "apiName": "customer.conversion_tracking_setting.google_ads_conversion_customer",
+        "dbColumn": "google_ads_conversion_customer",
+        "description": "Google Ads conversion customer resource name"
+      },
+      {
+        "apiName": "customer.customer_agreement_setting.accepted_lead_form_terms",
+        "dbColumn": "accepted_lead_form_terms",
+        "description": "Whether lead form terms are accepted"
+      },
+      {
+        "apiName": "customer.contains_eu_political_advertising",
+        "dbColumn": "contains_eu_political_advertising",
+        "description": "Whether contains EU political advertising"
+      },
+      {
+        "apiName": "customer.image_asset_auto_migration_done",
+        "dbColumn": "image_asset_auto_migration_done",
+        "description": "Whether image asset auto migration is done"
+      },
+      {
+        "apiName": "customer.image_asset_auto_migration_done_date_time",
+        "dbColumn": "image_asset_auto_migration_done_date_time",
+        "description": "Image asset auto migration done date time"
+      },
+      {
+        "apiName": "customer.location_asset_auto_migration_done",
+        "dbColumn": "location_asset_auto_migration_done",
+        "description": "Whether location asset auto migration is done"
+      },
+      {
+        "apiName": "customer.location_asset_auto_migration_done_date_time",
+        "dbColumn": "location_asset_auto_migration_done_date_time",
+        "description": "Location asset auto migration done date time"
+      },
+      {
+        "apiName": "customer.local_services_settings.granular_insurance_statuses",
+        "dbColumn": "granular_insurance_statuses",
+        "description": "Granular insurance statuses"
+      },
+      {
+        "apiName": "customer.local_services_settings.granular_license_statuses",
+        "dbColumn": "granular_license_statuses",
+        "description": "Granular license statuses"
+      },
+      {
+        "apiName": "customer.video_customer.third_party_integration_partners.brand_lift_integration_partners",
+        "dbColumn": "video_brand_lift_partners",
+        "description": "Customer video brand lift integration partners"
+      },
+      {
+        "apiName": "customer.video_customer.third_party_integration_partners.brand_safety_integration_partners",
+        "dbColumn": "video_brand_safety_partners",
+        "description": "Customer video brand safety integration partners"
+      },
+      {
+        "apiName": "customer.video_customer.third_party_integration_partners.reach_integration_partners",
+        "dbColumn": "video_reach_partners",
+        "description": "Customer video reach integration partners"
+      },
+      {
+        "apiName": "customer.video_customer.third_party_integration_partners.viewability_integration_partners",
+        "dbColumn": "video_viewability_partners",
+        "description": "Customer video viewability integration partners"
+      }
+    ]
+  }
+}

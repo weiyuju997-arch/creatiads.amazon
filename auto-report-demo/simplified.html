@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auto Report — Creatiads (Simplified)</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #fafafa; color: #1f2937; font-size: 14px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, textarea, select { font-family: inherit; }
+
+/* Layout */
+.app { display: flex; min-height: 100vh; }
+.sidebar { width: 240px; background: #fff; border-right: 1px solid #f0f0f0; padding: 20px 16px; flex-shrink: 0; }
+.sidebar-title { font-size: 11px; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+.sidebar-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; font-size: 13px; color: #6b7280; transition: all 0.15s; margin-bottom: 2px; }
+.sidebar-item:hover { background: #f5f3ff; color: #7c3aed; }
+.sidebar-item.active { background: #f5f3ff; color: #7c3aed; font-weight: 500; }
+.main { flex: 1; overflow-y: auto; }
+
+/* Page container */
+.page { display: none; }
+.page.active { display: block; }
+.page-inner { max-width: 800px; margin: 0 auto; padding: 40px 32px; }
+
+/* Header */
+.page-header { margin-bottom: 32px; }
+.page-header h1 { font-size: 24px; font-weight: 700; color: #111827; margin-bottom: 6px; }
+.page-header p { font-size: 14px; color: #6b7280; }
+
+/* Input card */
+.input-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+.input-card label { display: block; font-size: 13px; font-weight: 500; color: #374151; margin-bottom: 8px; }
+.input-card textarea { width: 100%; min-height: 96px; padding: 12px 14px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; line-height: 1.6; resize: none; transition: all 0.15s; }
+.input-card textarea:focus { outline: none; border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1); }
+.input-card .hint { font-size: 12px; color: #9ca3af; margin-top: 8px; }
+
+.input-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; }
+.example-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 12px; padding: 4px 10px; border: 1px solid #e5e7eb; border-radius: 16px; color: #6b7280; transition: all 0.15s; }
+.chip:hover { border-color: #c4b5fd; background: #f5f3ff; color: #7c3aed; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; transition: all 0.15s; border: 1px solid transparent; }
+.btn-primary { background: #7c3aed; color: #fff; }
+.btn-primary:hover { background: #6d28d9; }
+.btn-primary:disabled { background: #d1d5db; cursor: not-allowed; }
+.btn-ghost { color: #6b7280; border-color: #e5e7eb; background: #fff; }
+.btn-ghost:hover { background: #f9fafb; color: #111827; }
+.btn-lg { padding: 10px 20px; font-size: 14px; }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+
+/* Quick start templates */
+.section-title { font-size: 13px; font-weight: 600; color: #6b7280; margin: 24px 0 12px; }
+.template-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.template-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; text-align: left; transition: all 0.15s; cursor: pointer; }
+.template-card:hover { border-color: #c4b5fd; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(124, 58, 237, 0.08); }
+.template-card .icon { width: 32px; height: 32px; background: #f5f3ff; color: #7c3aed; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+.template-card h4 { font-size: 14px; font-weight: 600; color: #111827; margin-bottom: 4px; }
+.template-card p { font-size: 12px; color: #6b7280; line-height: 1.5; }
+
+/* Config page (Step 2) */
+.config-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; }
+.back-link { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: #6b7280; }
+.back-link:hover { color: #111827; }
+
+.config-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+.config-row { padding: 16px 20px; border-bottom: 1px solid #f5f5f5; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.config-row:last-child { border-bottom: none; }
+.config-label { font-size: 13px; color: #6b7280; min-width: 88px; flex-shrink: 0; }
+.config-value { flex: 1; font-size: 14px; color: #111827; }
+.config-actions { flex-shrink: 0; }
+
+/* Selected platform pills */
+.platform-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.platform-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: #f5f3ff; color: #7c3aed; border-radius: 16px; font-size: 12px; font-weight: 500; }
+.platform-pill .x { cursor: pointer; opacity: 0.6; font-size: 14px; line-height: 1; }
+.platform-pill .x:hover { opacity: 1; }
+
+/* Date range buttons */
+.date-options { display: flex; gap: 6px; }
+.date-option { padding: 4px 10px; border: 1px solid #e5e7eb; border-radius: 16px; font-size: 12px; color: #6b7280; transition: all 0.15s; }
+.date-option:hover { border-color: #c4b5fd; }
+.date-option.active { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+
+/* Advanced section (collapsible) */
+.advanced-toggle { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: #fafafa; border: 1px dashed #e5e7eb; border-radius: 10px; font-size: 13px; color: #6b7280; transition: all 0.15s; margin-bottom: 12px; }
+.advanced-toggle:hover { border-color: #c4b5fd; color: #7c3aed; }
+.advanced-toggle .chevron { transition: transform 0.2s; }
+.advanced-toggle.open .chevron { transform: rotate(90deg); }
+.advanced-content { display: none; padding: 4px 0 12px; }
+.advanced-content.open { display: block; }
+
+/* Tag chips for dimensions/metrics */
+.tag-list { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.tag { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; background: #f3f4f6; color: #4b5563; border-radius: 14px; font-size: 12px; font-weight: 500; }
+.tag .x { cursor: pointer; opacity: 0.5; font-size: 13px; line-height: 1; padding-left: 2px; }
+.tag .x:hover { opacity: 1; }
+.tag-add { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; background: #fff; border: 1px dashed #d1d5db; color: #6b7280; border-radius: 14px; font-size: 12px; transition: all 0.15s; }
+.tag-add:hover { border-color: #7c3aed; color: #7c3aed; border-style: solid; }
+
+/* Bottom action bar */
+.bottom-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 32px; padding-top: 24px; border-top: 1px solid #f0f0f0; }
+.summary-text { font-size: 13px; color: #6b7280; }
+.summary-text b { color: #111827; font-weight: 600; }
+
+/* Modal */
+.modal { display: none; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; }
+.modal.show { display: flex; }
+.modal-mask { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(2px); }
+.modal-box { position: relative; width: 480px; max-width: 90vw; max-height: 80vh; background: #fff; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2); }
+.modal-head { padding: 16px 20px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; justify-content: space-between; }
+.modal-head h3 { font-size: 16px; font-weight: 600; }
+.modal-close { font-size: 22px; color: #9ca3af; line-height: 1; padding: 4px; }
+.modal-close:hover { color: #4b5563; }
+.modal-body { padding: 16px 20px; overflow-y: auto; }
+.modal-foot { padding: 12px 20px; border-top: 1px solid #f0f0f0; display: flex; justify-content: flex-end; gap: 8px; }
+
+/* Modal: option list */
+.option-list { display: flex; flex-direction: column; gap: 4px; max-height: 360px; overflow-y: auto; }
+.option-search { width: 100%; padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 13px; margin-bottom: 12px; }
+.option-search:focus { outline: none; border-color: #7c3aed; }
+.option-group-title { font-size: 11px; font-weight: 600; color: #9ca3af; text-transform: uppercase; padding: 8px 8px 4px; }
+.option-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 6px; cursor: pointer; transition: background 0.1s; }
+.option-item:hover { background: #f9fafb; }
+.option-item input[type="checkbox"] { accent-color: #7c3aed; }
+.option-item label { flex: 1; font-size: 13px; cursor: pointer; }
+
+/* Platform select grid in modal */
+.platform-select-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.platform-select-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+.platform-select-item:hover { border-color: #c4b5fd; }
+.platform-select-item.selected { border-color: #7c3aed; background: #f5f3ff; }
+.platform-select-item .icon-square { width: 28px; height: 28px; background: #f3f4f6; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px; color: #4b5563; flex-shrink: 0; }
+.platform-select-item .name { font-size: 13px; font-weight: 500; flex: 1; }
+.platform-select-item .status { font-size: 11px; color: #9ca3af; }
+.platform-select-item.selected .status { color: #7c3aed; }
+
+/* Preview card */
+.preview-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; margin-top: 16px; }
+.preview-title { font-size: 14px; font-weight: 600; color: #111827; margin-bottom: 4px; }
+.preview-meta { font-size: 12px; color: #9ca3af; margin-bottom: 16px; }
+.preview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.preview-stat { padding: 12px 14px; background: #fafafa; border-radius: 8px; }
+.preview-stat .stat-label { font-size: 11px; color: #9ca3af; margin-bottom: 4px; }
+.preview-stat .stat-value { font-size: 18px; font-weight: 700; color: #111827; }
+.preview-chart { height: 120px; background: linear-gradient(180deg, #f5f3ff 0%, #fafafa 100%); border-radius: 8px; display: flex; align-items: flex-end; gap: 4px; padding: 12px; }
+.preview-bar { flex: 1; background: linear-gradient(180deg, #a78bfa, #7c3aed); border-radius: 4px 4px 0 0; opacity: 0.8; }
+
+/* Success modal */
+.success-icon { width: 56px; height: 56px; background: #ecfdf5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+.success-title { text-align: center; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.success-desc { text-align: center; font-size: 13px; color: #6b7280; margin-bottom: 20px; }
+
+/* History page */
+.history-table { width: 100%; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; }
+.history-table-head { display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr 80px; padding: 12px 16px; background: #fafafa; font-size: 12px; font-weight: 500; color: #6b7280; }
+.history-table-row { display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr 80px; padding: 14px 16px; border-top: 1px solid #f5f5f5; align-items: center; font-size: 13px; }
+.history-table-row:hover { background: #fafafa; }
+
+/* Empty state */
+.empty-state { text-align: center; padding: 60px 20px; color: #9ca3af; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-title">Auto Report</div>
+    <button class="sidebar-item active" onclick="showPage('home')">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      新建报表
+    </button>
+    <button class="sidebar-item" onclick="showPage('history')">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      历史报表
+    </button>
+  </aside>
+
+  <main class="main">
+    <!-- 首页：一句话生成 -->
+    <section class="page active" id="pageHome">
+      <div class="page-inner" id="homeContent"></div>
+    </section>
+
+    <!-- Step 2: 配置确认 -->
+    <section class="page" id="pageConfig">
+      <div class="page-inner" id="configContent"></div>
+    </section>
+
+    <!-- 历史报表 -->
+    <section class="page" id="pageHistory">
+      <div class="page-inner" id="historyContent"></div>
+    </section>
+  </main>
+</div>
+
+<script>
+/* ============ 数据 ============ */
+const EXAMPLES = [
+  '帮我生成 Facebook 和 TikTok 过去 30 天的转化和 ROAS 对比报表',
+  '我想看上个月所有平台的广告花费明细',
+  '生成本周 Google Ads 的点击率和转化率趋势'
+];
+
+const TEMPLATES = [
+  { id: 'performance', name: '广告效果分析', desc: '花费、展示、点击、CTR、CPC、CPM 趋势对比', icon: '📊' },
+  { id: 'conversion', name: '转化与 ROAS', desc: '转化漏斗、归因分析、ROAS 与 CPA 监控', icon: '🎯' },
+  { id: 'budget', name: '花费预算追踪', desc: '日/周/月花费明细、预算使用率、超支预警', icon: '💰' }
+];
+
+const PLATFORMS = [
+  { id: 'facebook', name: 'Facebook Ads', connected: true },
+  { id: 'tiktok', name: 'TikTok Ads', connected: true },
+  { id: 'google', name: 'Google Ads', connected: true },
+  { id: 'linkedin', name: 'LinkedIn Ads', connected: false },
+  { id: 'twitter', name: 'X Ads', connected: false },
+  { id: 'snapchat', name: 'Snapchat Ads', connected: false }
+];
+
+const DIMENSION_CATEGORIES = {
+  '时间': ['日期', '星期', '月份', '季度'],
+  '设备': ['设备类型', '操作系统'],
+  '地理': ['国家', '地区', '城市'],
+  '受众': ['年龄段', '性别']
+};
+
+const METRIC_CATEGORIES = {
+  '花费': ['总花费', '平均 CPC', '平均 CPM'],
+  '互动': ['展示次数', '点击次数', 'CTR'],
+  '转化': ['转化次数', '转化价值', 'CPA', 'ROAS']
+};
+
+const HISTORY_REPORTS = [
+  { name: 'FB_TT_转化对比_20260524', scenario: '转化与 ROAS', sources: 'Facebook, TikTok', updated: '2026/05/24 18:00' },
+  { name: '本月花费追踪', scenario: '花费预算追踪', sources: 'Facebook, Google', updated: '2026/05/23 09:00' },
+  { name: 'Google 效果分析', scenario: '广告效果分析', sources: 'Google Ads', updated: '2026/05/22 15:30' }
+];
+
+/* ============ 状态 ============ */
+let currentInput = '';
+let selectedPlatforms = new Set(['facebook', 'tiktok']);
+let dateRange = 30;
+let selectedDimensions = new Set(['日期', '设备类型']);
+let selectedMetrics = new Set(['总花费', '展示次数', '点击次数', 'CTR', '转化次数', 'ROAS']);
+let advancedOpen = false;
+
+/* ============ 页面切换 ============ */
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active');
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  event.target.closest('.sidebar-item').classList.add('active');
+  
+  if (page === 'home') renderHome();
+  else if (page === 'history') renderHistory();
+}
+
+/* ============ 首页渲染 ============ */
+function renderHome() {
+  document.getElementById('homeContent').innerHTML = `
+    <div class="page-header">
+      <h1>Auto Report</h1>
+      <p>用一句话描述你的需求，系统将自动生成报表</p>
+    </div>
+
+    <div class="input-card">
+      <label>描述你的需求</label>
+      <textarea id="nlInput" placeholder="例如：${EXAMPLES[0]}" oninput="currentInput=this.value"></textarea>
+      <div class="hint">输入越具体，配置越精准</div>
+      <div class="input-actions">
+        <div class="example-chips">
+          ${EXAMPLES.map((ex, i) => `<button class="chip" onclick="useExample(${i})">${ex.slice(0, 20)}...</button>`).join('')}
+        </div>
+        <button class="btn btn-primary" onclick="generateFromNL()" id="btnGenerate" disabled>
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          生成报表
+        </button>
+      </div>
+    </div>
+
+    <div class="section-title">或从场景模板开始</div>
+    <div class="template-grid">
+      ${TEMPLATES.map(t => `
+        <button class="template-card" onclick="startFromTemplate('${t.id}')">
+          <div class="icon">${t.icon}</div>
+          <h4>${t.name}</h4>
+          <p>${t.desc}</p>
+        </button>
+      `).join('')}
+    </div>
+  `;
+  
+  document.getElementById('nlInput').addEventListener('input', e => {
+    document.getElementById('btnGenerate').disabled = !e.target.value.trim();
+  });
+}
+
+function useExample(i) {
+  currentInput = EXAMPLES[i];
+  document.getElementById('nlInput').value = currentInput;
+  document.getElementById('btnGenerate').disabled = false;
+}
+
+function generateFromNL() {
+  if (!currentInput.trim()) return;
+  // 简单的关键词识别
+  if (/facebook|fb/i.test(currentInput)) selectedPlatforms.add('facebook');
+  if (/tiktok|tt/i.test(currentInput)) selectedPlatforms.add('tiktok');
+  if (/google/i.test(currentInput)) selectedPlatforms.add('google');
+  if (/30天|一个月/i.test(currentInput)) dateRange = 30;
+  else if (/7天|一周/i.test(currentInput)) dateRange = 7;
+  else if (/90天|三个月/i.test(currentInput)) dateRange = 90;
+  
+  showConfigPage();
+}
+
+function startFromTemplate(id) {
+  currentInput = TEMPLATES.find(t => t.id === id).name;
+  selectedPlatforms = new Set(['facebook', 'tiktok']);
+  dateRange = 30;
+  showConfigPage();
+}
+
+/* ============ 配置页渲染 ============ */
+function showConfigPage() {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('pageConfig').classList.add('active');
+  renderConfig();
+}
+
+function renderConfig() {
+  const platformNames = [...selectedPlatforms].map(id => PLATFORMS.find(p => p.id === id).name).join('、');
+  
+  document.getElementById('configContent').innerHTML = `
+    <div class="config-header">
+      <div>
+        <button class="back-link" onclick="showPage('home'); renderHome();">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          返回
+        </button>
+        <div class="page-header" style="margin-top: 12px; margin-bottom: 0;">
+          <h1>确认配置</h1>
+          <p>检查并调整自动识别的配置，或直接生成报表</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="config-card">
+      <div class="config-row">
+        <div class="config-label">需求描述</div>
+        <div class="config-value">${currentInput || '（从模板启动）'}</div>
+      </div>
+      <div class="config-row">
+        <div class="config-label">数据源</div>
+        <div class="config-value">
+          <div class="platform-pills">
+            ${[...selectedPlatforms].map(id => {
+              const p = PLATFORMS.find(x => x.id === id);
+              return `<span class="platform-pill">${p.name} <span class="x" onclick="removePlatform('${id}')">&times;</span></span>`;
+            }).join('')}
+            <button class="tag-add" onclick="openPlatformModal()">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              添加平台
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="config-row">
+        <div class="config-label">时间范围</div>
+        <div class="config-value">
+          <div class="date-options">
+            ${[7, 14, 30, 90].map(d => `<button class="date-option ${dateRange === d ? 'active' : ''}" onclick="dateRange=${d}; renderConfig();">${d} 天</button>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="advanced-toggle ${advancedOpen ? 'open' : ''}" onclick="toggleAdvanced()">
+      <span>高级配置（维度、指标）</span>
+      <svg class="chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+
+    <div class="advanced-content ${advancedOpen ? 'open' : ''}">
+      <div class="config-card">
+        <div class="config-row">
+          <div class="config-label">维度</div>
+          <div class="config-value">
+            <div class="tag-list">
+              ${[...selectedDimensions].map(d => `<span class="tag">${d} <span class="x" onclick="removeDimension('${d}')">&times;</span></span>`).join('')}
+              <button class="tag-add" onclick="openDimensionModal()">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                添加维度
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="config-row">
+          <div class="config-label">指标</div>
+          <div class="config-value">
+            <div class="tag-list">
+              ${[...selectedMetrics].map(m => `<span class="tag">${m} <span class="x" onclick="removeMetric('${m}')">&times;</span></span>`).join('')}
+              <button class="tag-add" onclick="openMetricModal()">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                添加指标
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="preview-card">
+      <div class="preview-title">报表预览</div>
+      <div class="preview-meta">基于 ${platformNames} · 最近 ${dateRange} 天 · ${selectedDimensions.size} 个维度 · ${selectedMetrics.size} 个指标</div>
+      <div class="preview-grid">
+        <div class="preview-stat"><div class="stat-label">总花费</div><div class="stat-value">¥128.5K</div></div>
+        <div class="preview-stat"><div class="stat-label">总展示</div><div class="stat-value">2.4M</div></div>
+        <div class="preview-stat"><div class="stat-label">总转化</div><div class="stat-value">1,847</div></div>
+      </div>
+      <div class="preview-chart">
+        ${[60, 75, 55, 80, 70, 85, 90].map(h => `<div class="preview-bar" style="height:${h}%"></div>`).join('')}
+      </div>
+    </div>
+
+    <div class="bottom-bar">
+      <div class="summary-text">将生成包含 <b>${selectedDimensions.size}</b> 个维度、<b>${selectedMetrics.size}</b> 个指标的报表</div>
+      <button class="btn btn-primary btn-lg" onclick="confirmGenerate()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        生成报表
+      </button>
+    </div>
+  `;
+}
+
+function toggleAdvanced() {
+  advancedOpen = !advancedOpen;
+  renderConfig();
+}
+
+function removePlatform(id) {
+  selectedPlatforms.delete(id);
+  renderConfig();
+}
+
+function removeDimension(d) {
+  selectedDimensions.delete(d);
+  renderConfig();
+}
+
+function removeMetric(m) {
+  selectedMetrics.delete(m);
+  renderConfig();
+}
+
+/* ============ 弹窗 ============ */
+function openPlatformModal() {
+  showModal('选择数据源平台', `
+    <div class="platform-select-grid">
+      ${PLATFORMS.map(p => `
+        <div class="platform-select-item ${selectedPlatforms.has(p.id) ? 'selected' : ''}" onclick="togglePlatformInModal('${p.id}')">
+          <div class="icon-square">${p.name.charAt(0)}</div>
+          <div class="name">${p.name}</div>
+          <div class="status">${p.connected ? '已连接' : '未连接'}</div>
+        </div>
+      `).join('')}
+    </div>
+  `, () => renderConfig());
+}
+
+function togglePlatformInModal(id) {
+  if (selectedPlatforms.has(id)) selectedPlatforms.delete(id);
+  else selectedPlatforms.add(id);
+  openPlatformModal();
+}
+
+function openDimensionModal() {
+  const html = Object.entries(DIMENSION_CATEGORIES).map(([cat, items]) => `
+    <div class="option-group-title">${cat}</div>
+    ${items.map(item => `
+      <div class="option-item">
+        <input type="checkbox" id="dim-${item}" ${selectedDimensions.has(item) ? 'checked' : ''} onchange="toggleDimension('${item}')">
+        <label for="dim-${item}">${item}</label>
+      </div>
+    `).join('')}
+  `).join('');
+  showModal('选择维度', `<div class="option-list">${html}</div>`, () => renderConfig());
+}
+
+function toggleDimension(d) {
+  if (selectedDimensions.has(d)) selectedDimensions.delete(d);
+  else selectedDimensions.add(d);
+}
+
+function openMetricModal() {
+  const html = Object.entries(METRIC_CATEGORIES).map(([cat, items]) => `
+    <div class="option-group-title">${cat}</div>
+    ${items.map(item => `
+      <div class="option-item">
+        <input type="checkbox" id="met-${item}" ${selectedMetrics.has(item) ? 'checked' : ''} onchange="toggleMetric('${item}')">
+        <label for="met-${item}">${item}</label>
+      </div>
+    `).join('')}
+  `).join('');
+  showModal('选择指标', `<div class="option-list">${html}</div>`, () => renderConfig());
+}
+
+function toggleMetric(m) {
+  if (selectedMetrics.has(m)) selectedMetrics.delete(m);
+  else selectedMetrics.add(m);
+}
+
+function showModal(title, bodyHTML, onClose) {
+  const modal = document.getElementById('modal') || createModal();
+  modal.querySelector('.modal-head h3').textContent = title;
+  modal.querySelector('.modal-body').innerHTML = bodyHTML;
+  modal.classList.add('show');
+  modal._onClose = onClose;
+}
+
+function closeModal() {
+  const modal = document.getElementById('modal');
+  modal.classList.remove('show');
+  if (modal._onClose) modal._onClose();
+}
+
+function createModal() {
+  const div = document.createElement('div');
+  div.id = 'modal';
+  div.className = 'modal';
+  div.innerHTML = `
+    <div class="modal-mask" onclick="closeModal()"></div>
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3></h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" onclick="closeModal()">关闭</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(div);
+  return div;
+}
+
+/* ============ 生成报表 ============ */
+function confirmGenerate() {
+  const platformNames = [...selectedPlatforms].map(id => PLATFORMS.find(p => p.id === id).name).join(', ');
+  showModal('报表已生成', `
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#10b981" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="success-title">报表生成成功</div>
+    <div class="success-desc">系统已自动完成数据拉取和报表配置</div>
+    <div style="background:#fafafa; border-radius:8px; padding:12px; font-size:13px; margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="color:#6b7280;">数据源</span><b>${platformNames}</b></div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="color:#6b7280;">时间范围</span><b>最近 ${dateRange} 天</b></div>
+      <div style="display:flex; justify-content:space-between;"><span style="color:#6b7280;">首次同步</span><b>已开始 · 预计 2 分钟</b></div>
+    </div>
+  `, () => {
+    showPage('home');
+    renderHome();
+  });
+  
+  setTimeout(() => {
+    const foot = document.querySelector('#modal .modal-foot');
+    foot.innerHTML = `
+      <button class="btn btn-ghost" onclick="closeModal()">留在这里</button>
+      <button class="btn btn-primary" onclick="closeModal()">查看 Dashboard</button>
+    `;
+  }, 100);
+}
+
+/* ============ 历史报表 ============ */
+function renderHistory() {
+  document.getElementById('historyContent').innerHTML = `
+    <div class="page-header">
+      <h1>历史报表</h1>
+      <p>查看和管理已生成的报表</p>
+    </div>
+    <div class="history-table">
+      <div class="history-table-head">
+        <div>报表名称</div>
+        <div>场景</div>
+        <div>数据源</div>
+        <div>最后更新</div>
+        <div></div>
+      </div>
+      ${HISTORY_REPORTS.map(r => `
+        <div class="history-table-row">
+          <div style="font-weight:500;">${r.name}</div>
+          <div style="color:#6b7280;">${r.scenario}</div>
+          <div style="color:#9ca3af; font-size:12px;">${r.sources}</div>
+          <div style="color:#9ca3af; font-size:12px;">${r.updated}</div>
+          <div><button class="btn btn-sm btn-ghost">查看</button></div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+/* ============ 初始化 ============ */
+renderHome();
+</script>
+</body>
+</html>

@@ -1,0 +1,2164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auto Report — Creatiads</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          border: 'hsl(214.3 31.8% 91.4%)',
+          input: 'hsl(214.3 31.8% 91.4%)',
+          ring: 'hsl(222.2 84% 4.9%)',
+          background: 'hsl(0 0% 100%)',
+          foreground: 'hsl(222.2 84% 4.9%)',
+          primary: { DEFAULT: 'hsl(222.2 47.4% 11.2%)', foreground: 'hsl(210 40% 98%)' },
+          secondary: { DEFAULT: 'hsl(210 40% 96.1%)', foreground: 'hsl(222.2 47.4% 11.2%)' },
+          muted: { DEFAULT: 'hsl(210 40% 96.1%)', foreground: 'hsl(215.4 16.3% 46.9%)' },
+          accent: { DEFAULT: 'hsl(210 40% 96.1%)', foreground: 'hsl(222.2 47.4% 11.2%)' },
+          card: { DEFAULT: 'hsl(0 0% 100%)', foreground: 'hsl(222.2 84% 4.9%)' },
+        },
+        borderRadius: { lg: '0.5rem', md: '0.375rem', sm: '0.25rem' },
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif; font-feature-settings: "rlig" 1, "calt" 1; }
+  .fade-in { animation: fadeIn .2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(2px);} to { opacity: 1; transform: translateY(0);} }
+  .scrollable::-webkit-scrollbar { width: 6px; height: 6px; }
+  .scrollable::-webkit-scrollbar-thumb { background: hsl(214.3 31.8% 85%); border-radius: 3px; }
+  .scrollable::-webkit-scrollbar-track { background: transparent; }
+  input:focus, textarea:focus, select:focus, button:focus-visible {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+  .focus-ring:focus-visible {
+    box-shadow: 0 0 0 2px white, 0 0 0 4px hsl(222.2 84% 4.9%);
+  }
+  details > summary::-webkit-details-marker { display: none; }
+  details[open] .chevron { transform: rotate(90deg); }
+  .chevron { transition: transform .15s ease; }
+  /* Loading spinner */
+  .spinner { animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  /* Modal */
+  .modal-mask { background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(2px); }
+  .modal-box { animation: modalIn .2s ease; }
+  @keyframes modalIn { from { opacity: 0; transform: translateY(-10px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  /* Tooltip */
+  .help-icon { position: relative; }
+  .help-icon .help-tip { opacity: 0; visibility: hidden; transition: opacity .15s ease, visibility .15s ease; }
+  .help-icon:hover .help-tip { opacity: 1; visibility: visible; }
+  /* Config Drawer */
+  #configDrawer.open { transform: translateX(0); }
+  #pickerDrawer.open { transform: translateX(0); }
+</style>
+</head>
+<body class="bg-background text-foreground text-sm antialiased">
+
+<div class="flex h-screen overflow-hidden">
+
+  <!-- ====================== 一级图标导航 ====================== -->
+  <nav id="primaryNav" class="w-[56px] bg-background border-r border-border flex flex-col items-center py-3 flex-shrink-0">
+    <div class="w-8 h-8 bg-foreground rounded-md flex items-center justify-center mb-4">
+      <span class="text-background text-sm font-semibold">C</span>
+    </div>
+    <div class="flex flex-col items-center gap-0.5 w-full px-1.5">
+      <button class="w-full h-10 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition" title="Dashboard">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        <span class="text-[9px] mt-0.5">Dashboard</span>
+      </button>
+      <button class="w-full h-10 rounded-md flex flex-col items-center justify-center bg-primary text-primary-foreground" title="Data">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+        <span class="text-[9px] mt-0.5">Data</span>
+      </button>
+      <button class="w-full h-10 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition" title="Processing">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <span class="text-[9px] mt-0.5">Processing</span>
+      </button>
+      <button class="w-full h-10 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition" title="Agent">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+        <span class="text-[9px] mt-0.5">Agent</span>
+      </button>
+      <button class="w-full h-10 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition" title="BI">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+        <span class="text-[9px] mt-0.5">BI</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ====================== 二级菜单 ====================== -->
+  <aside id="secondarySidebar" class="w-[240px] bg-background border-r border-border flex flex-col flex-shrink-0">
+    <div class="px-4 pt-4 pb-3 flex items-center justify-between border-b border-border">
+      <div class="flex items-center gap-2 min-w-0">
+        <div class="w-6 h-6 bg-secondary rounded flex items-center justify-center flex-shrink-0">
+          <span class="text-[11px] font-semibold">A</span>
+        </div>
+        <span class="text-sm font-medium truncate">All Workspaces</span>
+        <svg class="w-3 h-3 text-muted-foreground flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+    </div>
+
+    <div class="px-3 pt-4 pb-2">
+      <h2 class="text-xs font-semibold text-muted-foreground px-1">Data</h2>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto scrollable px-2 pb-2">
+      <button onclick="showPage('home')" id="nav-home"
+        class="nav-sub w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-sm font-medium transition mb-1 bg-accent text-foreground">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span class="flex-1 text-left">Auto Report</span>
+      </button>
+
+      <div class="px-2.5 pt-3 pb-1.5">
+        <span class="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Custom Configuration</span>
+      </div>
+
+      <button class="nav-sub w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+        Sources
+      </button>
+      <button class="nav-sub w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6"/><path d="M15 2v6"/><path d="M12 17v5"/><path d="M5 8h14"/><path d="M6 11V8h12v3a6 6 0 0 1-12 0Z"/></svg>
+        Connectors
+      </button>
+      <button class="nav-sub w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+        Datasets
+      </button>
+    </nav>
+
+    <div class="p-3 border-t border-border">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center text-xs font-medium">T</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium truncate">Theodore</div>
+          <div class="text-xs text-muted-foreground">Pro plan</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ====================== 主内容区 ====================== -->
+  <main class="flex-1 overflow-y-auto scrollable">
+    <section id="page-home" class="page"></section>
+    <section id="page-preview" class="page hidden"></section>
+    <section id="page-config" class="page hidden"></section>
+    <section id="page-dashboard" class="page hidden"></section>
+  </main>
+
+  <!-- 历史报表抽屉 -->
+  <div id="historyDrawerOverlay" class="fixed inset-0 bg-black/30 z-40 hidden" onclick="closeHistoryDrawer()"></div>
+  <aside id="historyDrawer" class="fixed top-0 right-0 h-full w-[420px] bg-background border-l border-border z-50 translate-x-full transition-transform duration-200 flex flex-col">
+    <div class="flex items-center justify-between px-5 py-4 border-b border-border">
+      <h2 class="text-base font-semibold">历史报表</h2>
+      <button onclick="closeHistoryDrawer()" class="w-7 h-7 flex items-center justify-center rounded-md hover:bg-accent transition">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="historyDrawerContent" class="flex-1 overflow-y-auto scrollable p-4"></div>
+  </aside>
+
+  <!-- 配置/预览抽屉 -->
+  <div id="configDrawerOverlay" class="fixed inset-0 bg-black/30 z-40 hidden" onclick="closeConfigDrawer()"></div>
+  <aside id="configDrawer" class="fixed top-0 right-0 h-full w-[720px] max-w-[90vw] bg-background border-l border-border z-50 translate-x-full transition-transform duration-200 flex flex-col">
+    <div id="configDrawerHeader" class="flex items-center justify-between px-6 py-4 border-b border-border flex-shrink-0">
+      <div id="configDrawerTitle"></div>
+      <button onclick="closeConfigDrawer()" class="w-7 h-7 rounded-md hover:bg-accent flex items-center justify-center text-muted-foreground hover:text-foreground transition">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="configDrawerContent" class="flex-1 overflow-y-auto scrollable"></div>
+  </aside>
+
+  <!-- 嵌套 picker 抽屉 -->
+  <div id="pickerDrawerOverlay" class="fixed inset-0 bg-black/20 z-[51] hidden" onclick="closePickerDrawer()"></div>
+  <aside id="pickerDrawer" class="fixed top-0 right-0 h-full w-[520px] max-w-[85vw] bg-background border-l border-border z-[52] translate-x-full transition-transform duration-200 flex flex-col" style="box-shadow:-4px 0 24px rgba(0,0,0,0.12);">
+    <div class="px-6 py-4 border-b border-border flex-shrink-0">
+      <div id="pickerDrawerTitle"></div>
+    </div>
+    <div id="pickerDrawerContent" class="flex-1 overflow-y-auto scrollable p-6"></div>
+    <div id="pickerDrawerFooter" class="px-6 py-3 border-t border-border flex-shrink-0 flex items-center justify-end gap-2"></div>
+  </aside>
+
+</div>
+
+<!-- ====================== Modal ====================== -->
+<div id="modal" class="hidden fixed inset-0 z-50 items-center justify-center" style="display:none;">
+  <div class="absolute inset-0 modal-mask" onclick="closeModal()"></div>
+  <div class="relative modal-box bg-background border border-border rounded-lg shadow-lg w-[480px] max-w-[90vw] max-h-[80vh] flex flex-col" id="modalInner">
+    <div class="px-5 py-3.5 border-b border-border flex items-center justify-between">
+      <h3 id="modalTitle" class="text-base font-semibold tracking-tight"></h3>
+      <button onclick="closeModal()" class="w-7 h-7 rounded-md hover:bg-accent flex items-center justify-center text-muted-foreground hover:text-foreground transition">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="modalBody" class="px-5 py-4 overflow-y-auto scrollable flex-1"></div>
+    <div id="modalFoot" class="px-5 py-3 border-t border-border flex items-center justify-end gap-2">
+      <button onclick="closeModal()" class="inline-flex items-center px-4 h-9 text-sm rounded-md border border-border bg-background hover:bg-accent transition">关闭</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ 嵌入模式检测：在 iframe 中加载时隐藏自身导航 ============ */
+(function() {
+  try {
+    if (window.self !== window.top) {
+      const nav = document.getElementById('primaryNav');
+      const aside = document.getElementById('secondarySidebar');
+      if (nav) nav.style.display = 'none';
+      if (aside) aside.style.display = 'none';
+    }
+  } catch (e) {
+    // 跨域场景下访问 window.top 可能抛错，此时也按嵌入处理
+    const nav = document.getElementById('primaryNav');
+    const aside = document.getElementById('secondarySidebar');
+    if (nav) nav.style.display = 'none';
+    if (aside) aside.style.display = 'none';
+  }
+})();
+
+/* ============ 数据 ============ */
+const EXAMPLES = [
+  '帮我生成 Facebook 和 TikTok 过去 30 天的转化和 ROAS 对比报表',
+  '我想看上个月所有平台的广告花费明细',
+  '生成本周 Google Ads 的点击率和转化率趋势'
+];
+
+const TEMPLATES = [
+  {
+    id: 'performance', name: '广告效果分析',
+    desc: '跨平台 KPI 总览：花费、展示、点击、CTR、CPC、CPM 趋势对比',
+    iconPath: '<path d="M3 3v18h18"/><rect x="7" y="13" width="3" height="5"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/>',
+    presetDimensions: ['日期 Date', '广告系列ID Campaign ID'],
+    presetMetrics: ['花费 Cost', '展示量 Impressions', '点击量 Clicks', '点击率 CTR', '平均点击成本 Avg.CPC', '平均千次展示成本 Avg.CPM'],
+    presetPlatforms: ['facebook', 'tiktok', 'google'],
+    presetStyle: 'trend'
+  },
+  {
+    id: 'conversion', name: '转化与 ROAS',
+    desc: '转化漏斗 + 归因分析，识别最有效的渠道',
+    iconPath: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+    presetDimensions: ['日期 Date', '地理定向国家 Country'],
+    presetMetrics: ['点击量 Clicks', '点击率 CTR', '转化量 Conversions', '每次转化费用 Cost/Conv.'],
+    presetPlatforms: ['facebook', 'tiktok'],
+    presetStyle: 'comparison'
+  },
+  {
+    id: 'budget', name: '花费 & 预算追踪',
+    desc: '日/周/月花费明细、预算使用率、超支预警，按账号和活动维度',
+    iconPath: '<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+    presetDimensions: ['日期 Date', '预算金额 Budget Amount'],
+    presetMetrics: ['花费 Cost', '展示量 Impressions', '点击量 Clicks', '平均点击成本 Avg.CPC', '平均千次展示成本 Avg.CPM'],
+    presetPlatforms: ['facebook', 'google'],
+    presetStyle: 'trend'
+  },
+  {
+    id: 'audience', name: '受众洞察分析',
+    desc: '按账户、广告层级分析表现，优化定向策略',
+    iconPath: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    presetDimensions: ['账户ID Customer ID', '广告系列ID Campaign ID', '广告组ID Ad Group ID'],
+    presetMetrics: ['花费 Cost', '点击量 Clicks', '点击率 CTR', '转化量 Conversions', '每次转化费用 Cost/Conv.'],
+    presetPlatforms: ['facebook', 'tiktok'],
+    presetStyle: 'comparison'
+  },
+  {
+    id: 'creative', name: '创意素材效果',
+    desc: '对比不同素材的点击率、转化率和 ROI，识别高效创意',
+    iconPath: '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>',
+    presetDimensions: ['日期 Date', '广告ID Ad ID'],
+    presetMetrics: ['展示量 Impressions', '点击量 Clicks', '点击率 CTR', '转化量 Conversions', '每次转化费用 Cost/Conv.'],
+    presetPlatforms: ['facebook', 'tiktok'],
+    presetStyle: 'detail'
+  },
+  {
+    id: 'timeslot', name: '时段表现分析',
+    desc: '24 小时 / 周内各时段的投放效果，优化投放时间策略',
+    iconPath: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    presetDimensions: ['小时 Hour', '日期 Date'],
+    presetMetrics: ['花费 Cost', '点击量 Clicks', '点击率 CTR', '转化量 Conversions', '每次转化费用 Cost/Conv.'],
+    presetPlatforms: ['facebook', 'tiktok', 'google'],
+    presetStyle: 'trend'
+  },
+  {
+    id: 'weekly-report', name: '客户周报模板',
+    desc: '整合关键指标、趋势图表和洞察建议，适合客户汇报',
+    iconPath: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>',
+    presetDimensions: ['日期 Date', '地理定向国家 Country'],
+    presetMetrics: ['花费 Cost', '展示量 Impressions', '点击量 Clicks', '点击率 CTR', '转化量 Conversions', '每次转化费用 Cost/Conv.'],
+    presetPlatforms: ['facebook', 'tiktok', 'google'],
+    presetStyle: 'comprehensive'
+  }
+];
+
+const PLATFORMS = [
+  {
+    id: 'facebook', name: 'Facebook Ads', connected: true,
+    accounts: [
+      { id: 'act_1729384756', name: 'Brand Main · US', status: 'active' },
+      { id: 'act_8273645102', name: 'Performance · EU', status: 'active' },
+      { id: 'act_5647382910', name: 'App Install · APAC', status: 'active' },
+      { id: 'act_3948572610', name: 'Retargeting · LATAM', status: 'paused' }
+    ]
+  },
+  {
+    id: 'tiktok', name: 'TikTok Ads', connected: true,
+    accounts: [
+      { id: 'tt_6921837465', name: 'TikTok Brand · Global', status: 'active' },
+      { id: 'tt_7283649102', name: 'TikTok Performance · US', status: 'active' }
+    ]
+  },
+  {
+    id: 'google', name: 'Google Ads', connected: true,
+    accounts: [
+      { id: 'gads_847-293-1056', name: 'Search · Brand', status: 'active' },
+      { id: 'gads_392-847-2018', name: 'YouTube · Awareness', status: 'active' },
+      { id: 'gads_184-739-2837', name: 'Display · Retargeting', status: 'active' }
+    ]
+  },
+  { id: 'linkedin', name: 'LinkedIn Ads', connected: false, accounts: [] },
+  { id: 'twitter', name: 'X Ads', connected: false, accounts: [] },
+  { id: 'snapchat', name: 'Snapchat Ads', connected: false, accounts: [] }
+];
+
+const DIMENSION_CATEGORIES = {
+  '时间 Time': ['日期 Date', '小时 Hour'],
+  '广告层级 Hierarchy': ['账户ID Customer ID', '广告系列ID Campaign ID', '广告组ID Ad Group ID', '广告ID Ad ID'],
+  '地区 Geographic': ['地理定向国家 Country'],
+  '金额 Budget': ['预算金额 Budget Amount']
+};
+
+const METRIC_CATEGORIES = {
+  '核心指标 Core': ['展示量 Impressions', '点击量 Clicks', '花费 Cost', '点击率 CTR', '平均点击成本 Avg.CPC', '平均千次展示成本 Avg.CPM'],
+  '转化指标 Conversions': ['转化量 Conversions', '每次转化费用 Cost/Conv.'],
+  '视频指标 Video': ['视频25%播放 Video P25', '视频50%播放 Video P50', '视频75%播放 Video P75', '视频完播 Video P100', '平均观看时长 Avg.Watch Time']
+};
+
+const PLATFORM_DIMENSIONS = {
+  facebook: [],
+  tiktok: [
+    { id: 'platform', name: '投放平台 platform', category: '设备与网络' },
+    { id: 'placement', name: '广告版位 placement', category: '设备与网络' },
+    { id: 'age', name: '年龄 age', category: '受众' },
+    { id: 'gender', name: '性别 gender', category: '受众' },
+    { id: 'interest_category', name: '兴趣分类 interest_category', category: '受众' },
+    { id: 'language', name: '语言 language', category: '受众' },
+    { id: 'audience_type', name: '受众类型 audience_type', category: '受众' },
+    { id: 'ac', name: '受众分类 ac', category: '受众' },
+    { id: 'tiktok_item_id', name: 'TikTok内容ID tiktok_item_id', category: '创意' },
+    { id: 'tiktok_account_id', name: 'TikTok账号ID tiktok_account_id', category: '创意' },
+    { id: 'tiktok_subplacements', name: 'TikTok子版位 tiktok_subplacements', category: '创意' }
+  ],
+  google: [
+    { id: 'day_of_week', name: '星期几 day_of_week', category: '时间' },
+    { id: 'week', name: '周 week', category: '时间' },
+    { id: 'month', name: '月 month', category: '时间' },
+    { id: 'quarter', name: '季度 quarter', category: '时间' },
+    { id: 'year', name: '年 year', category: '时间' },
+    { id: 'device', name: '设备类型 device', category: '设备与网络' },
+    { id: 'ad_network_type', name: '广告网络类型 ad_network_type', category: '设备与网络' },
+    { id: 'click_type', name: '点击类型 click_type', category: '设备与网络' },
+    { id: 'slot', name: '广告位置 slot', category: '设备与网络' },
+    { id: 'sk_ad_network_ad_event_type', name: 'SKAdNetwork广告事件类型 sk_ad_network_ad_event_type', category: '设备与网络' },
+    { id: 'sk_ad_network_attribution_credit', name: 'SKAdNetwork归因信用 sk_ad_network_attribution_credit', category: '设备与网络' },
+    { id: 'sk_ad_network_coarse_conversion_value', name: 'SKAdNetwork粗粒度转化值 sk_ad_network_coarse_conversion_value', category: '设备与网络' },
+    { id: 'sk_ad_network_fine_conversion_value', name: 'SKAdNetwork细粒度转化值 sk_ad_network_fine_conversion_value', category: '设备与网络' },
+    { id: 'sk_ad_network_postback_sequence_index', name: 'SKAdNetwork回传序列索引 sk_ad_network_postback_sequence_index', category: '设备与网络' },
+    { id: 'sk_ad_network_redistributed_fine_conversion_value', name: 'SKAdNetwork重分配细粒度转化值 sk_ad_network_redistributed_fine_conversion_value', category: '设备与网络' },
+    { id: 'sk_ad_network_source_app_id', name: 'SKAdNetwork来源应用ID sk_ad_network_source_app_id', category: '设备与网络' },
+    { id: 'sk_ad_network_source_domain', name: 'SKAdNetwork来源域名 sk_ad_network_source_domain', category: '设备与网络' },
+    { id: 'sk_ad_network_source_type', name: 'SKAdNetwork来源类型 sk_ad_network_source_type', category: '设备与网络' },
+    { id: 'sk_ad_network_user_type', name: 'SKAdNetwork用户类型 sk_ad_network_user_type', category: '设备与网络' },
+    { id: 'sk_ad_network_version', name: 'SKAdNetwork版本 sk_ad_network_version', category: '设备与网络' },
+    { id: 'conversion_action_name', name: '转化行为名称 conversion_action_name', category: '转化' },
+    { id: 'conversion_action_category', name: '转化行为类别 conversion_action_category', category: '转化' },
+    { id: 'conversion_action', name: '转化行为 conversion_action', category: '转化' },
+    { id: 'conversion_adjustment', name: '转化调整 conversion_adjustment', category: '转化' },
+    { id: 'conversion_lag_bucket', name: '转化延迟区间 conversion_lag_bucket', category: '转化' },
+    { id: 'conversion_or_adjustment_lag_bucket', name: '转化或调整延迟区间 conversion_or_adjustment_lag_bucket', category: '转化' },
+    { id: 'external_conversion_source', name: '外部转化来源 external_conversion_source', category: '转化' },
+    { id: 'conversion_attribution_event_type', name: '转化归因事件类型 conversion_attribution_event_type', category: '转化' },
+    { id: 'conversion_value_rule_primary_dimension', name: '转化价值规则主维度 conversion_value_rule_primary_dimension', category: '转化' },
+    { id: 'ad_destination_type', name: '广告目标类型 ad_destination_type', category: '广告层级' },
+    { id: 'ad_format_type', name: '广告格式类型 ad_format_type', category: '广告层级' },
+    { id: 'ad_using_product_data', name: '广告使用商品数据 ad_using_product_data', category: '广告层级' },
+    { id: 'ad_using_video', name: '广告使用视频 ad_using_video', category: '广告层级' },
+    { id: 'keyword_text', name: '关键词文本 keyword_text', category: '关键词与搜索' },
+    { id: 'keyword_match_type', name: '关键词匹配类型 keyword_match_type', category: '关键词与搜索' },
+    { id: 'search_term_match_type', name: '搜索词匹配类型 search_term_match_type', category: '关键词与搜索' },
+    { id: 'search_term_match_source', name: '搜索词匹配来源 search_term_match_source', category: '关键词与搜索' },
+    { id: 'geo_target_city', name: '地理定向城市 geo_target_city', category: '地域' },
+    { id: 'geo_target_region', name: '地理定向地区 geo_target_region', category: '地域' },
+    { id: 'geo_target_state', name: '地理定向州/省 geo_target_state', category: '地域' },
+    { id: 'geo_target_postal_code', name: '地理定向邮编 geo_target_postal_code', category: '地域' },
+    { id: 'geo_target_metro', name: '地理定向都市圈 geo_target_metro', category: '地域' },
+    { id: 'geo_target_province', name: '地理定向省份 geo_target_province', category: '地域' },
+    { id: 'geo_target_airport', name: '地理定向机场 geo_target_airport', category: '地域' },
+    { id: 'geo_target_canton', name: '地理定向州县 geo_target_canton', category: '地域' },
+    { id: 'geo_target_county', name: '地理定向县 geo_target_county', category: '地域' },
+    { id: 'geo_target_district', name: '地理定向区 geo_target_district', category: '地域' },
+    { id: 'adjusted_age_range', name: '调整后年龄段 adjusted_age_range', category: '其他' },
+    { id: 'adjusted_gender', name: '调整后性别 adjusted_gender', category: '其他' },
+    { id: 'recommendation_type', name: '建议类型 recommendation_type', category: '其他' },
+    { id: 'asset_interaction_target_asset', name: '素材互动目标素材 asset_interaction_target_asset', category: '其他' },
+    { id: 'asset_interaction_on_this_asset', name: '素材互动是否发生在该素材 asset_interaction_on_this_asset', category: '其他' },
+    { id: 'auction_insight_domain', name: '竞争洞察域名 auction_insight_domain', category: '其他' },
+    { id: 'new_versus_returning_customers', name: '新客vs回头客 new_versus_returning_customers', category: '其他' },
+    { id: 'travel_destination_city', name: '旅行目的地城市 travel_destination_city', category: '其他' },
+    { id: 'travel_destination_country', name: '旅行目的地国家 travel_destination_country', category: '其他' },
+    { id: 'travel_destination_region', name: '旅行目的地地区 travel_destination_region', category: '其他' },
+    { id: 'customer_name', name: '账户名称 customer_name', category: '账户层级' },
+    { id: 'currency_code', name: '货币代码 currency_code', category: '账户层级' },
+    { id: 'time_zone', name: '时区 time_zone', category: '账户层级' },
+    { id: 'auto_tagging_enabled', name: '是否启用自动标记 auto_tagging_enabled', category: '账户层级' },
+    { id: 'optimization_score', name: '优化得分 optimization_score', category: '账户层级' },
+    { id: 'tracking_url_template', name: '跟踪URL模板 tracking_url_template', category: '账户层级' },
+    { id: 'campaign_name', name: '广告系列名称 campaign_name', category: '广告层级' },
+    { id: 'campaign_status', name: '广告系列状态 campaign_status', category: '广告层级' },
+    { id: 'campaign_start_date', name: '广告系列开始日期 campaign_start_date', category: '广告层级' },
+    { id: 'campaign_end_date', name: '广告系列结束日期 campaign_end_date', category: '广告层级' },
+    { id: 'campaign_advertising_channel_type', name: '广告渠道类型 campaign_advertising_channel_type', category: '广告层级' },
+    { id: 'campaign_advertising_channel_sub_type', name: '广告渠道子类型 campaign_advertising_channel_sub_type', category: '广告层级' },
+    { id: 'campaign_bidding_strategy_type', name: '出价策略类型 campaign_bidding_strategy_type', category: '广告层级' },
+    { id: 'campaign_optimization_score', name: '广告系列优化得分 campaign_optimization_score', category: '广告层级' },
+    { id: 'campaign_primary_status', name: '广告系列主要状态 campaign_primary_status', category: '广告层级' },
+    { id: 'campaign_serving_status', name: '广告系列投放状态 campaign_serving_status', category: '广告层级' },
+    { id: 'campaign_labels', name: '广告系列标签 campaign_labels', category: '广告层级' },
+    { id: 'budget_id', name: '预算ID budget_id', category: '广告层级' },
+    { id: 'budget_delivery_method', name: '预算投放方式 budget_delivery_method', category: '广告层级' },
+    { id: 'ad_group_name', name: '广告组名称 ad_group_name', category: '广告层级' },
+    { id: 'ad_group_status', name: '广告组状态 ad_group_status', category: '广告层级' },
+    { id: 'ad_group_type', name: '广告组类型 ad_group_type', category: '广告层级' },
+    { id: 'ad_group_primary_status', name: '广告组主要状态 ad_group_primary_status', category: '广告层级' },
+    { id: 'ad_group_cpc_bid_micros', name: '广告组CPC出价 ad_group_cpc_bid_micros', category: '广告层级' },
+    { id: 'ad_group_target_cpa_micros', name: '广告组目标CPA ad_group_target_cpa_micros', category: '广告层级' },
+    { id: 'ad_group_target_roas', name: '广告组目标ROAS ad_group_target_roas', category: '广告层级' },
+    { id: 'ad_name', name: '广告名称 ad_name', category: '广告层级' },
+    { id: 'ad_type', name: '广告类型 ad_type', category: '广告层级' },
+    { id: 'ad_status', name: '广告状态 ad_status', category: '广告层级' },
+    { id: 'ad_strength', name: '广告质量评级 ad_strength', category: '广告层级' },
+    { id: 'ad_primary_status', name: '广告主要状态 ad_primary_status', category: '广告层级' },
+    { id: 'final_urls', name: '最终到达URL final_urls', category: '广告层级' },
+    { id: 'display_url', name: '展示URL display_url', category: '广告层级' },
+    { id: 'policy_approval_status', name: '政策审核状态 policy_approval_status', category: '广告层级' },
+    { id: 'policy_review_status', name: '政策审查状态 policy_review_status', category: '广告层级' },
+    { id: 'rsa_headlines', name: '响应式搜索广告标题 rsa_headlines', category: '广告创意' },
+    { id: 'rsa_descriptions', name: '响应式搜索广告描述 rsa_descriptions', category: '广告创意' },
+    { id: 'eta_headline_part1', name: '扩展文字广告标题1 eta_headline_part1', category: '广告创意' },
+    { id: 'eta_description', name: '扩展文字广告描述 eta_description', category: '广告创意' },
+    { id: 'display_ad_headlines', name: '响应式展示广告标题 display_ad_headlines', category: '广告创意' },
+    { id: 'display_ad_descriptions', name: '响应式展示广告描述 display_ad_descriptions', category: '广告创意' },
+    { id: 'video_ad_video_asset', name: '视频广告素材 video_ad_video_asset', category: '广告创意' },
+    { id: 'app_ad_headlines', name: '应用广告标题 app_ad_headlines', category: '广告创意' },
+    { id: 'demand_gen_carousel_headline', name: '需求开发轮播广告标题 demand_gen_carousel_headline', category: '广告创意' },
+    { id: 'keyword_status', name: '关键词状态 keyword_status', category: '关键词与搜索' },
+    { id: 'keyword_quality_score', name: '关键词质量得分 keyword_quality_score', category: '关键词与搜索' },
+    { id: 'keyword_first_page_cpc_micros', name: '首页CPC估算出价 keyword_first_page_cpc_micros', category: '关键词与搜索' },
+    { id: 'keyword_top_of_page_cpc_micros', name: '页首CPC估算出价 keyword_top_of_page_cpc_micros', category: '关键词与搜索' },
+    { id: 'search_term', name: '搜索词 search_term', category: '搜索词' },
+    { id: 'search_term_status', name: '搜索词状态 search_term_status', category: '搜索词' },
+    { id: 'geo_location_type', name: '地理位置类型 geo_location_type', category: '地域' },
+    { id: 'geo_country_criterion_id', name: '国家定向条件ID geo_country_criterion_id', category: '地域' },
+    { id: 'criterion_type', name: '定向条件类型 criterion_type', category: '广告系列定向' },
+    { id: 'criterion_negative', name: '是否为排除定向 criterion_negative', category: '广告系列定向' },
+    { id: 'criterion_bid_modifier', name: '出价调整系数 criterion_bid_modifier', category: '广告系列定向' },
+    { id: 'criterion_device_type', name: '设备定向类型 criterion_device_type', category: '广告系列定向' },
+    { id: 'criterion_location', name: '地理位置定向 criterion_location', category: '广告系列定向' },
+    { id: 'criterion_age_range', name: '年龄段定向 criterion_age_range', category: '广告系列定向' },
+    { id: 'criterion_gender', name: '性别定向 criterion_gender', category: '广告系列定向' },
+    { id: 'criterion_language', name: '语言定向 criterion_language', category: '广告系列定向' },
+    { id: 'criterion_user_interest', name: '用户兴趣定向 criterion_user_interest', category: '广告系列定向' },
+    { id: 'criterion_user_list', name: '用户列表定向 criterion_user_list', category: '广告系列定向' },
+    { id: 'criterion_keyword_text', name: '定向关键词文本 criterion_keyword_text', category: '广告系列定向' },
+    { id: 'criterion_keyword_match_type', name: '定向关键词匹配类型 criterion_keyword_match_type', category: '广告系列定向' },
+    { id: 'conversion_action_id', name: '转化行为ID conversion_action_id', category: '转化目标' },
+    { id: 'conversion_action_type', name: '转化行为类型 conversion_action_type', category: '转化目标' },
+    { id: 'conversion_action_status', name: '转化行为状态 conversion_action_status', category: '转化目标' },
+    { id: 'conversion_counting_type', name: '转化计数方式 conversion_counting_type', category: '转化目标' },
+    { id: 'attribution_model', name: '归因模型 attribution_model', category: '转化目标' },
+    { id: 'conversion_click_through_lookback_days', name: '点击归因回溯窗口天数 conversion_click_through_lookback_days', category: '转化目标' },
+    { id: 'conversion_default_value', name: '转化默认价值 conversion_default_value', category: '转化目标' }
+  ],
+  linkedin: []
+};
+
+const PLATFORM_METRICS = {
+  facebook: [],
+  tiktok: [
+    { id: 'reach', name: '触达人数 reach', category: '核心指标' },
+    { id: 'frequency', name: '频次 frequency', category: '核心指标' },
+    { id: 'budget', name: '预算 budget', category: '核心指标' },
+    { id: 'conversion_rate', name: '转化率 conversion_rate', category: '转化指标' },
+    { id: 'purchase', name: '购买量 purchase', category: '转化指标' },
+    { id: 'complete_payment', name: '完成支付量 complete_payment', category: '转化指标' },
+    { id: 'purchase_roas', name: '购买广告支出回报率 purchase_roas', category: '转化指标' },
+    { id: 'total_purchase_value', name: '总购买价值 total_purchase_value', category: '转化指标' },
+    { id: 'registration', name: '注册量 registration', category: '转化指标' },
+    { id: 'app_install', name: '应用安装量 app_install', category: '转化指标' },
+    { id: 'download_start', name: '开始下载量 download_start', category: '转化指标' },
+    { id: 'add_payment_info', name: '添加支付信息量 add_payment_info', category: '转化指标' },
+    { id: 'skan_conversion', name: 'SKAN转化量 skan_conversion', category: '苹果归因' },
+    { id: 'skan_app_install', name: 'SKAN应用安装量 skan_app_install', category: '苹果归因' },
+    { id: 'skan_purchase', name: 'SKAN购买量 skan_purchase', category: '苹果归因' },
+    { id: 'vta_purchase', name: '浏览归因购买量 vta_purchase', category: '归因' },
+    { id: 'cta_app_install', name: '点击归因应用安装量 cta_app_install', category: '归因' },
+    { id: 'cta_purchase', name: '点击归因购买量 cta_purchase', category: '归因' },
+    { id: 'likes', name: '点赞量 likes', category: '互动指标' },
+    { id: 'follows', name: '关注量 follows', category: '互动指标' },
+    { id: 'comments', name: '评论量 comments', category: '互动指标' },
+    { id: 'shares', name: '分享量 shares', category: '互动指标' },
+    { id: 'profile_visits', name: '主页访问量 profile_visits', category: '互动指标' },
+    { id: 'clicks_on_music_disc', name: '音乐碟片点击量 clicks_on_music_disc', category: '互动指标' },
+    { id: 'video_play_actions', name: '视频播放量 video_play_actions', category: '视频指标' },
+    { id: 'video_watched_2s', name: '视频2秒观看量 video_watched_2s', category: '视频指标' },
+    { id: 'video_watched_6s', name: '视频6秒观看量 video_watched_6s', category: '视频指标' },
+    { id: 'engaged_view', name: '有效观看量 engaged_view', category: '视频指标' },
+    { id: 'onsite_shopping', name: '站内购物量 onsite_shopping', category: '购物 & 营收' },
+    { id: 'onsite_total_purchase_value', name: '站内总购买价值 onsite_total_purchase_value', category: '购物 & 营收' },
+    { id: 'shop_total_items_purchased', name: '店铺总购买商品数 shop_total_items_purchased', category: '其他' },
+    { id: 'app_event_add_to_cart', name: '加入购物车事件量 app_event_add_to_cart', category: '其他' },
+    { id: 'complete_payment_roas', name: '完成支付广告支出回报率 complete_payment_roas', category: '其他' },
+    { id: 'value_per_complete_payment', name: '每次完成支付价值 value_per_complete_payment', category: '其他' }
+  ],
+  google: [
+    { id: 'average_cost', name: '平均费用 average_cost', category: '核心指标' },
+    { id: 'average_cpe', name: '平均互动成本 average_cpe', category: '核心指标' },
+    { id: 'relative_ctr', name: '相对点击率 relative_ctr', category: '核心指标' },
+    { id: 'coviewed_impressions', name: '共同观看展示量 coviewed_impressions', category: '核心指标' },
+    { id: 'primary_impressions', name: '主要展示量 primary_impressions', category: '核心指标' },
+    { id: 'invalid_clicks', name: '无效点击量 invalid_clicks', category: '核心指标' },
+    { id: 'general_invalid_clicks', name: '一般无效点击量 general_invalid_clicks', category: '核心指标' },
+    { id: 'invalid_click_rate', name: '无效点击率 invalid_click_rate', category: '核心指标' },
+    { id: 'general_invalid_click_rate', name: '一般无效点击率 general_invalid_click_rate', category: '核心指标' },
+    { id: 'clicks_unique_query_clusters', name: '唯一查询集群点击量 clicks_unique_query_clusters', category: '核心指标' },
+    { id: 'impressions_unique_query_clusters', name: '唯一查询集群展示量 impressions_unique_query_clusters', category: '核心指标' },
+    { id: 'publisher_organic_clicks', name: '发布商自然点击量 publisher_organic_clicks', category: '核心指标' },
+    { id: 'publisher_purchased_clicks', name: '发布商付费点击量 publisher_purchased_clicks', category: '核心指标' },
+    { id: 'publisher_unknown_clicks', name: '发布商未知点击量 publisher_unknown_clicks', category: '核心指标' },
+    { id: 'eligible_impressions_from_location_asset_store_reach', name: '门店覆盖可用展示量 eligible_impressions_from_location_asset_store_reach', category: '核心指标' },
+    { id: 'all_conversions', name: '总转化量 all_conversions', category: '转化指标' },
+    { id: 'conversions_value', name: '转化价值 conversions_value', category: '转化指标' },
+    { id: 'all_conversions_value', name: '总转化价值 all_conversions_value', category: '转化指标' },
+    { id: 'cost_per_all_conversions', name: '每次总转化费用 cost_per_all_conversions', category: '转化指标' },
+    { id: 'conversions_from_interactions_rate', name: '互动转化率 conversions_from_interactions_rate', category: '转化指标' },
+    { id: 'all_conversions_from_interactions_rate', name: '总互动转化率 all_conversions_from_interactions_rate', category: '转化指标' },
+    { id: 'value_per_conversion', name: '每次转化价值 value_per_conversion', category: '转化指标' },
+    { id: 'value_per_all_conversions', name: '每次总转化价值 value_per_all_conversions', category: '转化指标' },
+    { id: 'cross_device_conversions', name: '跨设备转化量 cross_device_conversions', category: '转化指标' },
+    { id: 'cross_device_conversions_value_micros', name: '跨设备转化价值 cross_device_conversions_value_micros', category: '转化指标' },
+    { id: 'view_through_conversions', name: '浏览型转化量 view_through_conversions', category: '转化指标' },
+    { id: 'current_model_attributed_conversions', name: '当前归因模型转化量 current_model_attributed_conversions', category: '转化指标' },
+    { id: 'current_model_attributed_conversions_value', name: '当前归因模型转化价值 current_model_attributed_conversions_value', category: '转化指标' },
+    { id: 'cost_per_current_model_attributed_conversion', name: '当前归因模型每次转化费用 cost_per_current_model_attributed_conversion', category: '转化指标' },
+    { id: 'conversions_value_by_conversion_date', name: '按转化日期的转化价值 conversions_value_by_conversion_date', category: '转化指标' },
+    { id: 'all_conversions_by_conversion_date', name: '按转化日期的总转化量 all_conversions_by_conversion_date', category: '转化指标' },
+    { id: 'biddable_app_install_conversions', name: '可出价应用安装转化量 biddable_app_install_conversions', category: '转化指标' },
+    { id: 'biddable_app_post_install_conversions', name: '可出价应用安装后转化量 biddable_app_post_install_conversions', category: '转化指标' },
+    { id: 'biddable_cohort_app_post_install_conversions', name: '可出价同期群应用安装后转化量 biddable_cohort_app_post_install_conversions', category: '转化指标' },
+    { id: 'platform_comparable_conversions', name: '平台可比转化量 platform_comparable_conversions', category: '转化指标' },
+    { id: 'platform_comparable_conversions_value', name: '平台可比转化价值 platform_comparable_conversions_value', category: '转化指标' },
+    { id: 'cost_per_platform_comparable_conversion', name: '平台可比每次转化费用 cost_per_platform_comparable_conversion', category: '转化指标' },
+    { id: 'results_conversions_purchase', name: '结果购买转化量 results_conversions_purchase', category: '转化指标' },
+    { id: 'sk_ad_network_total_conversions', name: 'SKAdNetwork总转化量 sk_ad_network_total_conversions', category: '转化指标' },
+    { id: 'all_conversions_from_click_to_call', name: '点击拨号转化量 all_conversions_from_click_to_call', category: '转化指标' },
+    { id: 'all_conversions_from_directions', name: '获取路线转化量 all_conversions_from_directions', category: '转化指标' },
+    { id: 'all_conversions_from_location_asset_store_visits', name: '门店资产到店转化量 all_conversions_from_location_asset_store_visits', category: '转化指标' },
+    { id: 'all_conversions_from_location_asset_website', name: '门店资产网站转化量 all_conversions_from_location_asset_website', category: '转化指标' },
+    { id: 'all_conversions_from_store_visit', name: '到店转化量 all_conversions_from_store_visit', category: '转化指标' },
+    { id: 'store_visits_last_click_model_attributed_conversions', name: '末次点击归因到店转化量 store_visits_last_click_model_attributed_conversions', category: '转化指标' },
+    { id: 'conversions_unique_query_clusters', name: '唯一查询集群转化量 conversions_unique_query_clusters', category: '转化指标' },
+    { id: 'all_conversions_value_per_cost', name: '总转化价值/费用 all_conversions_value_per_cost', category: '转化指标' },
+    { id: 'conversions_value_per_cost', name: '转化价值/费用（ROAS） conversions_value_per_cost', category: '转化指标' },
+    { id: 'engagements', name: '互动次数 engagements', category: '互动指标' },
+    { id: 'engagement_rate', name: '互动率 engagement_rate', category: '互动指标' },
+    { id: 'interactions', name: '互动量 interactions', category: '互动指标' },
+    { id: 'interaction_rate', name: '互动率（广泛） interaction_rate', category: '互动指标' },
+    { id: 'interaction_event_types', name: '互动事件类型 interaction_event_types', category: '互动指标' },
+    { id: 'bounce_rate', name: '跳出率 bounce_rate', category: '互动指标' },
+    { id: 'average_page_views', name: '平均页面浏览量 average_page_views', category: '互动指标' },
+    { id: 'average_time_on_site', name: '平均网站停留时长 average_time_on_site', category: '互动指标' },
+    { id: 'gmail_forwards', name: 'Gmail转发量 gmail_forwards', category: '互动指标' },
+    { id: 'gmail_saves', name: 'Gmail保存量 gmail_saves', category: '互动指标' },
+    { id: 'gmail_secondary_clicks', name: 'Gmail二次点击量 gmail_secondary_clicks', category: '互动指标' },
+    { id: 'video_watch_time_total', name: '视频总观看时长 video_watch_time_total', category: '视频指标' },
+    { id: 'trueview_views', name: 'TrueView观看量 trueview_views', category: '视频指标' },
+    { id: 'trueview_view_rate', name: 'TrueView观看率 trueview_view_rate', category: '视频指标' },
+    { id: 'trueview_view_rate_in_feed', name: '信息流TrueView观看率 trueview_view_rate_in_feed', category: '视频指标' },
+    { id: 'trueview_view_rate_in_stream', name: '插播TrueView观看率 trueview_view_rate_in_stream', category: '视频指标' },
+    { id: 'trueview_view_rate_shorts', name: 'Shorts TrueView观看率 trueview_view_rate_shorts', category: '视频指标' },
+    { id: 'trueview_average_cpv', name: '平均每次观看费用 trueview_average_cpv', category: '视频指标' },
+    { id: 'absolute_top_impression_percentage', name: '绝对顶部展示率 absolute_top_impression_percentage', category: '展示份额' },
+    { id: 'top_impression_percentage', name: '顶部展示率 top_impression_percentage', category: '展示份额' },
+    { id: 'search_impression_share', name: '搜索展示份额 search_impression_share', category: '展示份额' },
+    { id: 'search_absolute_top_impression_share', name: '搜索绝对顶部展示份额 search_absolute_top_impression_share', category: '展示份额' },
+    { id: 'search_exact_match_impression_share', name: '搜索完全匹配展示份额 search_exact_match_impression_share', category: '展示份额' },
+    { id: 'search_rank_lost_impression_share', name: '搜索排名损失展示份额 search_rank_lost_impression_share', category: '展示份额' },
+    { id: 'search_rank_lost_absolute_top_impression_share', name: '搜索排名损失绝对顶部展示份额 search_rank_lost_absolute_top_impression_share', category: '展示份额' },
+    { id: 'search_rank_lost_top_impression_share', name: '搜索排名损失顶部展示份额 search_rank_lost_top_impression_share', category: '展示份额' },
+    { id: 'search_budget_lost_impression_share', name: '搜索预算损失展示份额 search_budget_lost_impression_share', category: '展示份额' },
+    { id: 'search_budget_lost_absolute_top_impression_share', name: '搜索预算损失绝对顶部展示份额 search_budget_lost_absolute_top_impression_share', category: '展示份额' },
+    { id: 'search_budget_lost_top_impression_share', name: '搜索预算损失顶部展示份额 search_budget_lost_top_impression_share', category: '展示份额' },
+    { id: 'search_top_impression_share', name: '搜索顶部展示份额 search_top_impression_share', category: '展示份额' },
+    { id: 'search_click_share', name: '搜索点击份额 search_click_share', category: '展示份额' },
+    { id: 'content_impression_share', name: '展示网络展示份额 content_impression_share', category: '展示份额' },
+    { id: 'content_rank_lost_impression_share', name: '展示网络排名损失展示份额 content_rank_lost_impression_share', category: '展示份额' },
+    { id: 'content_budget_lost_impression_share', name: '展示网络预算损失展示份额 content_budget_lost_impression_share', category: '展示份额' },
+    { id: 'auction_insight_search_impression_share', name: '竞争洞察搜索展示份额 auction_insight_search_impression_share', category: '展示份额' },
+    { id: 'auction_insight_search_absolute_top_impression_percentage', name: '竞争洞察搜索绝对顶部展示率 auction_insight_search_absolute_top_impression_percentage', category: '展示份额' },
+    { id: 'auction_insight_search_top_impression_percentage', name: '竞争洞察搜索顶部展示率 auction_insight_search_top_impression_percentage', category: '展示份额' },
+    { id: 'active_view_impressions', name: '主动浏览展示量 active_view_impressions', category: '有效可视曝光' },
+    { id: 'active_view_cpm', name: '主动浏览千次展示成本 active_view_cpm', category: '有效可视曝光' },
+    { id: 'active_view_ctr', name: '主动浏览点击率 active_view_ctr', category: '有效可视曝光' },
+    { id: 'active_view_viewability', name: '主动浏览可见率 active_view_viewability', category: '有效可视曝光' },
+    { id: 'active_view_measurability', name: '主动浏览可衡量率 active_view_measurability', category: '有效可视曝光' },
+    { id: 'active_view_measurable_impressions', name: '主动浏览可衡量展示量 active_view_measurable_impressions', category: '有效可视曝光' },
+    { id: 'active_view_measurable_cost_micros', name: '主动浏览可衡量费用 active_view_measurable_cost_micros', category: '有效可视曝光' },
+    { id: 'phone_calls', name: '电话拨打量 phone_calls', category: '电话转化' },
+    { id: 'phone_impressions', name: '电话展示量 phone_impressions', category: '电话转化' },
+    { id: 'phone_through_rate', name: '电话接通率 phone_through_rate', category: '电话转化' },
+    { id: 'orders', name: '订单量 orders', category: '购物 & 营收' },
+    { id: 'revenue_micros', name: '收入 revenue_micros', category: '购物 & 营收' },
+    { id: 'gross_profit_micros', name: '毛利润 gross_profit_micros', category: '购物 & 营收' },
+    { id: 'gross_profit_margin', name: '毛利率 gross_profit_margin', category: '购物 & 营收' },
+    { id: 'units_sold', name: '销售件数 units_sold', category: '购物 & 营收' },
+    { id: 'average_order_value_micros', name: '平均订单价值 average_order_value_micros', category: '购物 & 营收' },
+    { id: 'average_cart_size', name: '平均购物车件数 average_cart_size', category: '购物 & 营收' },
+    { id: 'cost_of_goods_sold_micros', name: '销售成本 cost_of_goods_sold_micros', category: '购物 & 营收' },
+    { id: 'lead_revenue_micros', name: '直接销售收入 lead_revenue_micros', category: '购物 & 营收' },
+    { id: 'lead_gross_profit_micros', name: '直接销售毛利润 lead_gross_profit_micros', category: '购物 & 营收' },
+    { id: 'lead_units_sold', name: '直接销售件数 lead_units_sold', category: '购物 & 营收' },
+    { id: 'cross_sell_revenue_micros', name: '交叉销售收入 cross_sell_revenue_micros', category: '购物 & 营收' },
+    { id: 'cross_sell_gross_profit_micros', name: '交叉销售毛利润 cross_sell_gross_profit_micros', category: '购物 & 营收' },
+    { id: 'cross_sell_units_sold', name: '交叉销售件数 cross_sell_units_sold', category: '购物 & 营收' },
+    { id: 'sk_ad_network_installs', name: 'SKAdNetwork安装量 sk_ad_network_installs', category: '苹果归因' },
+    { id: 'historical_quality_score', name: '历史质量得分 historical_quality_score', category: '质量指标' },
+    { id: 'historical_creative_quality_score', name: '历史创意质量得分 historical_creative_quality_score', category: '质量指标' },
+    { id: 'historical_landing_page_quality_score', name: '历史落地页质量得分 historical_landing_page_quality_score', category: '质量指标' },
+    { id: 'historical_search_predicted_ctr', name: '历史搜索预测点击率 historical_search_predicted_ctr', category: '质量指标' },
+    { id: 'percent_new_visitors', name: '新访客占比 percent_new_visitors', category: '其他' },
+    { id: 'new_customer_lifetime_value', name: '新客户生命周期价值 new_customer_lifetime_value', category: '其他' },
+    { id: 'all_new_customer_lifetime_value', name: '全部新客户生命周期价值 all_new_customer_lifetime_value', category: '其他' },
+    { id: 'average_impression_frequency_per_user', name: '人均展示频次 average_impression_frequency_per_user', category: '其他' },
+    { id: 'unique_users', name: '唯一用户数 unique_users', category: '其他' },
+    { id: 'average_target_cpa_micros', name: '平均目标CPA average_target_cpa_micros', category: '其他' },
+    { id: 'average_target_roas', name: '平均目标ROAS average_target_roas', category: '其他' },
+    { id: 'optimization_score_uplift', name: '优化得分提升空间 optimization_score_uplift', category: '其他' },
+    { id: 'optimization_score_url', name: '优化建议链接 optimization_score_url', category: '其他' },
+    { id: 'auction_insight_search_outranking_share', name: '竞争洞察超越率 auction_insight_search_outranking_share', category: '竞价洞察' },
+    { id: 'auction_insight_search_overlap_rate', name: '竞争洞察重叠率 auction_insight_search_overlap_rate', category: '竞价洞察' },
+    { id: 'auction_insight_search_position_above_rate', name: '竞争洞察排名领先率 auction_insight_search_position_above_rate', category: '竞价洞察' }
+  ],
+  linkedin: []
+};
+
+const HISTORY_REPORTS = [
+  { name: 'FB_TT_转化对比_20260524', scenario: '转化与 ROAS', sources: 'Facebook, TikTok', updated: '2026/05/24 18:00', templateId: 'conversion' },
+  { name: '本月花费追踪', scenario: '花费 & 预算追踪', sources: 'Facebook, Google', updated: '2026/05/23 09:00', templateId: 'budget' },
+  { name: 'Google 效果分析', scenario: '广告效果分析', sources: 'Google Ads', updated: '2026/05/22 15:30', templateId: 'performance' }
+];
+
+/* ============ 状态 ============ */
+let currentInput = '';
+let reportName = '';
+let selectedPlatforms = new Set(['facebook', 'tiktok']);
+let selectedAccounts = {}; // { platformId: Set([accountId1, accountId2, ...]) }
+let dateRange = 30;
+let dateRangeMode = 'preset'; // 'preset' or 'custom'
+let customDateFrom = '';
+let customDateTo = '';
+let syncFrequency = 'daily'; // 'hourly' | 'daily' | 'weekly'
+let selectedDimensions = new Set(['日期 Date', '广告系列ID Campaign ID']);
+let selectedMetrics = new Set(['展示量 Impressions', '点击量 Clicks', '花费 Cost', '点击率 CTR', '转化量 Conversions', '每次转化费用 Cost/Conv.']);
+let platformDimensions = {}; // { platformId: Set([dimId1, dimId2, ...]) }
+let platformMetrics = {};   // { platformId: Set([metricId1, metricId2, ...]) }
+let activePlatformTab = 'facebook';
+let advancedOpen = false;
+let platformAdvancedOpen = false;
+let reportStyle = 'comprehensive'; // 'trend' | 'comparison' | 'detail' | 'comprehensive'
+let showStylePicker = true; // 是否显示风格选择器（空白模板/NL输入=true，预设模板=false）
+let isEditing = false; // 二次编辑模式（隐藏预览和风格选择）
+let userTemplates = [
+  { id: 'user_1', name: '周度花费监控', desc: 'Facebook, Google · 2维度 · 4指标', presetPlatforms: ['facebook','google'], presetDimensions: ['日期 Date','小时 Hour'], presetMetrics: ['花费 Cost','点击量 Clicks','点击率 CTR','转化量 Conversions'], presetStyle: 'trend', dateRange: 7, syncFrequency: 'daily', scenario: '2 维度 · 4 指标', author: 'Chen B.', avatar: 'C' },
+  { id: 'user_2', name: 'TikTok 视频效果', desc: 'TikTok · 1维度 · 5指标', presetPlatforms: ['tiktok'], presetDimensions: ['日期 Date'], presetMetrics: ['展示量 Impressions','视频25%播放 Video P25','视频50%播放 Video P50','视频75%播放 Video P75','视频完播 Video P100'], presetStyle: 'detail', dateRange: 30, syncFrequency: 'daily', scenario: '1 维度 · 5 指标', author: 'Wei J.', avatar: 'W' },
+  { id: 'user_3', name: '跨平台转化对比', desc: 'Facebook, TikTok, Google · 2维度 · 4指标', presetPlatforms: ['facebook','tiktok','google'], presetDimensions: ['日期 Date','地理定向国家 Country'], presetMetrics: ['花费 Cost','转化量 Conversions','每次转化费用 Cost/Conv.','点击率 CTR'], presetStyle: 'comparison', dateRange: 30, syncFrequency: 'weekly', scenario: '2 维度 · 4 指标', author: 'Liu M.', avatar: 'L' }
+];
+let usedTemplateIds = new Set(['performance', 'conversion', 'budget']);
+let activeTemplateTab = 'official'; // 'official' | 'hot' | 'used'
+const currentUser = { name: 'You', avatar: 'Y' };
+
+/* ============ 页面切换 ============ */
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+  document.getElementById('page-' + page).classList.remove('hidden');
+  
+  document.querySelectorAll('.nav-sub').forEach(n => {
+    n.classList.remove('bg-accent', 'text-foreground');
+    n.classList.add('text-muted-foreground');
+  });
+  const nav = document.getElementById('nav-' + page);
+  if (nav) {
+    nav.classList.add('bg-accent', 'text-foreground');
+    nav.classList.remove('text-muted-foreground');
+  }
+  
+  if (page === 'home') {
+    renderHome();
+  }
+}
+
+/* ============ 首页渲染 ============ */
+function renderHome() {
+  document.getElementById('page-home').innerHTML = `
+    <div class="max-w-4xl mx-auto px-8 py-10 fade-in">
+      <div class="mb-8">
+        <h1 class="text-2xl font-semibold tracking-tight mb-1.5">Auto Report</h1>
+        <p class="text-sm text-muted-foreground">选择模板快速生成报表，几次点击完成数据授权、拉取和报表生成</p>
+      </div>
+
+      <!-- NL 折叠区（主入口） -->
+      <div id="nlSection" class="mb-8">
+        <button onclick="toggleNL()" id="nlToggle"
+          class="w-full bg-card border border-border hover:border-foreground/30 hover:bg-accent/30 rounded-lg px-4 py-3 transition flex items-center justify-between text-left">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#7c3aed,#3b82f6);">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="12" rx="3"/><circle cx="12" cy="4.5" r="1.5"/><line x1="12" y1="6" x2="12" y2="8"/><circle cx="9.5" cy="13.5" r="1.2" fill="white" stroke="none"/><circle cx="14.5" cy="13.5" r="1.2" fill="white" stroke="none"/><path d="M10 17h4"/></svg>
+            </div>
+            <div class="min-w-0">
+              <div class="text-sm font-medium">不知道选哪个？用一句话描述需求</div>
+              <div class="text-xs text-muted-foreground mt-0.5 truncate">系统会自动匹配最合适的模板和配置</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <kbd class="hidden sm:inline-flex items-center gap-0.5 px-1.5 h-5 text-[10px] font-medium text-muted-foreground bg-secondary border border-border rounded">⌘ K</kbd>
+            <svg id="nlChevron" class="w-4 h-4 text-muted-foreground transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </button>
+
+        <div id="nlPanel" class="hidden mt-2 bg-card border border-border rounded-lg p-5">
+          <textarea id="nlInput" rows="3"
+            placeholder="例如：${EXAMPLES[0]}"
+            oninput="currentInput=this.value; document.getElementById('btnGenerate').disabled = !this.value.trim()"
+            class="w-full text-sm text-foreground placeholder:text-muted-foreground bg-background border border-input rounded-md px-3 py-2 resize-none focus-ring outline-none transition"></textarea>
+          <div class="flex items-center justify-between mt-3 flex-wrap gap-2">
+            <div class="flex flex-wrap gap-1.5">
+              ${EXAMPLES.map((ex, i) => `<button onclick="useExample(${i})" class="text-xs px-2.5 py-1 border border-border rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition">${ex.length > 18 ? ex.slice(0, 18) + '...' : ex}</button>`).join('')}
+            </div>
+            <button onclick="generateFromNL()" id="btnGenerate" disabled
+              class="inline-flex items-center gap-1.5 px-4 h-9 bg-primary text-primary-foreground text-sm font-medium rounded-md hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed">
+              <span id="btnGenerateText">Generate</span>
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+          </div>
+          <p class="text-xs text-muted-foreground mt-3">输入越具体，配置越精准 · 按 Ctrl/⌘ + Enter 快速提交</p>
+        </div>
+      </div>
+
+      <!-- 模板区（次级入口） -->
+      <div class="mb-8">
+        <div class="flex items-end justify-between mb-4">
+          <div>
+            <h3 class="text-base font-semibold tracking-tight">选择模板</h3>
+            <p class="text-xs text-muted-foreground mt-1">从场景模板快速开始，或使用空白模板自定义</p>
+          </div>
+        </div>
+        <!-- Tab 栏 -->
+        <div class="flex items-center gap-0 mb-4 border-b border-border">
+          <button onclick="activeTemplateTab='official'; renderHome();" class="px-4 py-2 text-sm font-medium border-b-2 transition ${activeTemplateTab==='official' ? 'border-foreground text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground'}">官方精选</button>
+          <button onclick="activeTemplateTab='hot'; renderHome();" class="px-4 py-2 text-sm font-medium border-b-2 transition ${activeTemplateTab==='hot' ? 'border-foreground text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground'}">热门模板</button>
+          <button onclick="activeTemplateTab='used'; renderHome();" class="px-4 py-2 text-sm font-medium border-b-2 transition ${activeTemplateTab==='used' ? 'border-foreground text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground'}">我使用的</button>
+        </div>
+        <div class="grid grid-cols-4 gap-3">
+          ${activeTemplateTab === 'official' ? `
+          <button onclick="startBlank()" class="text-left bg-card border border-dashed border-border hover:border-foreground hover:shadow-sm rounded-lg p-5 transition group">
+            <div class="w-11 h-11 bg-secondary rounded-lg flex items-center justify-center mb-4 group-hover:bg-foreground group-hover:text-background transition">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            </div>
+            <h4 class="font-semibold text-sm mb-1.5 tracking-tight">空白模板</h4>
+            <p class="text-xs text-muted-foreground leading-relaxed mb-3">从零开始自定义配置数据源、维度和指标</p>
+            <div class="flex gap-1.5 text-[10px]">
+              <span class="px-1.5 py-0.5 bg-secondary text-secondary-foreground rounded font-medium">自定义</span>
+            </div>
+          </button>
+          ${TEMPLATES.map(t => `
+            <button onclick="startFromTemplate('${t.id}')" class="text-left bg-card border border-border hover:border-foreground hover:shadow-sm rounded-lg p-5 transition group">
+              <div class="w-11 h-11 bg-secondary rounded-lg flex items-center justify-center mb-4 group-hover:bg-foreground group-hover:text-background transition">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${t.iconPath}</svg>
+              </div>
+              <h4 class="font-semibold text-sm mb-1.5 tracking-tight">${t.name}</h4>
+              <p class="text-xs text-muted-foreground leading-relaxed mb-3">${t.desc}</p>
+              <div class="flex gap-1.5 text-[10px]">
+                <span class="px-1.5 py-0.5 bg-secondary text-secondary-foreground rounded font-medium">${t.presetDimensions.length} 维度</span>
+                <span class="px-1.5 py-0.5 bg-secondary text-secondary-foreground rounded font-medium">${t.presetMetrics.length} 指标</span>
+              </div>
+            </button>
+          `).join('')}
+          ` : activeTemplateTab === 'hot' ? `
+          <button onclick="startBlank()" class="text-left bg-card border border-dashed border-border hover:border-foreground hover:shadow-sm rounded-lg p-5 transition group">
+            <div class="w-11 h-11 bg-secondary rounded-lg flex items-center justify-center mb-4 group-hover:bg-foreground group-hover:text-background transition">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            </div>
+            <h4 class="font-semibold text-sm mb-1.5 tracking-tight">空白模板</h4>
+            <p class="text-xs text-muted-foreground leading-relaxed mb-3">从零开始自定义配置数据源、维度和指标</p>
+            <div class="flex gap-1.5 text-[10px]">
+              <span class="px-1.5 py-0.5 bg-secondary text-secondary-foreground rounded font-medium">自定义</span>
+            </div>
+          </button>
+          ${userTemplates.map((t, idx) => `
+            <div class="text-left bg-card border border-border hover:border-foreground hover:shadow-sm rounded-lg p-5 transition group relative flex flex-col">
+              <button onclick="event.stopPropagation(); deleteUserTemplate(${idx});" class="absolute top-2 right-2 w-6 h-6 rounded-md opacity-0 group-hover:opacity-100 hover:bg-destructive/10 flex items-center justify-center text-muted-foreground hover:text-destructive transition" title="删除">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              </button>
+              <button onclick="startFromUserTemplate(${idx})" class="w-full text-left flex flex-col flex-1">
+                <div class="w-11 h-11 bg-secondary rounded-lg flex items-center justify-center mb-4 group-hover:bg-foreground group-hover:text-background transition">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17V9M12 17v-5M16 17v-3"/></svg>
+                </div>
+                <h4 class="font-semibold text-sm mb-1.5 tracking-tight">${t.name}</h4>
+                <p class="text-xs text-muted-foreground leading-relaxed mb-3">${t.desc || t.scenario || ''}</p>
+                <div class="flex gap-1.5 text-[10px]">
+                  <span class="px-1.5 py-0.5 bg-secondary text-secondary-foreground rounded font-medium">${t.presetDimensions.length} 维度</span>
+                  <span class="px-1.5 py-0.5 bg-secondary text-secondary-foreground rounded font-medium">${t.presetMetrics.length} 指标</span>
+                </div>
+                ${t.author ? `<div class="flex items-center gap-2 pt-2 mt-auto border-t border-border mt-3"><div class="w-5 h-5 rounded-full bg-foreground/10 flex items-center justify-center text-[9px] font-semibold text-foreground">${t.avatar||'?'}</div><span class="text-[11px] text-muted-foreground">${t.author}</span></div>` : ''}
+              </button>
+            </div>
+          `).join('')}
+          ` : `
+          <button onclick="startBlank()" class="text-left bg-card border border-dashed border-border hover:border-foreground hover:shadow-sm rounded-lg p-5 transition group">
+            <div class="w-11 h-11 bg-secondary rounded-lg flex items-center justify-center mb-4 group-hover:bg-foreground group-hover:text-background transition">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            </div>
+            <h4 class="font-semibold text-sm mb-1.5 tracking-tight">空白模板</h4>
+            <p class="text-xs text-muted-foreground leading-relaxed mb-3">从零开始自定义配置数据源、维度和指标</p>
+            <div class="flex gap-1.5 text-[10px]">
+              <span class="px-1.5 py-0.5 bg-secondary text-secondary-foreground rounded font-medium">自定义</span>
+            </div>
+          </button>
+          ${(() => {
+            const used = TEMPLATES.filter(t => usedTemplateIds.has(t.id));
+            const saved = userTemplates.map((t, idx) => ({...t, _userIdx: idx}));
+            const all = [...used, ...saved];
+            return all.map(t => `
+              <button onclick="startFromTemplate('${t.id || ''}')" class="text-left bg-card border border-border hover:border-foreground hover:shadow-sm rounded-lg p-5 transition group">
+                <div class="w-11 h-11 bg-secondary rounded-lg flex items-center justify-center mb-4 group-hover:bg-foreground group-hover:text-background transition">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17V9M12 17v-5M16 17v-3"/></svg>
+                </div>
+                <h4 class="font-semibold text-sm mb-1.5 tracking-tight">${t.name}</h4>
+                <p class="text-xs text-muted-foreground leading-relaxed mb-3">${t.desc || t.scenario || ''}</p>
+                <div class="flex gap-1.5 text-[10px]">
+                  <span class="px-1.5 py-0.5 bg-secondary text-secondary-foreground rounded font-medium">${t.presetDimensions.length} 维度</span>
+                  <span class="px-1.5 py-0.5 bg-secondary text-secondary-foreground rounded font-medium">${t.presetMetrics.length} 指标</span>
+                </div>
+              </button>
+            `).join('');
+          })()}
+          `}
+        </div>
+      </div>
+
+      <!-- 最近报表（已隐藏）
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-xs font-medium text-muted-foreground uppercase tracking-wider">最近报表</h3>
+          <button onclick="openHistoryDrawer()" class="text-xs text-muted-foreground hover:text-foreground transition">查看全部 →</button>
+        </div>
+        <div class="space-y-px">
+          ${HISTORY_REPORTS.slice(0, 3).map(r => `
+            <button class="w-full flex items-center justify-between gap-4 px-3 py-2 rounded-md hover:bg-accent/50 transition text-left group">
+              <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                <svg class="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17V9M12 17v-5M16 17v-3"/></svg>
+                <span class="text-sm text-muted-foreground group-hover:text-foreground truncate transition">${r.name}</span>
+              </div>
+              <div class="hidden md:flex items-center gap-3 text-xs text-muted-foreground/70 flex-shrink-0">
+                <span class="truncate max-w-[160px]">${r.sources}</span>
+                <span>${r.updated.split(' ')[0]}</span>
+              </div>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+      -->
+    </div>
+  `;
+
+  // NL 输入框的 Enter 快捷键
+  setTimeout(() => {
+    const input = document.getElementById('nlInput');
+    if (input) {
+      input.addEventListener('keydown', e => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && currentInput.trim()) {
+          generateFromNL();
+        }
+      });
+    }
+  }, 0);
+
+  // 全局 Cmd/Ctrl+K 快捷键展开 NL（仅注册一次）
+  if (!window._globalShortcutBound) {
+    document.addEventListener('keydown', handleGlobalShortcut);
+    window._globalShortcutBound = true;
+  }
+}
+
+function handleGlobalShortcut(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    // 只在首页生效
+    const homePage = document.getElementById('page-home');
+    if (homePage && homePage.classList.contains('hidden')) return;
+    
+    e.preventDefault();
+    const nlPanel = document.getElementById('nlPanel');
+    if (nlPanel && nlPanel.classList.contains('hidden')) {
+      toggleNL();
+      setTimeout(() => document.getElementById('nlInput')?.focus(), 100);
+    } else if (nlPanel) {
+      document.getElementById('nlInput')?.focus();
+    }
+  }
+}
+
+function toggleNL() {
+  const panel = document.getElementById('nlPanel');
+  const chevron = document.getElementById('nlChevron');
+  if (panel.classList.contains('hidden')) {
+    panel.classList.remove('hidden');
+    chevron.style.transform = 'rotate(180deg)';
+  } else {
+    panel.classList.add('hidden');
+    chevron.style.transform = 'rotate(0deg)';
+  }
+}
+
+function useExample(i) {
+  currentInput = EXAMPLES[i];
+  // 确保面板已展开
+  const panel = document.getElementById('nlPanel');
+  if (panel && panel.classList.contains('hidden')) {
+    toggleNL();
+  }
+  setTimeout(() => {
+    const input = document.getElementById('nlInput');
+    if (input) {
+      input.value = currentInput;
+      input.focus();
+    }
+    document.getElementById('btnGenerate').disabled = false;
+  }, 50);
+}
+
+function generateFromNL() {
+  if (!currentInput.trim()) return;
+
+  const btn = document.getElementById('btnGenerate');
+  const btnText = document.getElementById('btnGenerateText');
+  btn.disabled = true;
+  btnText.innerHTML = '<svg class="w-4 h-4 spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>';
+
+  selectedPlatforms.clear();
+  if (/facebook|fb/i.test(currentInput)) selectedPlatforms.add('facebook');
+  if (/tiktok|tt/i.test(currentInput)) selectedPlatforms.add('tiktok');
+  if (/google/i.test(currentInput)) selectedPlatforms.add('google');
+  if (selectedPlatforms.size === 0) selectedPlatforms = new Set(['facebook', 'tiktok']);
+
+  if (/30天|一个月/i.test(currentInput)) dateRange = 30;
+  else if (/7天|一周/i.test(currentInput)) dateRange = 7;
+  else if (/90天|三个月/i.test(currentInput)) dateRange = 90;
+
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}${String(today.getMonth()+1).padStart(2,'0')}${String(today.getDate()).padStart(2,'0')}`;
+  reportName = `自动报表_${dateStr}`;
+  showStylePicker = true; // NL输入需要选风格
+  isEditing = false;
+
+  setTimeout(() => {
+    showPreview();
+  }, 500);
+}
+
+function startBlank() {
+  currentInput = '';
+  selectedPlatforms = new Set();
+  selectedAccounts = {};
+  platformDimensions = {};
+  platformMetrics = {};
+  activePlatformTab = 'facebook';
+  dateRange = 30;
+  dateRangeMode = 'preset';
+  customDateFrom = '';
+  customDateTo = '';
+  syncFrequency = 'daily';
+  selectedDimensions = new Set();
+  selectedMetrics = new Set();
+  advancedOpen = true;
+  platformAdvancedOpen = false;
+  reportStyle = 'comprehensive';
+  showStylePicker = true; // 空白模板需要选风格
+  isEditing = false;
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}${String(today.getMonth()+1).padStart(2,'0')}${String(today.getDate()).padStart(2,'0')}`;
+  reportName = `自定义报表_${dateStr}`;
+  showConfigPage();
+}
+
+function startFromTemplate(id) {
+  const template = TEMPLATES.find(t => t.id === id);
+  if (!template) {
+    // 尝试从用户模板中查找
+    const ut = userTemplates.find(t => t.id === id);
+    if (ut) { startFromUserTemplate(userTemplates.indexOf(ut)); return; }
+    return;
+  }
+  usedTemplateIds.add(id);
+  currentInput = template.name;
+  selectedPlatforms = new Set(template.presetPlatforms);
+  dateRange = 30;
+  dateRangeMode = 'preset';
+  customDateFrom = '';
+  customDateTo = '';
+  syncFrequency = 'daily';
+  selectedDimensions = new Set(template.presetDimensions);
+  selectedMetrics = new Set(template.presetMetrics);
+  advancedOpen = false;
+  reportStyle = template.presetStyle || 'comprehensive';
+  showStylePicker = false;
+  isEditing = false;
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}${String(today.getMonth()+1).padStart(2,'0')}${String(today.getDate()).padStart(2,'0')}`;
+  reportName = `${template.name}_${dateStr}`;
+  showPreview();
+}
+
+function startFromUserTemplate(idx) {
+  const t = userTemplates[idx];
+  if (!t) return;
+  currentInput = t.name;
+  selectedPlatforms = new Set(t.presetPlatforms || []);
+  dateRange = t.dateRange || 30;
+  dateRangeMode = 'preset';
+  customDateFrom = '';
+  customDateTo = '';
+  syncFrequency = t.syncFrequency || 'daily';
+  selectedDimensions = new Set(t.presetDimensions || []);
+  selectedMetrics = new Set(t.presetMetrics || []);
+  advancedOpen = false;
+  reportStyle = t.presetStyle || 'comprehensive';
+  showStylePicker = false;
+  isEditing = false;
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}${String(today.getMonth()+1).padStart(2,'0')}${String(today.getDate()).padStart(2,'0')}`;
+  reportName = `${t.name}_${dateStr}`;
+  showPreview();
+}
+
+function deleteUserTemplate(idx) {
+  userTemplates.splice(idx, 1);
+  renderHome();
+}
+
+/* ============ 另存为模板 ============ */
+function openSaveTemplateModal() {
+  const defaultName = reportName || '自定义模板';
+  showModal('另存为模板', `
+    <div class="space-y-4">
+      <p class="text-sm text-muted-foreground">将当前配置保存为模板，方便后续复用</p>
+      <div>
+        <label class="text-sm font-medium mb-1.5 block">模板名称</label>
+        <input type="text" id="saveTemplateName" value="${defaultName}" class="w-full px-3 py-2 border border-border rounded-md text-sm bg-background focus-ring outline-none transition">
+      </div>
+      <div class="text-xs text-muted-foreground">
+        保存内容：${[...selectedPlatforms].map(id => { const p = PLATFORMS.find(x=>x.id===id); return p?p.name:id; }).join('、')} · ${selectedDimensions.size} 维度 · ${selectedMetrics.size} 指标 · ${{'trend':'趋势追踪','comparison':'对比分析','detail':'明细报表','comprehensive':'综合仪表盘'}[reportStyle]||'综合仪表盘'}
+      </div>
+    </div>
+  `);
+  document.getElementById('modalFoot').innerHTML = `
+    <button onclick="closeModal()" class="inline-flex items-center px-4 h-9 text-sm rounded-md border border-border bg-background hover:bg-accent transition">取消</button>
+    <button onclick="saveAsTemplate()" class="inline-flex items-center px-4 h-9 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition">保存</button>
+  `;
+}
+
+function saveAsTemplate() {
+  const name = document.getElementById('saveTemplateName').value.trim();
+  if (!name) { alert('请输入模板名称'); return; }
+  userTemplates.push({
+    id: 'user_' + Date.now(),
+    name: name,
+    desc: `${[...selectedPlatforms].map(id => { const p = PLATFORMS.find(x=>x.id===id); return p?p.name:id; }).join('、')} · ${selectedDimensions.size}维度 · ${selectedMetrics.size}指标`,
+    presetPlatforms: [...selectedPlatforms],
+    presetDimensions: [...selectedDimensions],
+    presetMetrics: [...selectedMetrics],
+    presetStyle: reportStyle,
+    dateRange: dateRange,
+    syncFrequency: syncFrequency,
+    scenario: `${selectedDimensions.size} 维度 · ${selectedMetrics.size} 指标`,
+    author: currentUser.name,
+    avatar: currentUser.avatar
+  });
+  closeModal();
+  activeTemplateTab = 'hot';
+  showPage('home');
+}
+
+/* ============ 预览页 ============ */
+function showPreview() {
+  document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+  document.getElementById('page-preview').classList.remove('hidden');
+  renderPreview();
+}
+
+function renderPreview() {
+  const metrics = [...selectedMetrics];
+  const dims = [...selectedDimensions];
+  const platformSummary = [...selectedPlatforms].map(id => {
+    const p = PLATFORMS.find(x => x.id === id);
+    const count = selectedAccounts[id] ? selectedAccounts[id].size : 0;
+    return p ? `${p.name}（${count}个账户）` : id;
+  });
+  const timeLabel = dateRangeMode === 'custom' ? (customDateFrom||'起始') + ' 至 ' + (customDateTo||'至今') : '最近 ' + dateRange + ' 天';
+  const syncLabel = {'hourly':'每小时','daily':'每日','weekly':'每周'}[syncFrequency] || '每日';
+  const styleLabel = {'trend':'趋势追踪','comparison':'对比分析','detail':'明细报表','comprehensive':'综合仪表盘'}[reportStyle] || '综合仪表盘';
+
+  const mockValues = {'展示量 Impressions':'2.4M','点击量 Clicks':'76.8K','花费 Cost':'¥128.5K','点击率 CTR':'3.2%','平均点击成本 Avg.CPC':'¥2.8','平均千次展示成本 Avg.CPM':'¥18.6','转化量 Conversions':'1,847','每次转化费用 Cost/Conv.':'¥69.5','视频25%播放 Video P25':'68.4%','视频50%播放 Video P50':'52.1%','视频75%播放 Video P75':'38.6%','视频完播 Video P100':'24.3%','平均观看时长 Avg.Watch Time':'12.8s'};
+  const mockChanges = {'展示量 Impressions':'+8.7%','点击量 Clicks':'+6.4%','花费 Cost':'+12.3%','点击率 CTR':'-0.3%','平均点击成本 Avg.CPC':'-5.1%','平均千次展示成本 Avg.CPM':'+3.2%','转化量 Conversions':'+15.2%','每次转化费用 Cost/Conv.':'-8.4%','视频25%播放 Video P25':'+4.2%','视频50%播放 Video P50':'+2.8%','视频75%播放 Video P75':'+1.5%','视频完播 Video P100':'+0.9%','平均观看时长 Avg.Watch Time':'+1.2s'};
+  const isPos = (v) => v && v.startsWith('+');
+
+  let preview = '';
+  // KPI 卡片
+  preview += '<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">';
+  metrics.slice(0, 8).forEach(m => {
+    const val = mockValues[m] || '--';
+    const chg = mockChanges[m] || '';
+    preview += `<div class="bg-card border border-border rounded-lg p-4"><div class="text-xs text-muted-foreground truncate">${m}</div><div class="text-xl font-bold mt-1">${val}</div><div class="text-xs mt-0.5 ${isPos(chg)?'text-green-600':'text-red-500'}">${chg}</div></div>`;
+  });
+  preview += '</div>';
+
+  // 趋势图
+  if (reportStyle === 'trend' || reportStyle === 'comprehensive') {
+    preview += `<div class="bg-card border border-border rounded-lg p-5 mb-4"><div class="text-sm font-medium mb-3">${metrics[0]||'指标'} 趋势</div><div class="h-40 flex items-end gap-1 px-2">`;
+    [40,55,45,60,52,70,65,80,72,90,85,95,88,78].forEach(h => { preview += `<div class="flex-1 bg-foreground/20 rounded-t" style="height:${h}%;"></div>`; });
+    preview += '</div><div class="flex justify-between text-[10px] text-muted-foreground mt-2 px-2"><span>05/14</span><span>05/21</span><span>05/28</span></div></div>';
+  }
+  // 平台对比
+  if (reportStyle === 'comparison' || reportStyle === 'comprehensive') {
+    preview += '<div class="bg-card border border-border rounded-lg p-5 mb-4"><div class="text-sm font-medium mb-3">平台对比</div><div class="space-y-3">';
+    [...selectedPlatforms].forEach(id => {
+      const p = PLATFORMS.find(x => x.id === id);
+      const w = Math.floor(40 + Math.random() * 55);
+      preview += `<div class="flex items-center gap-3"><span class="text-xs w-28 text-muted-foreground truncate">${p?p.name:id}</span><div class="flex-1 h-6 bg-secondary rounded"><div class="h-full bg-foreground/60 rounded" style="width:${w}%;"></div></div><span class="text-xs font-medium w-12 text-right">${w}%</span></div>`;
+    });
+    preview += '</div></div>';
+  }
+  // 明细表
+  if (reportStyle === 'detail' || reportStyle === 'comprehensive') {
+    preview += `<div class="bg-card border border-border rounded-lg overflow-hidden mb-4"><div class="px-5 py-3 border-b border-border text-sm font-medium">明细数据</div><div class="overflow-x-auto"><table class="w-full text-xs"><thead class="bg-secondary/50"><tr><th class="text-left px-4 py-2.5 font-medium text-muted-foreground">${dims[0]||'维度'}</th>`;
+    metrics.slice(0,5).forEach(m => { preview += `<th class="text-right px-4 py-2.5 font-medium text-muted-foreground">${m}</th>`; });
+    preview += '</tr></thead><tbody>';
+    ['2026/05/28','2026/05/27','2026/05/26','2026/05/25','2026/05/24'].forEach(d => {
+      preview += `<tr class="border-t border-border hover:bg-accent/30"><td class="px-4 py-2.5">${d}</td>`;
+      metrics.slice(0,5).forEach(m => { preview += `<td class="text-right px-4 py-2.5">${mockValues[m]||'--'}</td>`; });
+      preview += '</tr>';
+    });
+    preview += '</tbody></table></div></div>';
+  }
+
+  document.getElementById('page-preview').innerHTML = `
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <button onclick="showPage('home')" class="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1 mb-3">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+            返回首页
+          </button>
+          <h1 class="text-xl font-bold mb-1">报表预览</h1>
+          <div class="text-sm font-medium text-foreground mb-1">${reportName}</div>
+          <div class="text-xs text-muted-foreground">${platformSummary.join('、')} · ${timeLabel} · 同步: ${syncLabel} · ${styleLabel}</div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="showConfigPage()" class="text-xs font-medium px-4 h-9 inline-flex items-center rounded-md border border-border bg-background hover:bg-accent transition">
+            <svg class="w-3.5 h-3.5 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            编辑配置
+          </button>
+          <button onclick="confirmGenerate()" class="text-xs font-medium px-4 h-9 inline-flex items-center rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition shadow-sm">
+            <svg class="w-3.5 h-3.5 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            一键生成
+          </button>
+        </div>
+      </div>
+      ${preview}
+    </div>
+  `;
+}
+
+/* ============ 配置页 ============ */
+function showConfigPage() {
+  openConfigDrawer('config');
+  renderConfig();
+}
+
+/* ============ 配置抽屉 ============ */
+function openConfigDrawer(mode) {
+  const overlay = document.getElementById('configDrawerOverlay');
+  const drawer = document.getElementById('configDrawer');
+  const title = document.getElementById('configDrawerTitle');
+  overlay.classList.remove('hidden');
+  title.innerHTML = mode === 'preview'
+    ? '<span class="text-base font-semibold">报表预览</span><span class="text-xs text-muted-foreground ml-2">检查并调整自动识别的配置，或直接生成报表</span>'
+    : '<span class="text-base font-semibold">确认配置</span><span class="text-xs text-muted-foreground ml-2">检查并调整自动识别的配置，或直接生成报表</span>';
+  // 触发 reflow 确保动画生效
+  void drawer.offsetHeight;
+  drawer.classList.add('open');
+}
+
+function closeConfigDrawer() {
+  const overlay = document.getElementById('configDrawerOverlay');
+  const drawer = document.getElementById('configDrawer');
+  const pickerOverlay = document.getElementById('pickerDrawerOverlay');
+  const pickerDrawer = document.getElementById('pickerDrawer');
+  drawer.classList.remove('open');
+  pickerDrawer.classList.remove('open');
+  overlay.classList.add('hidden');
+  pickerOverlay.classList.add('hidden');
+}
+
+function openPickerDrawer(titleText, bodyHTML) {
+  const overlay = document.getElementById('pickerDrawerOverlay');
+  const drawer = document.getElementById('pickerDrawer');
+  document.getElementById('pickerDrawerTitle').innerHTML = titleText;
+  document.getElementById('pickerDrawerContent').innerHTML = bodyHTML;
+  overlay.classList.remove('hidden');
+  void drawer.offsetHeight;
+  drawer.classList.add('open');
+}
+
+function closePickerDrawer() {
+  const overlay = document.getElementById('pickerDrawerOverlay');
+  const drawer = document.getElementById('pickerDrawer');
+  drawer.classList.remove('open');
+  overlay.classList.add('hidden');
+  _pickerState = null;
+}
+
+function renderConfig() {
+  // 确保 activePlatformTab 始终是已选平台之一
+  if (selectedPlatforms.size > 0 && !selectedPlatforms.has(activePlatformTab)) {
+    activePlatformTab = [...selectedPlatforms][0];
+  }
+  const platformSummary = [...selectedPlatforms].map(id => {
+    const p = PLATFORMS.find(x => x.id === id);
+    const count = selectedAccounts[id] ? selectedAccounts[id].size : 0;
+    return `${p.name}（${count}个账户）`;
+  }).join('、');
+  const isEmpty = selectedPlatforms.size === 0;
+  const canGenerate = selectedPlatforms.size > 0 && selectedDimensions.size > 0 && selectedMetrics.size > 0;
+
+  document.getElementById('configDrawerContent').innerHTML = `
+    <div class="max-w-3xl mx-auto px-8 py-8 fade-in">
+
+      <!-- 基础配置 -->
+      <div class="bg-card border border-border rounded-lg overflow-hidden mb-3">
+        <div class="px-5 py-3.5 border-b border-border flex items-center gap-4">
+          <div class="text-sm text-muted-foreground w-20 flex-shrink-0">报表名称</div>
+          <input type="text" value="${reportName}" oninput="reportName=this.value"
+            class="flex-1 h-8 px-3 text-sm bg-background border border-input rounded-md focus-ring outline-none transition"
+            placeholder="输入报表名称">
+        </div>
+        ${currentInput ? `
+        <div class="px-5 py-3.5 border-b border-border flex items-start gap-4">
+          <div class="text-sm text-muted-foreground w-20 flex-shrink-0 mt-1">需求描述</div>
+          <div class="flex-1 text-sm text-muted-foreground leading-relaxed">${currentInput}</div>
+        </div>
+        ` : ''}
+        <div class="px-5 py-3.5 border-b border-border flex items-start gap-4">
+          <div class="text-sm text-muted-foreground w-20 flex-shrink-0 mt-1">数据源</div>
+          <div class="flex-1">
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              ${[...selectedPlatforms].map(id => {
+                const p = PLATFORMS.find(x => x.id === id);
+                const accountCount = selectedAccounts[id] ? selectedAccounts[id].size : p.accounts.filter(a => a.status === 'active').length;
+                return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-secondary text-secondary-foreground rounded-md text-xs font-medium">
+                  ${p.name} <span class="text-muted-foreground">(${accountCount}个账户)</span>
+                  <button onclick="removePlatform('${id}')" class="text-muted-foreground hover:text-foreground ml-0.5">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                  </button>
+                </span>`;
+              }).join('')}
+              <button onclick="openPlatformModal()" class="inline-flex items-center gap-1 px-2.5 py-1 border border-dashed ${isEmpty ? 'border-foreground/40 text-foreground' : 'border-border text-muted-foreground'} rounded-md text-xs hover:border-foreground/50 hover:text-foreground transition">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                ${isEmpty ? '选择数据源' : '添加平台'}
+              </button>
+            </div>
+            ${selectedPlatforms.size > 0 ? `
+              <button onclick="openAccountConfigModal()" class="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1 transition">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m6.36 6.36l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m6.36-6.36l4.24-4.24"/></svg>
+                高级配置：选择具体账户
+              </button>
+            ` : ''}
+          </div>
+        </div>
+        <div class="px-5 py-3.5 flex items-center gap-4">
+          <div class="text-sm text-muted-foreground w-20 flex-shrink-0">时间范围</div>
+          <div class="flex-1">
+            <div class="flex gap-1.5 mb-2">
+              ${[7, 14, 30, 90].map(d => `
+                <button onclick="dateRange=${d}; dateRangeMode='preset'; renderConfig();" class="text-xs px-2.5 h-7 border ${dateRangeMode==='preset' && dateRange===d ? 'border-foreground bg-accent' : 'border-border'} rounded-md hover:bg-accent transition">${d} 天</button>
+              `).join('')}
+              <button onclick="dateRangeMode='custom'; renderConfig();" class="text-xs px-2.5 h-7 border ${dateRangeMode==='custom' ? 'border-foreground bg-accent' : 'border-border'} rounded-md hover:bg-accent transition">自定义</button>
+            </div>
+            ${dateRangeMode === 'custom' ? `
+            <div class="flex items-center gap-2">
+              <input type="date" value="${customDateFrom}" onchange="customDateFrom=this.value; renderConfig();" class="text-xs h-7 px-2 border border-border rounded-md bg-background focus-ring outline-none">
+              <span class="text-xs text-muted-foreground">至</span>
+              <input type="date" value="${customDateTo}" onchange="customDateTo=this.value; renderConfig();" class="text-xs h-7 px-2 border border-border rounded-md bg-background focus-ring outline-none">
+            </div>
+            ` : ''}
+          </div>
+        </div>
+        <div class="px-5 py-3.5 flex items-center gap-4">
+          <div class="text-sm text-muted-foreground w-20 flex-shrink-0">同步频率</div>
+          <select onchange="syncFrequency=this.value; renderConfig();" class="text-xs h-7 px-2 border border-border rounded-md bg-background focus-ring outline-none">
+            <option value="hourly" ${syncFrequency==='hourly'?'selected':''}>每小时</option>
+            <option value="daily" ${syncFrequency==='daily'?'selected':''}>每日 00:00（推荐）</option>
+            <option value="weekly" ${syncFrequency==='weekly'?'selected':''}>每周</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 通用配置（可折叠） -->
+      <details class="bg-card border border-border rounded-lg mb-3" style="overflow:visible;" ${advancedOpen ? 'open' : ''}>
+        <summary class="px-5 py-3 cursor-pointer flex items-center justify-between hover:bg-accent/30 transition">
+          <span class="text-sm font-medium flex items-center gap-1.5">${isEmpty ? '配置维度和指标' : '通用维度&指标（跨平台）'}${!isEmpty ? `<span class="text-xs text-muted-foreground font-normal">${selectedDimensions.size} 维度 · ${selectedMetrics.size} 指标</span>` : ''}<span class="help-icon inline-flex items-center justify-center w-4 h-4 rounded-full bg-secondary text-muted-foreground text-[10px] font-medium cursor-help" style="line-height:1;">?<span class="help-tip absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-[11px] leading-snug rounded-lg shadow-lg pointer-events-none z-50" style="width:260px;white-space:normal;">跨平台聚合的通用维度和指标共用无须单独勾选使用</span></span></span>
+          <svg class="chevron w-4 h-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </summary>
+        <div class="border-t border-border">
+          <div class="px-5 py-3.5 border-b border-border flex items-start gap-4">
+            <div class="text-sm text-muted-foreground w-20 flex-shrink-0 mt-1">维度</div>
+            <div class="flex-1 flex flex-wrap gap-1.5">
+              ${[...selectedDimensions].map(d => `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-secondary text-secondary-foreground rounded-md text-xs font-medium">
+                ${d}
+                <button onclick="removeDimension('${d}')" class="text-muted-foreground hover:text-foreground">
+                  <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+              </span>`).join('')}
+              <button onclick="openDimensionModal()" class="inline-flex items-center gap-1 px-2.5 py-1 border border-dashed border-border text-muted-foreground rounded-md text-xs hover:border-foreground/50 hover:text-foreground transition">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                添加维度
+              </button>
+            </div>
+          </div>
+          <div class="px-5 py-3.5 flex items-start gap-4">
+            <div class="text-sm text-muted-foreground w-20 flex-shrink-0 mt-1">指标</div>
+            <div class="flex-1 flex flex-wrap gap-1.5">
+              ${[...selectedMetrics].map(m => `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-secondary text-secondary-foreground rounded-md text-xs font-medium">
+                ${m}
+                <button onclick="removeMetric('${m}')" class="text-muted-foreground hover:text-foreground">
+                  <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+              </span>`).join('')}
+              <button onclick="openMetricModal()" class="inline-flex items-center gap-1 px-2.5 py-1 border border-dashed border-border text-muted-foreground rounded-md text-xs hover:border-foreground/50 hover:text-foreground transition">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                添加指标
+              </button>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 平台专属配置（可折叠） -->
+      ${selectedPlatforms.size > 0 ? `
+      <details class="bg-card border border-border rounded-lg mb-3" style="overflow:visible;" ${platformAdvancedOpen ? 'open' : ''} ontoggle="platformAdvancedOpen=this.open;">
+        <summary class="px-5 py-3 cursor-pointer flex items-center justify-between hover:bg-accent/30 transition">
+          <span class="text-sm font-medium flex items-center gap-1.5">平台专属维度&指标<span class="text-xs text-muted-foreground font-normal">${(() => { let pd=0,pm=0; Object.values(platformDimensions).forEach(s=>pd+=s.size); Object.values(platformMetrics).forEach(s=>pm+=s.size); return (pd+pm>0) ? pd+' 维度 · '+pm+' 指标' : ''; })()}</span><span class="help-icon inline-flex items-center justify-center w-4 h-4 rounded-full bg-secondary text-muted-foreground text-[10px] font-medium cursor-help" style="line-height:1;">?<span class="help-tip absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-[11px] leading-snug rounded-lg shadow-lg pointer-events-none z-50" style="width:240px;white-space:normal;">各平台特有的维度和指标，仅在对应平台的数据源中可用</span></span></span>
+          <svg class="chevron w-4 h-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </summary>
+        <div class="border-t border-border">
+          <!-- 平台 Tab 栏 -->
+          <div class="flex border-b border-border">
+            ${[...selectedPlatforms].map(id => {
+              const p = PLATFORMS.find(x => x.id === id);
+              const dimCount = platformDimensions[id] ? platformDimensions[id].size : 0;
+              const metCount = platformMetrics[id] ? platformMetrics[id].size : 0;
+              const totalCount = dimCount + metCount;
+              return `<button onclick="activePlatformTab='${id}'; platformAdvancedOpen=true; renderConfig();" class="px-4 py-2.5 text-xs font-medium border-b-2 transition ${activePlatformTab===id ? 'border-foreground text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground'}">
+                ${p.name}
+                ${totalCount > 0 ? `<span class="ml-1 inline-flex items-center justify-center w-4 h-4 text-[9px] font-medium bg-foreground text-background rounded-full">${totalCount}</span>` : ''}
+              </button>`;
+            }).join('')}
+          </div>
+          <!-- 当前平台的维度 -->
+          <div class="px-5 py-3.5 border-b border-border flex items-start gap-4">
+            <div class="text-sm text-muted-foreground w-20 flex-shrink-0 mt-1">维度</div>
+            <div class="flex-1 flex flex-wrap gap-1.5">
+              ${(platformDimensions[activePlatformTab] ? [...platformDimensions[activePlatformTab]] : []).map(id => { const d = (PLATFORM_DIMENSIONS[activePlatformTab]||[]).find(x=>x.id===id); return d ? '<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-secondary text-secondary-foreground rounded-md text-xs font-medium">'+d.name+'<button onclick="removePlatformDim(\''+activePlatformTab+'\',\''+d.id+'\')" class="text-muted-foreground hover:text-foreground"><svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></span>' : ''; }).join('')}
+              <button onclick="openPlatformDimModal('${activePlatformTab}')" class="inline-flex items-center gap-1 px-2.5 py-1 border border-dashed border-border text-muted-foreground rounded-md text-xs hover:border-foreground/50 hover:text-foreground transition">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                添加维度
+              </button>
+            </div>
+          </div>
+          <!-- 当前平台的指标 -->
+          <div class="px-5 py-3.5 flex items-start gap-4">
+            <div class="text-sm text-muted-foreground w-20 flex-shrink-0 mt-1">指标</div>
+            <div class="flex-1 flex flex-wrap gap-1.5">
+              ${(platformMetrics[activePlatformTab] ? [...platformMetrics[activePlatformTab]] : []).map(id => { const m = (PLATFORM_METRICS[activePlatformTab]||[]).find(x=>x.id===id); return m ? '<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-secondary text-secondary-foreground rounded-md text-xs font-medium">'+m.name+'<button onclick="removePlatformMetric(\''+activePlatformTab+'\',\''+m.id+'\')" class="text-muted-foreground hover:text-foreground"><svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></span>' : ''; }).join('')}
+              <button onclick="openPlatformMetricModal('${activePlatformTab}')" class="inline-flex items-center gap-1 px-2.5 py-1 border border-dashed border-border text-muted-foreground rounded-md text-xs hover:border-foreground/50 hover:text-foreground transition">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                添加指标
+              </button>
+            </div>
+          </div>
+        </div>
+      </details>
+      ` : ''}
+
+      <!-- 报表风格（仅空白模板/NL输入时显示） -->
+      ${showStylePicker && !isEditing ? `
+      <div class="bg-card border border-border rounded-lg overflow-hidden mb-3">
+        <div class="px-5 py-3 border-b border-border">
+          <span class="text-sm font-medium">报表风格</span>
+          <span class="text-xs text-muted-foreground ml-2">决定初始生成的视图布局</span>
+        </div>
+        <div class="p-4 grid grid-cols-4 gap-3">
+          <button onclick="reportStyle='trend'; renderConfig();" class="text-left p-3 border ${reportStyle==='trend' ? 'border-foreground bg-accent/40' : 'border-border'} rounded-lg hover:border-foreground/50 transition">
+            <div class="h-12 mb-2 flex items-end gap-0.5 px-1">
+              <div class="flex-1 bg-muted-foreground/20 rounded-sm" style="height:40%"></div>
+              <div class="flex-1 bg-muted-foreground/20 rounded-sm" style="height:60%"></div>
+              <div class="flex-1 bg-muted-foreground/20 rounded-sm" style="height:45%"></div>
+              <div class="flex-1 bg-muted-foreground/20 rounded-sm" style="height:80%"></div>
+              <div class="flex-1 bg-muted-foreground/20 rounded-sm" style="height:70%"></div>
+              <div class="flex-1 bg-foreground/60 rounded-sm" style="height:90%"></div>
+            </div>
+            <div class="text-xs font-medium">趋势追踪</div>
+            <div class="text-[10px] text-muted-foreground mt-0.5">折线图 + KPI 卡片</div>
+          </button>
+          <button onclick="reportStyle='comparison'; renderConfig();" class="text-left p-3 border ${reportStyle==='comparison' ? 'border-foreground bg-accent/40' : 'border-border'} rounded-lg hover:border-foreground/50 transition">
+            <div class="h-12 mb-2 flex items-end justify-center gap-1.5 px-1">
+              <div class="w-5 bg-muted-foreground/30 rounded-sm" style="height:70%"></div>
+              <div class="w-5 bg-foreground/60 rounded-sm" style="height:90%"></div>
+              <div class="w-5 bg-muted-foreground/30 rounded-sm" style="height:50%"></div>
+              <div class="w-5 bg-foreground/60 rounded-sm" style="height:65%"></div>
+            </div>
+            <div class="text-xs font-medium">对比分析</div>
+            <div class="text-[10px] text-muted-foreground mt-0.5">多维度并排柱状图</div>
+          </button>
+          <button onclick="reportStyle='detail'; renderConfig();" class="text-left p-3 border ${reportStyle==='detail' ? 'border-foreground bg-accent/40' : 'border-border'} rounded-lg hover:border-foreground/50 transition">
+            <div class="h-12 mb-2 px-1 flex flex-col justify-center gap-1">
+              <div class="h-1.5 bg-muted-foreground/20 rounded-sm w-full"></div>
+              <div class="h-1.5 bg-muted-foreground/20 rounded-sm w-4/5"></div>
+              <div class="h-1.5 bg-muted-foreground/20 rounded-sm w-full"></div>
+              <div class="h-1.5 bg-muted-foreground/20 rounded-sm w-3/5"></div>
+            </div>
+            <div class="text-xs font-medium">明细报表</div>
+            <div class="text-[10px] text-muted-foreground mt-0.5">数据表格 + 汇总行</div>
+          </button>
+          <button onclick="reportStyle='comprehensive'; renderConfig();" class="text-left p-3 border ${reportStyle==='comprehensive' ? 'border-foreground bg-accent/40' : 'border-border'} rounded-lg hover:border-foreground/50 transition">
+            <div class="h-12 mb-2 px-1 grid grid-cols-2 grid-rows-2 gap-0.5">
+              <div class="bg-muted-foreground/20 rounded-sm"></div>
+              <div class="bg-foreground/40 rounded-sm"></div>
+              <div class="bg-foreground/40 rounded-sm col-span-2"></div>
+            </div>
+            <div class="text-xs font-medium">综合仪表盘</div>
+            <div class="text-[10px] text-muted-foreground mt-0.5">KPI + 趋势 + 表格</div>
+          </button>
+        </div>
+      </div>
+      ` : ''}
+
+      <!-- 预览 -->
+      ${!isEditing ? (canGenerate ? (() => {
+        const metrics = [...selectedMetrics];
+        const dims = [...selectedDimensions];
+        const platforms = [...selectedPlatforms].map(id => PLATFORMS.find(x=>x.id===id));
+        const mockValues = {'展示量 Impressions':'2.4M','点击量 Clicks':'76.8K','花费 Cost':'¥128.5K','点击率 CTR':'3.2%','平均点击成本 Avg.CPC':'¥2.8','平均千次展示成本 Avg.CPM':'¥18.6','转化量 Conversions':'1,847','每次转化费用 Cost/Conv.':'¥69.5','视频25%播放 Video P25':'68.4%','视频50%播放 Video P50':'52.1%','视频75%播放 Video P75':'38.6%','视频完播 Video P100':'24.3%','平均观看时长 Avg.Watch Time':'12.8s'};
+        const mockChanges = {'展示量 Impressions':'+8.7%','点击量 Clicks':'+6.4%','花费 Cost':'+12.3%','点击率 CTR':'-0.3%','平均点击成本 Avg.CPC':'-5.1%','平均千次展示成本 Avg.CPM':'+3.2%','转化量 Conversions':'+15.2%','每次转化费用 Cost/Conv.':'-8.4%','视频25%播放 Video P25':'+4.2%','视频50%播放 Video P50':'+2.8%','视频75%播放 Video P75':'+1.5%','视频完播 Video P100':'+0.9%','平均观看时长 Avg.Watch Time':'+1.2s'};
+        const isPositive = v => v && v.startsWith('+');
+        const styleLabel = {'trend':'趋势追踪','comparison':'对比分析','detail':'明细报表','comprehensive':'综合仪表盘'}[reportStyle];
+        return `
+      <div class="bg-card border border-border rounded-lg p-5 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <div class="text-sm font-semibold">报表预览 · ${styleLabel}</div>
+            <div class="text-xs text-muted-foreground mt-0.5">基于 ${platformSummary} · ${dateRangeMode==='custom' ? (customDateFrom||'起始')+' 至 '+(customDateTo||'至今') : '最近 '+dateRange+' 天'} · 同步：${{'hourly':'每小时','daily':'每日','weekly':'每周'}[syncFrequency]}</div>
+          </div>
+          <span class="text-[10px] px-1.5 py-0.5 bg-secondary text-secondary-foreground rounded font-medium">示例数据</span>
+        </div>
+        ${reportStyle === 'trend' ? `
+        <div class="grid grid-cols-${Math.min(metrics.length, 4)} gap-2.5 mb-4">
+          ${metrics.slice(0, 4).map(m => `<div class="border border-border rounded-md p-2.5">
+            <div class="text-[10px] text-muted-foreground">${m}</div>
+            <div class="text-lg font-semibold mt-0.5">${mockValues[m]||'--'}</div>
+            <div class="text-[10px] ${isPositive(mockChanges[m]) ? 'text-green-600' : 'text-red-500'} mt-0.5">${mockChanges[m]||''}</div>
+          </div>`).join('')}
+        </div>
+        <div class="h-28 relative bg-secondary/30 rounded-md p-3">
+          <div class="absolute top-2 left-3 text-[9px] text-muted-foreground">${metrics[0]} 趋势</div>
+          <svg class="w-full h-full" viewBox="0 0 280 80" preserveAspectRatio="none">
+            <polyline points="0,60 40,45 80,50 120,30 160,35 200,20 240,25 280,10" fill="none" stroke="currentColor" stroke-width="2" opacity="0.7"/>
+            <polyline points="0,65 40,55 80,60 120,45 160,50 200,40 240,42 280,30" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3" stroke-dasharray="4,3"/>
+          </svg>
+          <div class="absolute bottom-2 right-3 flex items-center gap-3 text-[9px] text-muted-foreground">
+            <span class="flex items-center gap-1"><span class="w-3 h-0.5 bg-foreground/70 inline-block"></span>本期</span>
+            <span class="flex items-center gap-1"><span class="w-3 h-0.5 bg-foreground/30 inline-block" style="border-top:1px dashed"></span>上期</span>
+          </div>
+        </div>
+        ` : reportStyle === 'comparison' ? `
+        <div class="grid grid-cols-${Math.min(platforms.length, 3)} gap-3 mb-4">
+          ${platforms.slice(0, 3).map((p, i) => `<div class="border border-border rounded-md p-2.5">
+            <div class="text-[10px] text-muted-foreground mb-1">${p.name}</div>
+            <div class="text-lg font-semibold">${['¥78.2K','¥50.3K','¥32.1K'][i]}</div>
+            <div class="text-[10px] text-muted-foreground">${metrics.slice(1,3).map(m => m + ' ' + (mockValues[m]||'--')).join(' · ')}</div>
+          </div>`).join('')}
+        </div>
+        <div class="h-28 bg-secondary/30 rounded-md p-3 flex items-end gap-4 justify-center">
+          ${metrics.slice(0, 5).map((m, i) => {
+            const heights = platforms.map((_,pi) => 40 + Math.floor(Math.random()*50));
+            return '<div class="flex-1 flex flex-col items-center gap-1"><div class="w-full flex items-end justify-center gap-1" style="height:80px">' + platforms.map((_, pi) => '<div class="w-3 bg-foreground/' + (pi===0?'70':'30') + ' rounded-sm" style="height:' + (50+i*8+pi*10) + '%"></div>').join('') + '</div><div class="text-[8px] text-muted-foreground">' + m.replace('平均 ','') + '</div></div>';
+          }).join('')}
+        </div>
+        <div class="flex justify-center gap-4 mt-2 text-[9px] text-muted-foreground">
+          ${platforms.map((p, i) => `<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-foreground/${i===0?'70':'30'} rounded-sm inline-block"></span>${p.name.replace(' Ads','')}</span>`).join('')}
+        </div>
+        ` : reportStyle === 'detail' ? `
+        <div class="border border-border rounded-md overflow-hidden">
+          <table class="w-full text-xs">
+            <thead class="bg-secondary/50">
+              <tr>
+                <th class="text-left px-3 py-2 font-medium text-muted-foreground">${dims[0]||'日期'}</th>
+                ${metrics.slice(0, 5).map(m => `<th class="text-right px-3 py-2 font-medium text-muted-foreground">${m.replace('平均 ','')}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              ${['05/26','05/25','05/24'].map(d => `<tr class="border-t border-border"><td class="px-3 py-2">${d}</td>${metrics.slice(0,5).map(m => `<td class="text-right px-3 py-2">${mockValues[m]||'--'}</td>`).join('')}</tr>`).join('')}
+              <tr class="border-t border-border bg-secondary/30 font-medium"><td class="px-3 py-2">合计</td>${metrics.slice(0,5).map(m => `<td class="text-right px-3 py-2">${mockValues[m]||'--'}</td>`).join('')}</tr>
+            </tbody>
+          </table>
+        </div>
+        ` : `
+        <div class="grid grid-cols-${Math.min(metrics.length, 3)} gap-2.5 mb-3">
+          ${metrics.slice(0, 3).map(m => `<div class="border border-border rounded-md p-2.5">
+            <div class="text-[10px] text-muted-foreground">${m}</div>
+            <div class="text-lg font-semibold mt-0.5">${mockValues[m]||'--'}</div>
+          </div>`).join('')}
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="h-20 bg-secondary/30 rounded-md p-2">
+            <div class="text-[9px] text-muted-foreground mb-1">${metrics[0]} 趋势</div>
+            <div class="flex items-end gap-0.5 h-12">
+              ${[40,55,45,65,50,70,80,60,75,85].map(h => `<div class="flex-1 bg-foreground/60 rounded-sm" style="height:${h}%"></div>`).join('')}
+            </div>
+          </div>
+          <div class="h-20 bg-secondary/30 rounded-md p-2 flex flex-col justify-center gap-1 text-[9px]">
+            ${platforms.slice(0,3).map((p,i) => `<div class="flex justify-between"><span class="text-muted-foreground">${p.name.replace(' Ads','')}</span><span>${['¥78.2K','¥50.3K','¥32.1K'][i]}</span></div>`).join('')}
+            <div class="flex justify-between border-t border-border pt-1 font-medium"><span>合计</span><span>${mockValues[metrics[0]]||'--'}</span></div>
+          </div>
+        </div>
+        `}
+      </div>`;
+      })() : `
+      <div class="bg-card border border-dashed border-border rounded-lg p-10 mb-6 text-center">
+        <div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center mx-auto mb-3">
+          <svg class="w-5 h-5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+        </div>
+        <div class="text-sm font-medium mb-1">完成配置后查看预览</div>
+        <div class="text-xs text-muted-foreground">
+          ${selectedPlatforms.size === 0 ? '请先选择数据源' : selectedDimensions.size === 0 ? '请添加至少一个维度' : '请添加至少一个指标'}
+        </div>
+      </div>
+      `) : ''}
+
+      <!-- 底部操作 -->
+      <div class="flex items-center justify-between pt-6 border-t border-border">
+        <div class="text-xs text-muted-foreground">
+          ${canGenerate
+            ? (() => {
+              let pd=0,pm=0;
+              Object.values(platformDimensions).forEach(s=>pd+=s.size);
+              Object.values(platformMetrics).forEach(s=>pm+=s.size);
+              const total = selectedDimensions.size + selectedMetrics.size + pd + pm;
+              return `将生成包含 <b class="text-foreground">${total}</b> 个字段的报表` + (pd+pm>0 ? `（含 ${pd+pm} 个平台专属字段）` : '');
+            })()
+            : `<span class="text-amber-600">⚠</span> 请完成必填项后再生成`}
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="openSaveTemplateModal()" class="inline-flex items-center gap-1.5 px-4 h-10 text-sm font-medium rounded-md border border-border bg-background hover:bg-accent transition">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            另存为模板
+          </button>
+          <button onclick="confirmGenerate()" id="btnConfirm" ${canGenerate ? '' : 'disabled'} class="inline-flex items-center gap-1.5 px-5 h-10 bg-primary text-primary-foreground text-sm font-medium rounded-md hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed">
+            <span id="btnConfirmText">${isEditing ? '保存配置' : '生成报表'}</span>
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function removePlatform(id) {
+  selectedPlatforms.delete(id);
+  delete selectedAccounts[id];
+  delete platformDimensions[id];
+  delete platformMetrics[id];
+  renderConfig();
+}
+
+function removeDimension(d) { selectedDimensions.delete(d); renderConfig(); }
+function removeMetric(m) { selectedMetrics.delete(m); renderConfig(); }
+
+function openAccountConfigModal() {
+  const items = [];
+  const allSelected = new Set();
+  [...selectedPlatforms].forEach(platformId => {
+    const p = PLATFORMS.find(x => x.id === platformId);
+    if (!p || !p.accounts.length) return;
+    p.accounts.forEach(a => {
+      const statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ' + (a.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600') + '">' + (a.status === 'active' ? '正常' : '已暂停') + '</span>';
+      const meta = statusBadge + ' <span class="font-mono text-[10px]">' + a.id + '</span>';
+      items.push({ id: a.id, name: a.name, category: p.name, meta: meta });
+    });
+    const sel = selectedAccounts[platformId] || new Set();
+    sel.forEach(id => allSelected.add(id));
+  });
+  showPickerModal({
+    title: '选择具体账户',
+    subtitle: '从已连接平台中筛选账户',
+    items: items,
+    selectedIds: allSelected,
+    onApply: (newSet) => {
+      // 按平台重新分配
+      [...selectedPlatforms].forEach(platformId => {
+        const p = PLATFORMS.find(x => x.id === platformId);
+        if (!p) return;
+        selectedAccounts[platformId] = new Set(p.accounts.filter(a => newSet.has(a.id)).map(a => a.id));
+      });
+      renderConfig();
+    }
+  });
+}
+
+function toggleAccount(platformId, accountId) {
+  if (!selectedAccounts[platformId]) selectedAccounts[platformId] = new Set();
+  if (selectedAccounts[platformId].has(accountId)) {
+    selectedAccounts[platformId].delete(accountId);
+  } else {
+    selectedAccounts[platformId].add(accountId);
+  }
+  openAccountConfigModal();
+}
+
+/* ============ 弹窗 ============ */
+function openPlatformModal() {
+  const titleHTML = '<span class="text-base font-semibold">选择数据源平台</span>';
+  const bodyHTML = `
+    <div class="grid grid-cols-2 gap-2">
+      ${PLATFORMS.map(p => {
+        const activeCount = p.accounts.filter(a => a.status === 'active').length;
+        return `
+        <button onclick="togglePlatformInModal('${p.id}')" class="text-left flex items-center gap-2.5 p-3 border ${selectedPlatforms.has(p.id) ? 'border-foreground bg-accent/40' : 'border-border'} hover:border-foreground/50 rounded-md transition">
+          <div class="w-10 h-10 bg-secondary rounded-lg flex items-center justify-center flex-shrink-0">
+            <span class="text-sm font-semibold">${p.name.charAt(0)}</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="text-sm font-medium mb-0.5">${p.name}</div>
+            <div class="text-xs">
+              ${p.connected
+                ? `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium" style="background:#dcf5ed;color:#0d9668;">已连接 ${activeCount} 个</span>`
+                : '<span class="text-muted-foreground">可用</span>'}
+            </div>
+          </div>
+          ${selectedPlatforms.has(p.id) ? `<svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>` : ''}
+        </button>
+        `;
+      }).join('')}
+    </div>
+  `;
+  document.getElementById('pickerDrawerTitle').innerHTML = titleHTML;
+  document.getElementById('pickerDrawerContent').innerHTML = bodyHTML;
+  document.getElementById('pickerDrawerFooter').innerHTML = '<button onclick="closePickerDrawer(); renderConfig();" class="inline-flex items-center px-4 h-9 text-sm rounded-md bg-foreground text-background hover:bg-foreground/90 transition font-medium">完成</button>';
+  document.getElementById('pickerDrawerOverlay').classList.remove('hidden');
+  const drawer = document.getElementById('pickerDrawer');
+  void drawer.offsetHeight;
+  drawer.classList.add('open');
+}
+
+function togglePlatformInModal(id) {
+  const p = PLATFORMS.find(x => x.id === id);
+  // 未授权的平台：跳转到授权页（如果嵌入 index.html 则通过父窗口打开 OAuth）
+  if (p && !p.connected) {
+    const inIframe = (function() { try { return window.self !== window.top; } catch (e) { return true; } })();
+    if (inIframe) {
+      try {
+        window.parent.postMessage({ type: 'creatiads-open-oauth', platformKey: id }, '*');
+      } catch (e) { /* 安全兜底 */ }
+      closePickerDrawer();
+    } else {
+      // 独立打开 simplified-v2.html 时给个提示，避免静默失败
+      alert('请在 Creatiads 中打开此页面以完成 ' + p.name + ' 授权');
+    }
+    return;
+  }
+  if (selectedPlatforms.has(id)) {
+    selectedPlatforms.delete(id);
+    delete selectedAccounts[id];
+    delete platformDimensions[id];
+    delete platformMetrics[id];
+  } else {
+    selectedPlatforms.add(id);
+    // 默认全选所有有效账户
+    if (p) {
+      selectedAccounts[id] = new Set(p.accounts.filter(a => a.status === 'active').map(a => a.id));
+    }
+  }
+  openPlatformModal();
+}
+
+function openDimensionModal() {
+  const items = [];
+  Object.entries(DIMENSION_CATEGORIES).forEach(([cat, list]) => {
+    list.forEach(name => items.push({ id: name, name: name, category: cat }));
+  });
+  showPickerModal({
+    title: '编辑维度',
+    subtitle: '从分类中选择数据聚合维度',
+    items: items,
+    selectedIds: new Set(selectedDimensions),
+    onApply: (newSet) => { selectedDimensions = newSet; renderConfig(); }
+  });
+}
+
+function toggleDimension(d) {
+  if (selectedDimensions.has(d)) selectedDimensions.delete(d);
+  else selectedDimensions.add(d);
+}
+
+function togglePlatformDim(platformId, dimId) {
+  if (!platformDimensions[platformId]) platformDimensions[platformId] = new Set();
+  if (platformDimensions[platformId].has(dimId)) platformDimensions[platformId].delete(dimId);
+  else platformDimensions[platformId].add(dimId);
+  platformAdvancedOpen = true;
+  renderConfig();
+}
+
+function togglePlatformMetric(platformId, metricId) {
+  if (!platformMetrics[platformId]) platformMetrics[platformId] = new Set();
+  if (platformMetrics[platformId].has(metricId)) platformMetrics[platformId].delete(metricId);
+  else platformMetrics[platformId].add(metricId);
+  platformAdvancedOpen = true;
+  renderConfig();
+}
+
+function removePlatformDim(platformId, dimId) {
+  if (platformDimensions[platformId]) platformDimensions[platformId].delete(dimId);
+  platformAdvancedOpen = true;
+  renderConfig();
+}
+
+function removePlatformMetric(platformId, metricId) {
+  if (platformMetrics[platformId]) platformMetrics[platformId].delete(metricId);
+  platformAdvancedOpen = true;
+  renderConfig();
+}
+
+function openPlatformDimModal(platformId) {
+  const items = PLATFORM_DIMENSIONS[platformId] || [];
+  if (!platformDimensions[platformId]) platformDimensions[platformId] = new Set();
+  showPickerModal({
+    title: '编辑专属维度',
+    subtitle: '从分类中选择平台专属维度',
+    items: items,
+    selectedIds: new Set(platformDimensions[platformId]),
+    onApply: (newSet) => { platformDimensions[platformId] = newSet; platformAdvancedOpen = true; renderConfig(); }
+  });
+}
+
+function openPlatformMetricModal(platformId) {
+  const items = PLATFORM_METRICS[platformId] || [];
+  if (!platformMetrics[platformId]) platformMetrics[platformId] = new Set();
+  showPickerModal({
+    title: '编辑专属指标',
+    subtitle: '从分类中选择平台专属指标',
+    items: items,
+    selectedIds: new Set(platformMetrics[platformId]),
+    onApply: (newSet) => { platformMetrics[platformId] = newSet; platformAdvancedOpen = true; renderConfig(); }
+  });
+}
+
+function openMetricModal() {
+  const items = [];
+  Object.entries(METRIC_CATEGORIES).forEach(([cat, list]) => {
+    list.forEach(name => items.push({ id: name, name: name, category: cat }));
+  });
+  showPickerModal({
+    title: '编辑指标',
+    subtitle: '从分类中选择需要的数值指标',
+    items: items,
+    selectedIds: new Set(selectedMetrics),
+    onApply: (newSet) => { selectedMetrics = newSet; renderConfig(); }
+  });
+}
+
+function toggleMetric(m) {
+  if (selectedMetrics.has(m)) selectedMetrics.delete(m);
+  else selectedMetrics.add(m);
+}
+
+/* ============ 双栏 Picker Modal ============ */
+let _pickerState = null;
+
+function showPickerModal(config) {
+  _pickerState = {
+    items: config.items,
+    selected: config.selectedIds,
+    onApply: config.onApply,
+    search: ''
+  };
+  const titleHTML = '<span class="text-base font-semibold">' + config.title + '</span><div class="text-xs font-normal text-muted-foreground mt-0.5">' + config.subtitle + '</div>';
+  document.getElementById('pickerDrawerTitle').innerHTML = titleHTML;
+  renderPickerBody();
+  document.getElementById('pickerDrawerOverlay').classList.remove('hidden');
+  const pickerDrawer = document.getElementById('pickerDrawer');
+  void pickerDrawer.offsetHeight;
+  pickerDrawer.classList.add('open');
+}
+
+function renderPickerBody() {
+  if (!_pickerState) return;
+  const { items, selected, search } = _pickerState;
+  const grouped = {};
+  items.forEach(it => { (grouped[it.category] = grouped[it.category] || []).push(it); });
+  const q = search.toLowerCase();
+
+  // 计算全局选中数（仅当前可见项纳入"全选"语义，搜索状态下也合理）
+  const visibleItems = q
+    ? items.filter(it => it.name.toLowerCase().includes(q) || it.id.toLowerCase().includes(q))
+    : items;
+  const visSelCount = visibleItems.filter(it => selected.has(it.id)).length;
+  const allVisSelected = visibleItems.length > 0 && visSelCount === visibleItems.length;
+  const noneSelected = visSelCount === 0;
+
+  let leftHtml = '<div class="mb-2 flex items-center gap-2"><div class="flex-1"><input type="text" value="' + search.replace(/"/g,'&quot;') + '" oninput="_pickerState.search=this.value;renderPickerBody();" placeholder="搜索..." class="w-full px-3 py-2 border border-border rounded-md text-sm bg-background focus:outline-none focus:ring-1 focus:ring-ring"></div></div>';
+
+  // 顶部全局操作栏
+  leftHtml += '<div class="mb-2 flex items-center gap-2 px-1 text-xs text-muted-foreground">';
+  leftHtml += '<button onclick="pickerSelectAll(true)" class="hover:text-foreground transition" ' + (allVisSelected ? 'disabled' : '') + '>全选</button>';
+  leftHtml += '<span class="text-border">·</span>';
+  leftHtml += '<button onclick="pickerSelectAll(false)" class="hover:text-foreground transition" ' + (noneSelected ? 'disabled' : '') + '>取消全选</button>';
+  leftHtml += '<span class="text-border">·</span>';
+  leftHtml += '<button onclick="pickerInvertSelection()" class="hover:text-foreground transition">反选</button>';
+  leftHtml += '<span class="ml-auto">' + visSelCount + ' / ' + visibleItems.length + '</span>';
+  leftHtml += '</div>';
+
+  leftHtml += '<div class="overflow-y-auto scrollable" style="max-height:calc(60vh - 140px);">';
+  Object.entries(grouped).forEach(([cat, list]) => {
+    const filtered = q ? list.filter(it => it.name.toLowerCase().includes(q) || it.id.toLowerCase().includes(q)) : list;
+    if (filtered.length === 0) return;
+    const groupSelCount = filtered.filter(it => selected.has(it.id)).length;
+    const groupAllSel = filtered.length > 0 && groupSelCount === filtered.length;
+    const catEsc = cat.replace(/'/g,"\\'");
+    leftHtml += '<div class="mb-2"><div class="flex items-center justify-between px-1 py-1 text-xs font-medium"><span class="text-foreground">' + cat + '</span><div class="flex items-center gap-1.5 text-muted-foreground"><button onclick="pickerSelectGroup(\'' + catEsc + '\',' + (!groupAllSel) + ')" class="hover:text-foreground transition">' + (groupAllSel ? '取消' : '全选') + '</button><span>' + groupSelCount + '/' + filtered.length + '</span></div></div>';
+    filtered.forEach(it => {
+      const checked = selected.has(it.id) ? 'checked' : '';
+      const idEsc = it.id.replace(/'/g,"\\'");
+      const metaHtml = it.meta ? '<span class="text-xs text-muted-foreground ml-2 flex-shrink-0">' + it.meta + '</span>' : '';
+      leftHtml += '<label class="flex items-center gap-2.5 px-2 py-1.5 rounded-md hover:bg-accent transition cursor-pointer"><input type="checkbox" ' + checked + ' onchange="pickerToggle(\'' + idEsc + '\')" class="accent-foreground flex-shrink-0"><span class="text-sm flex-1 min-w-0 truncate">' + it.name + '</span>' + metaHtml + '</label>';
+    });
+    leftHtml += '</div>';
+  });
+  if (visibleItems.length === 0) {
+    leftHtml += '<div class="text-center text-xs text-muted-foreground py-8">无匹配结果</div>';
+  }
+  leftHtml += '</div>';
+
+  // 右侧已选
+  let rightHtml = '<div class="flex items-center justify-between mb-2"><span class="text-xs font-medium text-muted-foreground">已选 ' + selected.size + '</span>';
+  if (selected.size > 0) {
+    rightHtml += '<button onclick="pickerClearAll()" class="text-xs text-muted-foreground hover:text-foreground transition">清空</button>';
+  }
+  rightHtml += '</div>';
+  rightHtml += '<div class="overflow-y-auto scrollable flex flex-col gap-0.5" style="max-height:calc(60vh - 100px);">';
+  if (selected.size === 0) {
+    rightHtml += '<div class="text-center text-xs text-muted-foreground py-6">暂未选择</div>';
+  } else {
+    selected.forEach(id => {
+      const it = items.find(x => x.id === id);
+      const label = it ? it.name : id;
+      const idEsc = id.replace(/'/g,"\\'");
+      rightHtml += '<div class="flex items-center justify-between px-2 py-1.5 bg-secondary/50 rounded-md text-sm"><span class="truncate flex-1">' + label + '</span><button onclick="pickerRemove(\'' + idEsc + '\')" class="ml-2 text-muted-foreground hover:text-foreground flex-shrink-0"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>';
+    });
+  }
+  rightHtml += '</div>';
+
+  document.getElementById('pickerDrawerContent').innerHTML = '<div class="flex gap-4 h-full" style="min-height:300px;"><div class="flex-1 flex flex-col">' + leftHtml + '</div><div class="w-[170px] flex-shrink-0 border-l border-border pl-4 flex flex-col">' + rightHtml + '</div></div>';
+  document.getElementById('pickerDrawerFooter').innerHTML = '<button onclick="closePickerDrawer()" class="inline-flex items-center px-4 h-9 text-sm rounded-md border border-border bg-background hover:bg-accent transition">取消</button><button onclick="applyPicker()" class="inline-flex items-center px-4 h-9 text-sm rounded-md bg-foreground text-background hover:bg-foreground/90 transition font-medium">应用</button>';
+}
+
+function pickerToggle(id) {
+  if (!_pickerState) return;
+  if (_pickerState.selected.has(id)) _pickerState.selected.delete(id);
+  else _pickerState.selected.add(id);
+  renderPickerBody();
+}
+
+function pickerRemove(id) {
+  if (!_pickerState) return;
+  _pickerState.selected.delete(id);
+  renderPickerBody();
+}
+
+function pickerSelectAll(select) {
+  if (!_pickerState) return;
+  const { items, search } = _pickerState;
+  const q = search.toLowerCase();
+  const visible = q ? items.filter(it => it.name.toLowerCase().includes(q) || it.id.toLowerCase().includes(q)) : items;
+  if (select) {
+    visible.forEach(it => _pickerState.selected.add(it.id));
+  } else {
+    visible.forEach(it => _pickerState.selected.delete(it.id));
+  }
+  renderPickerBody();
+}
+
+function pickerInvertSelection() {
+  if (!_pickerState) return;
+  const { items, search } = _pickerState;
+  const q = search.toLowerCase();
+  const visible = q ? items.filter(it => it.name.toLowerCase().includes(q) || it.id.toLowerCase().includes(q)) : items;
+  visible.forEach(it => {
+    if (_pickerState.selected.has(it.id)) _pickerState.selected.delete(it.id);
+    else _pickerState.selected.add(it.id);
+  });
+  renderPickerBody();
+}
+
+function pickerSelectGroup(category, select) {
+  if (!_pickerState) return;
+  const { items, search } = _pickerState;
+  const q = search.toLowerCase();
+  const groupItems = items.filter(it => it.category === category);
+  const visible = q ? groupItems.filter(it => it.name.toLowerCase().includes(q) || it.id.toLowerCase().includes(q)) : groupItems;
+  if (select) {
+    visible.forEach(it => _pickerState.selected.add(it.id));
+  } else {
+    visible.forEach(it => _pickerState.selected.delete(it.id));
+  }
+  renderPickerBody();
+}
+
+function pickerClearAll() {
+  if (!_pickerState) return;
+  _pickerState.selected.clear();
+  renderPickerBody();
+}
+
+function applyPicker() {
+  if (_pickerState && _pickerState.onApply) {
+    _pickerState.onApply(_pickerState.selected);
+  }
+  _pickerState = null;
+  closePickerDrawer();
+}
+
+function showModal(title, bodyHTML, onClose) {
+  const modal = document.getElementById('modal');
+  modal.querySelector('#modalTitle').textContent = title;
+  modal.querySelector('#modalBody').innerHTML = bodyHTML;
+  modal.style.display = 'flex';
+  modal._onClose = onClose;
+}
+
+function closeModal() {
+  const modal = document.getElementById('modal');
+  modal.style.display = 'none';
+  if (modal._onClose) modal._onClose();
+  // Reset footer and width
+  document.getElementById('modalFoot').innerHTML = `<button onclick="closeModal()" class="inline-flex items-center px-4 h-9 text-sm rounded-md border border-border bg-background hover:bg-accent transition">关闭</button>`;
+  document.getElementById('modalInner').style.width = '480px';
+  _pickerState = null;
+}
+
+/* ============ 生成报表 ============ */
+function confirmGenerate() {
+  if (!reportName.trim()) { alert('请输入报表名称'); return; }
+  
+  const btn = document.getElementById('btnConfirm');
+  const btnText = document.getElementById('btnConfirmText');
+  btn.disabled = true;
+  btnText.innerHTML = '<svg class="w-4 h-4 spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>';
+  
+  setTimeout(() => {
+    const platformNames = [...selectedPlatforms].map(id => {
+      const p = PLATFORMS.find(x => x.id === id);
+      const count = selectedAccounts[id] ? selectedAccounts[id].size : 0;
+      return `${p.name}（${count}个账户）`;
+    }).join('、');
+    showModal('报表已生成', `
+      <div class="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3 class="text-base font-semibold tracking-tight text-center mb-1">${reportName}</h3>
+      <p class="text-sm text-muted-foreground text-center mb-5">系统已自动完成数据源连接、字段配置、数据集创建和报表生成</p>
+      <div class="border border-border rounded-md p-3 text-sm space-y-2">
+        <div class="flex justify-between"><span class="text-muted-foreground">数据源</span><span class="font-medium">${platformNames}</span></div>
+        <div class="flex justify-between"><span class="text-muted-foreground">时间范围</span><span class="font-medium">${dateRangeMode==='custom' ? (customDateFrom||'起始') + ' 至 ' + (customDateTo||'至今') : '最近 '+dateRange+' 天'}</span></div>
+        <div class="flex justify-between"><span class="text-muted-foreground">同步频率</span><span class="font-medium">${{'hourly':'每小时','daily':'每日 00:00（推荐）','weekly':'每周'}[syncFrequency]}</span></div>
+        <div class="flex justify-between"><span class="text-muted-foreground">报表风格</span><span class="font-medium">${{'trend':'趋势追踪','comparison':'对比分析','detail':'明细报表','comprehensive':'综合仪表盘'}[reportStyle]}</span></div>
+        <div class="flex justify-between"><span class="text-muted-foreground">通用维度 / 指标</span><span class="font-medium">${selectedDimensions.size} / ${selectedMetrics.size}</span></div>
+        ${(() => {
+          let platformSpecificCount = 0;
+          let platformDimCount = 0;
+          let platformMetCount = 0;
+          Object.values(platformDimensions).forEach(s => platformDimCount += s.size);
+          Object.values(platformMetrics).forEach(s => platformMetCount += s.size);
+          if (platformDimCount > 0 || platformMetCount > 0) {
+            return `<div class="flex justify-between"><span class="text-muted-foreground">平台专属维度 / 指标</span><span class="font-medium">${platformDimCount} / ${platformMetCount}</span></div>`;
+          }
+          return '';
+        })()}
+        <div class="flex justify-between"><span class="text-muted-foreground">首次同步</span><span class="font-medium">已开始 · 预计 2 分钟</span></div>
+      </div>
+    `);
+    
+    // 自定义底部按钮
+    document.getElementById('modalFoot').innerHTML = `
+      <button onclick="closeModal(); showPage('home');" class="flex-1 inline-flex items-center justify-center px-4 h-9 text-sm rounded-md border border-border bg-background hover:bg-accent transition">继续创建</button>
+      <button onclick="closeModal(); showDashboard();" class="flex-1 inline-flex items-center justify-center px-4 h-9 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition">查看 Dashboard</button>
+    `;
+    
+    btn.disabled = false;
+    btnText.textContent = '生成报表';
+  }, 800);
+}
+
+/* ============ 历史报表（抽屉） ============ */
+function openHistoryDrawer() {
+  const html = HISTORY_REPORTS.length > 0 ? `
+    <div class="space-y-2">
+      ${HISTORY_REPORTS.map((r, idx) => `
+        <div class="bg-card border border-border rounded-lg p-3 hover:border-foreground/30 transition">
+          <div class="text-sm font-medium mb-1">${r.name}</div>
+          <div class="text-xs text-muted-foreground mb-1">${r.scenario}</div>
+          <div class="text-[11px] text-muted-foreground mb-2">${r.sources} · ${r.updated}</div>
+          <div class="flex gap-2 pt-2 border-t border-border">
+            <button onclick="editReport(${idx})" class="text-xs font-medium px-2.5 h-7 inline-flex items-center rounded-md border border-border hover:bg-accent transition">
+              <svg class="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              编辑配置
+            </button>
+            <button onclick="viewReport(${idx})" class="text-xs font-medium px-2.5 h-7 inline-flex items-center rounded-md border border-border hover:bg-accent transition">
+              <svg class="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              查看
+            </button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  ` : `
+    <div class="text-center py-12">
+      <div class="text-sm text-muted-foreground mb-3">还没有生成任何报表</div>
+    </div>
+  `;
+  document.getElementById('historyDrawerContent').innerHTML = html;
+  document.getElementById('historyDrawerOverlay').classList.remove('hidden');
+  const drawer = document.getElementById('historyDrawer');
+  drawer.classList.remove('translate-x-full');
+}
+
+function closeHistoryDrawer() {
+  document.getElementById('historyDrawerOverlay').classList.add('hidden');
+  document.getElementById('historyDrawer').classList.add('translate-x-full');
+}
+
+function editReport(idx) {
+  const r = HISTORY_REPORTS[idx];
+  const template = TEMPLATES.find(t => t.id === r.templateId);
+  if (template) {
+    currentInput = r.name;
+    reportName = r.name;
+    selectedPlatforms = new Set(template.presetPlatforms);
+    [...selectedPlatforms].forEach(id => {
+      const p = PLATFORMS.find(x => x.id === id);
+      if (p) selectedAccounts[id] = new Set(p.accounts.filter(a => a.status === 'active').map(a => a.id));
+    });
+    dateRange = 30;
+    dateRangeMode = 'preset';
+    syncFrequency = 'daily';
+    selectedDimensions = new Set(template.presetDimensions);
+    selectedMetrics = new Set(template.presetMetrics);
+    reportStyle = template.presetStyle || 'comprehensive';
+    showStylePicker = false;
+    isEditing = true; // 二次编辑模式
+    advancedOpen = true;
+    platformAdvancedOpen = false;
+    platformDimensions = {};
+    platformMetrics = {};
+    closeHistoryDrawer();
+    showConfigPage();
+  }
+}
+
+/* ============ 初始化 ============ */
+// 初始默认选中所有有效账户
+;[...selectedPlatforms].forEach(id => {
+  const p = PLATFORMS.find(x => x.id === id);
+  if (p) selectedAccounts[id] = new Set(p.accounts.filter(a => a.status === 'active').map(a => a.id));
+});
+
+/* ============ Dashboard 跳转（通知父窗口） ============ */
+function showDashboard(config) {
+  const c = config || {};
+  const reportConfig = {
+    name: c.name || reportName || '未命名报表',
+    style: c.style || reportStyle || 'comprehensive',
+    metrics: c.metrics || [...selectedMetrics],
+    dimensions: c.dimensions || [...selectedDimensions],
+    platforms: c.platforms || [...selectedPlatforms].map(id => { const p = PLATFORMS.find(x=>x.id===id); return p ? p.name : id; }),
+    dateRange: c.dateRange || (dateRangeMode === 'custom' ? (customDateFrom||'起始') + ' 至 ' + (customDateTo||'至今') : '最近 ' + dateRange + ' 天'),
+    syncFrequency: c.syncFrequency || syncFrequency
+  };
+  const inIframe = (function() { try { return window.self !== window.top; } catch(e) { return true; } })();
+  if (inIframe) {
+    try { window.parent.postMessage({ type: 'creatiads-show-report', report: reportConfig }, '*'); } catch(e) {}
+  } else {
+    // 独立打开时直接渲染内部 dashboard
+    renderInternalDashboard(reportConfig);
+  }
+}
+
+function renderInternalDashboard(config) {
+  const page = document.getElementById('page-dashboard');
+  const mockValues = {'展示量 Impressions':'2.4M','点击量 Clicks':'76.8K','花费 Cost':'¥128.5K','点击率 CTR':'3.2%','平均点击成本 Avg.CPC':'¥2.8','平均千次展示成本 Avg.CPM':'¥18.6','转化量 Conversions':'1,847','每次转化费用 Cost/Conv.':'¥69.5','视频25%播放 Video P25':'68.4%','视频50%播放 Video P50':'52.1%','视频75%播放 Video P75':'38.6%','视频完播 Video P100':'24.3%','平均观看时长 Avg.Watch Time':'12.8s'};
+  const mockChanges = {'展示量 Impressions':'+8.7%','点击量 Clicks':'+6.4%','花费 Cost':'+12.3%','点击率 CTR':'-0.3%','平均点击成本 Avg.CPC':'-5.1%','平均千次展示成本 Avg.CPM':'+3.2%','转化量 Conversions':'+15.2%','每次转化费用 Cost/Conv.':'-8.4%','视频25%播放 Video P25':'+4.2%','视频50%播放 Video P50':'+2.8%','视频75%播放 Video P75':'+1.5%','视频完播 Video P100':'+0.9%','平均观看时长 Avg.Watch Time':'+1.2s'};
+  function isPos(v) { return v && v.startsWith('+'); }
+  const metrics = config.metrics || [];
+  const dims = config.dimensions || [];
+  let body = '<div class="p-6"><button onclick="showPage(\'home\')" class="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1 mb-3"><svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>返回</button>';
+  body += '<h1 class="text-xl font-bold mb-1">' + config.name + '</h1>';
+  body += '<div class="text-xs text-muted-foreground mb-4">' + (config.platforms||[]).join(', ') + ' · ' + config.dateRange + '</div>';
+  body += '<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">';
+  metrics.slice(0,8).forEach(m => { body += '<div class="bg-card border border-border rounded-lg p-4"><div class="text-xs text-muted-foreground truncate">' + m + '</div><div class="text-xl font-bold mt-1">' + (mockValues[m]||'--') + '</div><div class="text-xs mt-0.5 ' + (isPos(mockChanges[m])?'text-green-600':'text-red-500') + '">' + (mockChanges[m]||'') + '</div></div>'; });
+  body += '</div><div class="text-center text-sm text-muted-foreground py-8">（独立模式 Dashboard 演示）</div></div>';
+  page.innerHTML = body;
+  showPage('dashboard');
+}
+
+function viewReport(idx) {
+  const r = HISTORY_REPORTS[idx];
+  const template = TEMPLATES.find(t => t.id === r.templateId);
+  closeHistoryDrawer();
+  showDashboard({
+    name: r.name,
+    style: template ? template.presetStyle : 'comprehensive',
+    metrics: template ? template.presetMetrics : [...selectedMetrics],
+    dimensions: template ? template.presetDimensions : [...selectedDimensions],
+    platforms: r.sources.split(', '),
+    dateRange: '最近 30 天',
+    syncFrequency: 'daily'
+  });
+}
+
+renderHome();
+</script>
+</body>
+</html>

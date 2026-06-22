@@ -1,0 +1,249 @@
+标准指标名,中文名,指标分组,GG-Account,GG-Campaign,GG-AdGroup,GG-Ad,GG-Keyword,GG-SearchQuery,GG-Geographic,TT-Advertiser,TT-Campaign,TT-AdGroup,TT-Ad,AMZ-Campaign,AMZ-AdGroup,AMZ-Ad,FB-Campaign,FB-AdSet,FB-Ad
+impressions,展示量,Core,-,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions
+clicks,点击量,Core,-,clicks,clicks,clicks,clicks,clicks,clicks,clicks,clicks,clicks,clicks,clickThroughs/clicks,clickThroughs/clicks,clickThroughs/clicks,clicks,clicks,clicks
+cost_micros,花费,Core,-,cost_micros,cost_micros,cost_micros,cost_micros,cost_micros,cost_micros,spend,spend,spend,spend,totalCost/cost,totalCost/cost,totalCost/cost,spend,spend,spend
+ctr,点击率,Core,-,ctr,ctr,ctr,ctr,ctr,ctr,ctr,ctr,ctr,ctr,CTR,CTR,CTR,ctr,ctr,ctr
+average_cpc,平均点击成本,Core,-,average_cpc,average_cpc,average_cpc,average_cpc,average_cpc,average_cpc,cpc,cpc,cpc,cpc,eCPC,eCPC,eCPC,cpc,cpc,cpc
+average_cpm,平均千次展示成本,Core,-,average_cpm,average_cpm,average_cpm,average_cpm,-,-,cpm,cpm,cpm,cpm,eCPM,eCPM,eCPM,cpm,cpm,cpm
+average_cost,平均费用,Core,-,average_cost,average_cost,average_cost,average_cost,average_cost,-,-,-,-,-,-,-,-,-,-,-
+average_cpe,平均互动成本,Core,-,average_cpe,average_cpe,average_cpe,average_cpe,average_cpe,-,-,-,-,-,-,-,-,-,-,-
+relative_ctr,相对点击率,Core,-,relative_ctr,relative_ctr,relative_ctr,-,-,-,-,-,-,-,-,-,-,-,-,-
+coviewed_impressions,共同观看展示量,Core,-,coviewed_impressions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+primary_impressions,主要展示量,Core,-,primary_impressions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+invalid_clicks,无效点击量,Core,-,invalid_clicks,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+general_invalid_clicks,一般无效点击量,Core,-,general_invalid_clicks,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+invalid_click_rate,无效点击率,Core,-,invalid_click_rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+general_invalid_click_rate,一般无效点击率,Core,-,general_invalid_click_rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+clicks_unique_query_clusters,唯一查询集群点击量,Core,-,clicks_unique_query_clusters,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+impressions_unique_query_clusters,唯一查询集群展示量,Core,-,impressions_unique_query_clusters,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+publisher_organic_clicks,发布商自然点击量,Core,-,publisher_organic_clicks,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+publisher_purchased_clicks,发布商付费点击量,Core,-,publisher_purchased_clicks,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+publisher_unknown_clicks,发布商未知点击量,Core,-,publisher_unknown_clicks,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+eligible_impressions_from_location_asset_store_reach,店铺覆盖可用展示量,Core,-,eligible_impressions_from_location_asset_store_reach,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+reach,触达人数,Core,-,-,-,-,-,-,-,reach,reach,reach,reach,-,-,-,reach,reach,reach
+frequency,频次,Core,-,-,-,-,-,-,-,frequency,frequency,frequency,frequency,-,-,-,frequency,frequency,frequency
+budget,预算,Core,-,-,-,-,-,-,-,budget,budget,budget,budget,-,-,-,-,-,-
+conversions,转化量,Conversions,-,conversions,conversions,conversions,conversions,conversions,conversions,conversion,conversion,conversion,conversion,totalPurchases14d/purchases7d,totalPurchases14d/purchases7d,totalPurchases14d/purchases7d,actions:purchase,actions:purchase,actions:purchase
+all_conversions,总转化量,Conversions,-,all_conversions,all_conversions,all_conversions,all_conversions,all_conversions,all_conversions,-,-,-,-,-,-,-,-,-,-
+conversions_value,转化价值,Conversions,-,conversions_value,conversions_value,conversions_value,conversions_value,conversions_value,-,-,-,-,-,totalSales14d/sales7d,totalSales14d/sales7d,totalSales14d/sales7d,action_values:purchase,action_values:purchase,action_values:purchase
+all_conversions_value,总转化价值,Conversions,-,all_conversions_value,all_conversions_value,all_conversions_value,all_conversions_value,all_conversions_value,all_conversions_value,-,-,-,-,-,-,-,-,-,-
+cost_per_conversion,每次转化费用,Conversions,-,cost_per_conversion,cost_per_conversion,cost_per_conversion,cost_per_conversion,cost_per_conversion,cost_per_conversion,cost_per_conversion,cost_per_conversion,cost_per_conversion,cost_per_conversion,-,-,-,cost_per_action_type:purchase,cost_per_action_type:purchase,cost_per_action_type:purchase
+cost_per_all_conversions,每次总转化费用,Conversions,-,cost_per_all_conversions,cost_per_all_conversions,cost_per_all_conversions,cost_per_all_conversions,cost_per_all_conversions,cost_per_all_conversions,-,-,-,-,-,-,-,-,-,-
+conversions_from_interactions_rate,互动转化率,Conversions,-,conversions_from_interactions_rate,conversions_from_interactions_rate,conversions_from_interactions_rate,conversions_from_interactions_rate,conversions_from_interactions_rate,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_interactions_rate,总互动转化率,Conversions,-,all_conversions_from_interactions_rate,all_conversions_from_interactions_rate,all_conversions_from_interactions_rate,all_conversions_from_interactions_rate,all_conversions_from_interactions_rate,all_conversions_from_interactions_rate,-,-,-,-,-,-,-,-,-,-
+value_per_conversion,每次转化价值,Conversions,-,value_per_conversion,value_per_conversion,value_per_conversion,value_per_conversion,value_per_conversion,-,-,-,-,-,-,-,-,-,-,-
+value_per_all_conversions,每次总转化价值,Conversions,-,value_per_all_conversions,value_per_all_conversions,value_per_all_conversions,value_per_all_conversions,value_per_all_conversions,value_per_all_conversions,-,-,-,-,-,-,-,-,-,-
+cross_device_conversions,跨设备转化量,Conversions,-,cross_device_conversions,cross_device_conversions,cross_device_conversions,cross_device_conversions,cross_device_conversions,-,-,-,-,-,-,-,-,-,-,-
+cross_device_conversions_value_micros,跨设备转化价值,Conversions,-,cross_device_conversions_value_micros,cross_device_conversions_value_micros,cross_device_conversions_value_micros,cross_device_conversions_value_micros,-,-,-,-,-,-,-,-,-,-,-,-
+view_through_conversions,浏览转化量,Conversions,-,view_through_conversions,view_through_conversions,view_through_conversions,view_through_conversions,view_through_conversions,view_through_conversions,-,-,-,-,-,-,-,-,-,-
+current_model_attributed_conversions,当前归因模型转化量,Conversions,-,current_model_attributed_conversions,current_model_attributed_conversions,current_model_attributed_conversions,current_model_attributed_conversions,-,-,-,-,-,-,-,-,-,-,-,-
+current_model_attributed_conversions_value,当前归因模型转化价值,Conversions,-,current_model_attributed_conversions_value,current_model_attributed_conversions_value,current_model_attributed_conversions_value,current_model_attributed_conversions_value,-,-,-,-,-,-,-,-,-,-,-,-
+cost_per_current_model_attributed_conversion,当前归因模型每次转化费用,Conversions,-,cost_per_current_model_attributed_conversion,cost_per_current_model_attributed_conversion,cost_per_current_model_attributed_conversion,cost_per_current_model_attributed_conversion,-,-,-,-,-,-,-,-,-,-,-,-
+conversions_value_by_conversion_date,按转化日期的转化价值,Conversions,-,conversions_value_by_conversion_date,conversions_value_by_conversion_date,conversions_value_by_conversion_date,conversions_value_by_conversion_date,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_by_conversion_date,按转化日期的总转化量,Conversions,-,all_conversions_by_conversion_date,all_conversions_by_conversion_date,all_conversions_by_conversion_date,all_conversions_by_conversion_date,-,-,-,-,-,-,-,-,-,-,-,-
+biddable_app_install_conversions,可出价应用安装转化量,Conversions,-,biddable_app_install_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+biddable_app_post_install_conversions,可出价应用安装后转化量,Conversions,-,biddable_app_post_install_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+biddable_cohort_app_post_install_conversions,可出价同期群应用安装后转化量,Conversions,-,biddable_cohort_app_post_install_conversions,biddable_cohort_app_post_install_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+platform_comparable_conversions,平台可比转化量,Conversions,-,platform_comparable_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+platform_comparable_conversions_value,平台可比转化价值,Conversions,-,platform_comparable_conversions_value,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+cost_per_platform_comparable_conversion,平台可比每次转化费用,Conversions,-,cost_per_platform_comparable_conversion,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+results_conversions_purchase,购买结果转化量,Conversions,-,results_conversions_purchase,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+sk_ad_network_total_conversions,SKAdNetwork总转化量,Conversions,-,sk_ad_network_total_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_click_to_call,来电转化量,Conversions,-,all_conversions_from_click_to_call,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_directions,获取路线转化量,Conversions,-,all_conversions_from_directions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_location_asset_store_visits,店铺资产到店转化量,Conversions,-,all_conversions_from_location_asset_store_visits,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_location_asset_website,店铺资产网站转化量,Conversions,-,all_conversions_from_location_asset_website,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_store_visit,到店转化量,Conversions,-,all_conversions_from_store_visit,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+store_visits_last_click_model_attributed_conversions,末次点击归因到店转化量,Conversions,-,store_visits_last_click_model_attributed_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+conversions_unique_query_clusters,唯一查询集群转化量,Conversions,-,conversions_unique_query_clusters,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_value_per_cost,总转化价值/费用,Conversions,-,-,-,-,all_conversions_value_per_cost,all_conversions_value_per_cost,-,-,-,-,-,-,-,-,-,-,-
+conversions_value_per_cost,转化价值/费用(ROAS),Conversions,-,-,-,-,conversions_value_per_cost,conversions_value_per_cost,-,-,-,-,-,-,-,-,-,-,-
+conversion_rate,转化率,Conversions,-,-,-,-,-,-,-,conversion_rate,conversion_rate,conversion_rate,conversion_rate,-,-,-,-,-,-
+purchase,购买量,Conversions,-,-,-,-,-,-,-,purchase,purchase,purchase,purchase,totalPurchases14d/purchases7d,totalPurchases14d/purchases7d,totalPurchases14d/purchases7d,actions:purchase,actions:purchase,actions:purchase
+complete_payment,完成支付量,Conversions,-,-,-,-,-,-,-,complete_payment,complete_payment,complete_payment,complete_payment,-,-,-,-,-,-
+purchase_roas,购买广告支出回报率,Conversions,-,-,-,-,-,-,-,purchase_roas,purchase_roas,purchase_roas,purchase_roas,-,-,-,purchase_roas,purchase_roas,purchase_roas
+total_purchase_value,总购买价值,Conversions,-,-,-,-,-,-,-,total_purchase_value,total_purchase_value,total_purchase_value,total_purchase_value,totalSales14d/sales7d,totalSales14d/sales7d,totalSales14d/sales7d,action_values:purchase,action_values:purchase,action_values:purchase
+registration,注册量,Conversions,-,-,-,-,-,-,-,registration,registration,registration,registration,-,-,-,actions:complete_registration,actions:complete_registration,actions:complete_registration
+app_install,应用安装量,Conversions,-,-,-,-,-,-,-,app_install,app_install,app_install,app_install,-,-,-,actions:app_install,actions:app_install,actions:app_install
+download_start,开始下载量,Conversions,-,-,-,-,-,-,-,download_start,download_start,download_start,download_start,-,-,-,-,-,-
+add_payment_info,添加支付信息量,Conversions,-,-,-,-,-,-,-,add_payment_info,add_payment_info,add_payment_info,add_payment_info,-,-,-,actions:add_payment_info,actions:add_payment_info,actions:add_payment_info
+skan_conversion,SKAN转化量,SKAN,-,-,-,-,-,-,-,skan_conversion,skan_conversion,skan_conversion,skan_conversion,-,-,-,-,-,-
+skan_app_install,SKAN应用安装量,SKAN,-,-,-,-,-,-,-,skan_app_install,skan_app_install,skan_app_install,skan_app_install,-,-,-,-,-,-
+skan_purchase,SKAN购买量,SKAN,-,-,-,-,-,-,-,skan_purchase,skan_purchase,skan_purchase,skan_purchase,-,-,-,-,-,-
+vta_purchase,浏览归因购买量,Attribution,-,-,-,-,-,-,-,vta_purchase,vta_purchase,vta_purchase,vta_purchase,-,-,-,-,-,-
+cta_app_install,点击归因应用安装量,Attribution,-,-,-,-,-,-,-,cta_app_install,cta_app_install,cta_app_install,cta_app_install,-,-,-,-,-,-
+cta_purchase,点击归因购买量,Attribution,-,-,-,-,-,-,-,cta_purchase,cta_purchase,cta_purchase,cta_purchase,-,-,-,-,-,-
+engagements,互动次数,Engagement,-,engagements,engagements,engagements,engagements,engagements,-,-,-,-,-,-,-,-,-,-,-
+engagement_rate,互动率,Engagement,-,engagement_rate,engagement_rate,engagement_rate,engagement_rate,engagement_rate,-,-,-,-,-,-,-,-,-,-,-
+interactions,交互量,Engagement,-,interactions,interactions,interactions,interactions,interactions,interactions,-,-,-,-,-,-,-,-,-,-
+interaction_rate,交互率,Engagement,-,interaction_rate,interaction_rate,interaction_rate,interaction_rate,interaction_rate,interaction_rate,-,-,-,-,-,-,-,-,-,-
+interaction_event_types,交互事件类型,Engagement,-,interaction_event_types,interaction_event_types,interaction_event_types,interaction_event_types,interaction_event_types,interaction_event_types,-,-,-,-,-,-,-,-,-,-
+bounce_rate,跳出率,Engagement,-,bounce_rate,bounce_rate,bounce_rate,bounce_rate,bounce_rate,-,-,-,-,-,-,-,-,-,-,-
+average_page_views,平均页面浏览量,Engagement,-,average_page_views,average_page_views,average_page_views,average_page_views,average_page_views,-,-,-,-,-,-,-,-,-,-,-
+average_time_on_site,平均网站停留时间,Engagement,-,average_time_on_site,average_time_on_site,average_time_on_site,average_time_on_site,average_time_on_site,-,-,-,-,-,-,-,-,-,-,-
+gmail_forwards,Gmail转发量,Engagement,-,gmail_forwards,gmail_forwards,gmail_forwards,gmail_forwards,-,-,-,-,-,-,-,-,-,-,-,-
+gmail_saves,Gmail保存量,Engagement,-,gmail_saves,gmail_saves,gmail_saves,gmail_saves,-,-,-,-,-,-,-,-,-,-,-,-
+gmail_secondary_clicks,Gmail二次点击量,Engagement,-,gmail_secondary_clicks,gmail_secondary_clicks,gmail_secondary_clicks,gmail_secondary_clicks,-,-,-,-,-,-,-,-,-,-,-,-
+likes,点赞量,Engagement,-,-,-,-,-,-,-,likes,likes,likes,likes,-,-,-,-,-,-
+follows,关注量,Engagement,-,-,-,-,-,-,-,follows,follows,follows,follows,-,-,-,-,-,-
+comments,评论量,Engagement,-,-,-,-,-,-,-,comments,comments,comments,comments,-,-,-,-,-,-
+shares,分享量,Engagement,-,-,-,-,-,-,-,shares,shares,shares,shares,-,-,-,-,-,-
+profile_visits,主页访问量,Engagement,-,-,-,-,-,-,-,profile_visits,profile_visits,profile_visits,profile_visits,-,-,-,-,-,-
+clicks_on_music_disc,音乐唱片点击量,Engagement,-,-,-,-,-,-,-,clicks_on_music_disc,clicks_on_music_disc,clicks_on_music_disc,clicks_on_music_disc,-,-,-,-,-,-
+video_play_actions,视频播放量,Video,-,-,-,-,-,-,-,video_play_actions,video_play_actions,video_play_actions,video_play_actions,-,-,-,-,-,-
+video_watched_2s,视频2秒观看量,Video,-,-,-,-,-,-,-,video_watched_2s,video_watched_2s,video_watched_2s,video_watched_2s,-,-,-,-,-,-
+video_watched_6s,视频6秒观看量,Video,-,-,-,-,-,-,-,video_watched_6s,video_watched_6s,video_watched_6s,video_watched_6s,-,-,-,-,-,-
+video_views_p25,视频25%播放量,Video,-,video_quartile_p25_rate,video_quartile_p25_rate,video_quartile_p25_rate,video_quartile_p25_rate,video_quartile_p25_rate,-,video_views_p25,video_views_p25,video_views_p25,video_views_p25,-,-,-,video_p25_watched_actions,video_p25_watched_actions,video_p25_watched_actions
+video_views_p50,视频50%播放量,Video,-,video_quartile_p50_rate,video_quartile_p50_rate,video_quartile_p50_rate,video_quartile_p50_rate,video_quartile_p50_rate,-,video_views_p50,video_views_p50,video_views_p50,video_views_p50,-,-,-,video_p50_watched_actions,video_p50_watched_actions,video_p50_watched_actions
+video_views_p75,视频75%播放量,Video,-,video_quartile_p75_rate,video_quartile_p75_rate,video_quartile_p75_rate,video_quartile_p75_rate,video_quartile_p75_rate,-,video_views_p75,video_views_p75,video_views_p75,video_views_p75,-,-,-,video_p75_watched_actions,video_p75_watched_actions,video_p75_watched_actions
+video_views_p100,视频完播量,Video,-,video_quartile_p100_rate,video_quartile_p100_rate,video_quartile_p100_rate,video_quartile_p100_rate,video_quartile_p100_rate,-,video_views_p100,video_views_p100,video_views_p100,video_views_p100,videoCompleted,videoCompleted,videoCompleted,video_p100_watched_actions,video_p100_watched_actions,video_p100_watched_actions
+average_video_watch_time,平均视频观看时间,Video,-,average_video_watch_time_duration_millis,average_video_watch_time_duration_millis,average_video_watch_time_duration_millis,-,-,-,average_video_play,average_video_play,average_video_play,average_video_play,-,-,-,video_avg_time_watched_actions,video_avg_time_watched_actions,video_avg_time_watched_actions
+video_watch_time_total,视频总观看时间,Video,-,video_watch_time_duration_millis,video_watch_time_duration_millis,video_watch_time_duration_millis,-,-,-,-,-,-,-,-,-,-,-,-,-
+trueview_views,TrueView观看量,Video,-,video_trueview_views,video_trueview_views,video_trueview_views,video_trueview_views,video_trueview_views,video_trueview_views,-,-,-,-,-,-,-,-,-,-
+trueview_view_rate,TrueView观看率,Video,-,video_trueview_view_rate,video_trueview_view_rate,video_trueview_view_rate,video_trueview_view_rate,video_trueview_view_rate,video_trueview_view_rate,-,-,-,-,-,-,-,-,-,-
+trueview_view_rate_in_feed,信息流TrueView观看率,Video,-,video_trueview_view_rate_in_feed,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+trueview_view_rate_in_stream,插播TrueView观看率,Video,-,video_trueview_view_rate_in_stream,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+trueview_view_rate_shorts,Shorts TrueView观看率,Video,-,video_trueview_view_rate_shorts,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+trueview_average_cpv,平均每次观看费用,Video,-,trueview_average_cpv,trueview_average_cpv,trueview_average_cpv,trueview_average_cpv,trueview_average_cpv,trueview_average_cpv,-,-,-,-,-,-,-,-,-,-
+engaged_view,有效观看量,Video,-,-,-,-,-,-,-,engaged_view,engaged_view,engaged_view,engaged_view,-,-,-,-,-,-
+absolute_top_impression_percentage,最顶部展示率,Impression Share,-,absolute_top_impression_percentage,absolute_top_impression_percentage,absolute_top_impression_percentage,absolute_top_impression_percentage,absolute_top_impression_percentage,absolute_top_impression_percentage,-,-,-,-,-,-,-,-,-,-
+top_impression_percentage,顶部展示率,Impression Share,-,top_impression_percentage,top_impression_percentage,top_impression_percentage,top_impression_percentage,top_impression_percentage,top_impression_percentage,-,-,-,-,-,-,-,-,-,-
+search_impression_share,搜索展示份额,Impression Share,-,search_impression_share,search_impression_share,-,search_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_absolute_top_impression_share,搜索最顶部展示份额,Impression Share,-,search_absolute_top_impression_share,search_absolute_top_impression_share,-,search_absolute_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_exact_match_impression_share,搜索完全匹配展示份额,Impression Share,-,search_exact_match_impression_share,search_exact_match_impression_share,-,search_exact_match_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_rank_lost_impression_share,搜索排名丢失展示份额,Impression Share,-,search_rank_lost_impression_share,search_rank_lost_impression_share,-,search_rank_lost_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_rank_lost_absolute_top_impression_share,搜索排名丢失最顶部展示份额,Impression Share,-,search_rank_lost_absolute_top_impression_share,search_rank_lost_absolute_top_impression_share,-,search_rank_lost_absolute_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_rank_lost_top_impression_share,搜索排名丢失顶部展示份额,Impression Share,-,search_rank_lost_top_impression_share,search_rank_lost_top_impression_share,-,search_rank_lost_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_budget_lost_impression_share,搜索预算丢失展示份额,Impression Share,-,search_budget_lost_impression_share,search_budget_lost_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+search_budget_lost_absolute_top_impression_share,搜索预算丢失最顶部展示份额,Impression Share,-,search_budget_lost_absolute_top_impression_share,search_budget_lost_absolute_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+search_budget_lost_top_impression_share,搜索预算丢失顶部展示份额,Impression Share,-,search_budget_lost_top_impression_share,search_budget_lost_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+search_top_impression_share,搜索顶部展示份额,Impression Share,-,search_top_impression_share,search_top_impression_share,-,search_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_click_share,搜索点击份额,Impression Share,-,search_click_share,search_click_share,-,search_click_share,-,-,-,-,-,-,-,-,-,-,-,-
+content_impression_share,展示网络展示份额,Impression Share,-,content_impression_share,content_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+content_rank_lost_impression_share,展示网络排名丢失展示份额,Impression Share,-,content_rank_lost_impression_share,content_rank_lost_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+content_budget_lost_impression_share,展示网络预算丢失展示份额,Impression Share,-,content_budget_lost_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_impression_share,竞价洞察搜索展示份额,Impression Share,-,auction_insight_search_impression_share,auction_insight_search_impression_share,-,auction_insight_search_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_absolute_top_impression_percentage,竞价洞察搜索最顶部展示率,Impression Share,-,auction_insight_search_absolute_top_impression_percentage,auction_insight_search_absolute_top_impression_percentage,-,auction_insight_search_absolute_top_impression_percentage,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_top_impression_percentage,竞价洞察搜索顶部展示率,Impression Share,-,auction_insight_search_top_impression_percentage,auction_insight_search_top_impression_percentage,-,auction_insight_search_top_impression_percentage,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_impressions,可见性展示量,Active View,-,active_view_impressions,active_view_impressions,active_view_impressions,active_view_impressions,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_cpm,可见性千次展示成本,Active View,-,active_view_cpm,active_view_cpm,active_view_cpm,active_view_cpm,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_ctr,可见性点击率,Active View,-,active_view_ctr,active_view_ctr,active_view_ctr,active_view_ctr,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_viewability,可见性可见率,Active View,-,active_view_viewability,active_view_viewability,active_view_viewability,active_view_viewability,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_measurability,可见性可衡量率,Active View,-,active_view_measurability,active_view_measurability,active_view_measurability,active_view_measurability,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_measurable_impressions,可见性可衡量展示量,Active View,-,active_view_measurable_impressions,active_view_measurable_impressions,active_view_measurable_impressions,active_view_measurable_impressions,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_measurable_cost_micros,可见性可衡量费用,Active View,-,active_view_measurable_cost_micros,active_view_measurable_cost_micros,active_view_measurable_cost_micros,active_view_measurable_cost_micros,-,-,-,-,-,-,-,-,-,-,-,-
+phone_calls,电话呼叫量,Phone,-,phone_calls,phone_calls,-,phone_calls,-,-,-,-,-,-,-,-,-,-,-,-
+phone_impressions,电话展示量,Phone,-,phone_impressions,phone_impressions,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+phone_through_rate,电话接通率,Phone,-,phone_through_rate,phone_through_rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_outranking_share,竞价洞察超越率,Auction Insight,-,auction_insight_search_outranking_share,auction_insight_search_outranking_share,-,auction_insight_search_outranking_share,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_overlap_rate,竞价洞察重叠率,Auction Insight,-,auction_insight_search_overlap_rate,auction_insight_search_overlap_rate,-,auction_insight_search_overlap_rate,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_position_above_rate,竞价洞察排名高于率,Auction Insight,-,auction_insight_search_position_above_rate,auction_insight_search_position_above_rate,-,auction_insight_search_position_above_rate,-,-,-,-,-,-,-,-,-,-,-,-
+orders,订单量,Shopping & Revenue,-,orders,orders,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+revenue_micros,营收,Shopping & Revenue,-,revenue_micros,revenue_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+gross_profit_micros,毛利润,Shopping & Revenue,-,gross_profit_micros,gross_profit_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+gross_profit_margin,毛利率,Shopping & Revenue,-,gross_profit_margin,gross_profit_margin,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+units_sold,销售件数,Shopping & Revenue,-,units_sold,units_sold,-,-,-,-,-,-,-,-,totalUnitsSold14d/unitsSold14d,totalUnitsSold14d/unitsSold14d,totalUnitsSold14d/unitsSold14d,-,-,-
+average_order_value_micros,平均订单价值,Shopping & Revenue,-,average_order_value_micros,average_order_value_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+average_cart_size,平均购物车件数,Shopping & Revenue,-,average_cart_size,average_cart_size,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+cost_of_goods_sold_micros,销售成本,Shopping & Revenue,-,cost_of_goods_sold_micros,cost_of_goods_sold_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+lead_revenue_micros,直接产品营收,Shopping & Revenue,-,lead_revenue_micros,lead_revenue_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+lead_gross_profit_micros,直接产品毛利润,Shopping & Revenue,-,lead_gross_profit_micros,lead_gross_profit_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+lead_units_sold,直接销售件数,Shopping & Revenue,-,lead_units_sold,lead_units_sold,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+cross_sell_revenue_micros,交叉销售营收,Shopping & Revenue,-,cross_sell_revenue_micros,cross_sell_revenue_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+cross_sell_gross_profit_micros,交叉销售毛利润,Shopping & Revenue,-,cross_sell_gross_profit_micros,cross_sell_gross_profit_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+cross_sell_units_sold,交叉销售件数,Shopping & Revenue,-,cross_sell_units_sold,cross_sell_units_sold,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+onsite_shopping,站内购物量,Shopping & Revenue,-,-,-,-,-,-,-,onsite_shopping,onsite_shopping,onsite_shopping,onsite_shopping,-,-,-,-,-,-
+onsite_total_purchase_value,站内总购买价值,Shopping & Revenue,-,-,-,-,-,-,-,onsite_total_purchase_value,onsite_total_purchase_value,onsite_total_purchase_value,onsite_total_purchase_value,-,-,-,-,-,-
+sk_ad_network_installs,SKAdNetwork安装量,SKAdNetwork,-,sk_ad_network_installs,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+historical_quality_score,历史质量得分,Quality,-,-,-,-,historical_quality_score,-,-,-,-,-,-,-,-,-,-,-,-
+historical_creative_quality_score,历史创意质量得分,Quality,-,-,-,-,historical_creative_quality_score,-,-,-,-,-,-,-,-,-,-,-,-
+historical_landing_page_quality_score,历史落地页质量得分,Quality,-,-,-,-,historical_landing_page_quality_score,-,-,-,-,-,-,-,-,-,-,-,-
+historical_search_predicted_ctr,历史搜索预测点击率,Quality,-,-,-,-,historical_search_predicted_ctr,-,-,-,-,-,-,-,-,-,-,-,-
+percent_new_visitors,新访客占比,Other,-,percent_new_visitors,percent_new_visitors,percent_new_visitors,percent_new_visitors,-,-,-,-,-,-,-,-,-,-,-,-
+new_customer_lifetime_value,新客户生命周期价值,Other,-,new_customer_lifetime_value,new_customer_lifetime_value,new_customer_lifetime_value,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_new_customer_lifetime_value,全部新客户生命周期价值,Other,-,all_new_customer_lifetime_value,all_new_customer_lifetime_value,all_new_customer_lifetime_value,-,-,-,-,-,-,-,-,-,-,-,-,-
+average_impression_frequency_per_user,人均展示频次,Other,-,average_impression_frequency_per_user,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+unique_users,唯一用户数,Other,-,unique_users,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+average_target_cpa_micros,平均目标CPA,Other,-,average_target_cpa_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+average_target_roas,平均目标ROAS,Other,-,average_target_roas,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+optimization_score_uplift,优化得分提升空间,Other,-,optimization_score_uplift,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+optimization_score_url,优化建议链接,Other,-,optimization_score_url,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+shop_total_items_purchased,商店总购买商品数,Other,-,-,-,-,-,-,-,shop_total_items_purchased,shop_total_items_purchased,shop_total_items_purchased,shop_total_items_purchased,-,-,-,-,-,-
+app_event_add_to_cart,加入购物车事件量,Other,-,-,-,-,-,-,-,app_event_add_to_cart,app_event_add_to_cart,app_event_add_to_cart,app_event_add_to_cart,-,-,-,-,-,-
+complete_payment_roas,完成支付广告支出回报率,Other,-,-,-,-,-,-,-,complete_payment_roas,complete_payment_roas,complete_payment_roas,complete_payment_roas,-,-,-,-,-,-
+value_per_complete_payment,每次完成支付价值,Other,-,-,-,-,-,-,-,value_per_complete_payment,value_per_complete_payment,value_per_complete_payment,value_per_complete_payment,-,-,-,-,-,-
+total_fee,总费用,Amazon Fee,-,-,-,-,-,-,-,-,-,-,-,totalFee,totalFee,totalFee,-,-,-
+agency_fee,代理费,Amazon Fee,-,-,-,-,-,-,-,-,-,-,-,agencyFee,agencyFee,agencyFee,-,-,-
+dpv_views_14d,详情页浏览量(14天),Amazon DPV,-,-,-,-,-,-,-,-,-,-,-,dpvViews14d,dpvViews14d,dpvViews14d,-,-,-
+total_detail_page_views_14d,总详情页浏览量(14天),Amazon DPV,-,-,-,-,-,-,-,-,-,-,-,totalDetailPageViews14d,totalDetailPageViews14d,totalDetailPageViews14d,-,-,-
+total_add_to_cart_14d,加入购物车量(14天),Amazon Cart,-,-,-,-,-,-,-,-,-,-,-,totalAddToCart14d,totalAddToCart14d,totalAddToCart14d,-,-,-
+total_add_to_list_14d,加入列表量(14天),Amazon Cart,-,-,-,-,-,-,-,-,-,-,-,totalAddToList14d,totalAddToList14d,totalAddToList14d,-,-,-
+total_purchases_14d,总购买量(14天),Amazon Purchase,-,-,-,-,-,-,-,-,-,-,-,totalPurchases14d,totalPurchases14d,totalPurchases14d,-,-,-
+total_purchase_rate_14d,总购买率(14天),Amazon Purchase,-,-,-,-,-,-,-,-,-,-,-,totalPurchaseRate14d,totalPurchaseRate14d,totalPurchaseRate14d,-,-,-
+total_sales_14d,总销售额(14天),Amazon Sales,-,-,-,-,-,-,-,-,-,-,-,totalSales14d,totalSales14d,totalSales14d,-,-,-
+total_units_sold_14d,总销售件数(14天),Amazon Sales,-,-,-,-,-,-,-,-,-,-,-,totalUnitsSold14d,totalUnitsSold14d,totalUnitsSold14d,-,-,-
+ntb_purchases_14d,品牌新客购买量(14天),Amazon NTB,-,-,-,-,-,-,-,-,-,-,-,newToBrandPurchases14d,newToBrandPurchases14d,newToBrandPurchases14d,-,-,-
+ntb_purchase_rate_14d,品牌新客购买率(14天),Amazon NTB,-,-,-,-,-,-,-,-,-,-,-,newToBrandPurchaseRate14d,newToBrandPurchaseRate14d,newToBrandPurchaseRate14d,-,-,-
+measurable_impressions,可衡量展示量,Amazon Viewability,-,-,-,-,-,-,-,-,-,-,-,measurableImpressions,measurableImpressions,measurableImpressions,-,-,-
+viewable_impressions,可见展示量,Amazon Viewability,-,-,-,-,-,-,-,-,-,-,-,viewableImpressions,viewableImpressions,viewableImpressions,-,-,-
+viewability_rate,可见率,Amazon Viewability,-,-,-,-,-,-,-,-,-,-,-,viewabilityRate,viewabilityRate,viewabilityRate,-,-,-
+video_started,视频开始播放量,Video,-,-,-,-,-,-,-,-,-,-,-,videoStarted,videoStarted,videoStarted,-,-,-
+purchases_1d,购买量(1天归因),Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,purchases1d,purchases1d,purchases1d,-,-,-
+purchases_7d,购买量(7天归因),Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,purchases7d,purchases7d,purchases7d,-,-,-
+purchases_14d,购买量(14天归因),Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,purchases14d,purchases14d,purchases14d,-,-,-
+purchases_30d,购买量(30天归因),Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,purchases30d,purchases30d,purchases30d,-,-,-
+sales_1d,销售额(1天归因),Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,sales1d,sales1d,sales1d,-,-,-
+sales_7d,销售额(7天归因),Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,sales7d,sales7d,sales7d,-,-,-
+sales_14d,销售额(14天归因),Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,sales14d,sales14d,sales14d,-,-,-
+sales_30d,销售额(30天归因),Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,sales30d,sales30d,sales30d,-,-,-
+add_to_cart,加入购物车量,Conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:add_to_cart,actions:add_to_cart,actions:add_to_cart
+initiate_checkout,发起结账量,Conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:initiate_checkout,actions:initiate_checkout,actions:initiate_checkout
+view_content,内容浏览量,Conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:view_content,actions:view_content,actions:view_content
+lead,线索量,Conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:lead,actions:lead,actions:lead
+video_play_actions,视频播放量,Video,-,-,-,-,-,-,-,-,-,-,-,-,-,-,video_play_actions,video_play_actions,video_play_actions
+video_watched_2s,视频2秒观看量,Video,-,-,-,-,-,-,-,-,-,-,-,-,-,-,video_continuous_2_sec_watched_actions,video_continuous_2_sec_watched_actions,video_continuous_2_sec_watched_actions
+video_thruplay,ThruPlay视频观看量,Video,-,-,-,-,-,-,-,-,-,-,-,-,-,-,video_thruplay_watched_actions,video_thruplay_watched_actions,video_thruplay_watched_actions
+video_30_sec_watched,视频30秒观看量,Video,-,-,-,-,-,-,-,-,-,-,-,-,-,-,video_30_sec_watched_actions,video_30_sec_watched_actions,video_30_sec_watched_actions
+cpp,千人触达成本,Core,-,-,-,-,-,-,-,-,-,-,-,-,-,-,cpp,cpp,cpp
+unique_clicks,独立点击量,Core,-,-,-,-,-,-,-,-,-,-,-,-,-,-,unique_clicks,unique_clicks,unique_clicks
+unique_ctr,独立点击率,Core,-,-,-,-,-,-,-,-,-,-,-,-,-,-,unique_ctr,unique_ctr,unique_ctr
+inline_link_clicks,链接点击量,Engagement,-,-,-,-,-,-,-,-,-,-,-,-,-,-,inline_link_clicks,inline_link_clicks,inline_link_clicks
+inline_post_engagement,帖子互动量,Engagement,-,-,-,-,-,-,-,-,-,-,-,-,-,-,inline_post_engagement,inline_post_engagement,inline_post_engagement
+post_engagement,帖子互动量(action),Engagement,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:post_engagement,actions:post_engagement,actions:post_engagement
+page_engagement,主页互动量,Engagement,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:page_engagement,actions:page_engagement,actions:page_engagement
+link_click,链接点击量(action),Engagement,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:link_click,actions:link_click,actions:link_click
+landing_page_view,落地页浏览量,Engagement,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:landing_page_view,actions:landing_page_view,actions:landing_page_view
+cost_per_thruplay,ThruPlay单次费用,FB Video Cost,-,-,-,-,-,-,-,-,-,-,-,-,-,-,cost_per_thruplay,cost_per_thruplay,cost_per_thruplay
+cost_per_inline_link_click,链接点击单次费用,FB Click Cost,-,-,-,-,-,-,-,-,-,-,-,-,-,-,cost_per_inline_link_click,cost_per_inline_link_click,cost_per_inline_link_click
+cost_per_outbound_click,外链点击单次费用,FB Click Cost,-,-,-,-,-,-,-,-,-,-,-,-,-,-,cost_per_outbound_click,cost_per_outbound_click,cost_per_outbound_click
+cost_per_unique_click,独立点击单次费用,FB Click Cost,-,-,-,-,-,-,-,-,-,-,-,-,-,-,cost_per_unique_click,cost_per_unique_click,cost_per_unique_click
+outbound_clicks,外链点击量,FB Click,-,-,-,-,-,-,-,-,-,-,-,-,-,-,outbound_clicks,outbound_clicks,outbound_clicks
+social_spend,社交花费,FB Engagement,-,-,-,-,-,-,-,-,-,-,-,-,-,-,social_spend,social_spend,social_spend
+website_purchase_roas,网站购买ROAS,FB ROAS,-,-,-,-,-,-,-,-,-,-,-,-,-,-,website_purchase_roas,website_purchase_roas,website_purchase_roas
+canvas_avg_view_percent,即时体验平均浏览百分比,FB Canvas,-,-,-,-,-,-,-,-,-,-,-,-,-,-,canvas_avg_view_percent,canvas_avg_view_percent,canvas_avg_view_percent
+quality_ranking,质量排名,FB Quality,-,-,-,-,-,-,-,-,-,-,-,-,-,-,quality_ranking,quality_ranking,quality_ranking
+engagement_rate_ranking,互动率排名,FB Quality,-,-,-,-,-,-,-,-,-,-,-,-,-,-,engagement_rate_ranking,engagement_rate_ranking,engagement_rate_ranking
+conversion_rate_ranking,转化率排名,FB Quality,-,-,-,-,-,-,-,-,-,-,-,-,-,-,conversion_rate_ranking,conversion_rate_ranking,conversion_rate_ranking
+dpv_clicks_14d,详情页点击量(14天),Amazon DPV,-,-,-,-,-,-,-,-,-,-,-,dpvClicks14d,dpvClicks14d,dpvClicks14d,-,-,-
+total_add_to_cart_clicks_14d,加购点击归因(14天),Amazon Cart,-,-,-,-,-,-,-,-,-,-,-,totalAddToCartClicks14d,totalAddToCartClicks14d,totalAddToCartClicks14d,-,-,-
+total_add_to_cart_views_14d,加购浏览归因(14天),Amazon Cart,-,-,-,-,-,-,-,-,-,-,-,totalAddToCartViews14d,totalAddToCartViews14d,totalAddToCartViews14d,-,-,-
+total_purchases_clicks_14d,购买点击归因(14天),Amazon Purchase,-,-,-,-,-,-,-,-,-,-,-,totalPurchasesClicks14d,totalPurchasesClicks14d,totalPurchasesClicks14d,-,-,-
+total_purchases_views_14d,购买浏览归因(14天),Amazon Purchase,-,-,-,-,-,-,-,-,-,-,-,totalPurchasesViews14d,totalPurchasesViews14d,totalPurchasesViews14d,-,-,-
+purchases_clicks_14d,推广商品购买点击归因(14天),Amazon Purchase,-,-,-,-,-,-,-,-,-,-,-,purchasesClicks14d,purchasesClicks14d,purchasesClicks14d,-,-,-
+purchases_views_14d,推广商品购买浏览归因(14天),Amazon Purchase,-,-,-,-,-,-,-,-,-,-,-,purchasesViews14d,purchasesViews14d,purchasesViews14d,-,-,-
+units_sold_14d,推广商品销售件数(14天),Amazon Sales,-,-,-,-,-,-,-,-,-,-,-,unitsSold14d,unitsSold14d,unitsSold14d,-,-,-
+ntb_purchases_clicks_14d,品牌新客购买点击归因(14天),Amazon NTB,-,-,-,-,-,-,-,-,-,-,-,newToBrandPurchasesClicks14d,newToBrandPurchasesClicks14d,newToBrandPurchasesClicks14d,-,-,-
+ntb_purchases_views_14d,品牌新客购买浏览归因(14天),Amazon NTB,-,-,-,-,-,-,-,-,-,-,-,newToBrandPurchasesViews14d,newToBrandPurchasesViews14d,newToBrandPurchasesViews14d,-,-,-
+ntb_ecpp_14d,品牌新客每次购买成本(14天),Amazon NTB,-,-,-,-,-,-,-,-,-,-,-,newToBrandEcpp14d,newToBrandEcpp14d,newToBrandEcpp14d,-,-,-
+total_ntb_purchases_14d,总品牌新客购买量(14天),Amazon NTB,-,-,-,-,-,-,-,-,-,-,-,totalNewToBrandPurchases14d,totalNewToBrandPurchases14d,totalNewToBrandPurchases14d,-,-,-
+new_subscribe_and_save_14d,新订阅省(14天),Amazon Subscribe,-,-,-,-,-,-,-,-,-,-,-,newSubscribeAndSave14d,newSubscribeAndSave14d,newSubscribeAndSave14d,-,-,-
+total_subscribe_and_save_14d,总订阅省(14天),Amazon Subscribe,-,-,-,-,-,-,-,-,-,-,-,totalSubscribeAndSave14d,totalSubscribeAndSave14d,totalSubscribeAndSave14d,-,-,-
+brand_search_14d,品牌搜索量(14天),Amazon Brand,-,-,-,-,-,-,-,-,-,-,-,brandSearch14d,brandSearch14d,brandSearch14d,-,-,-
+brand_search_clicks_14d,品牌搜索点击归因(14天),Amazon Brand,-,-,-,-,-,-,-,-,-,-,-,brandSearchClicks14d,brandSearchClicks14d,brandSearchClicks14d,-,-,-
+brand_search_views_14d,品牌搜索浏览归因(14天),Amazon Brand,-,-,-,-,-,-,-,-,-,-,-,brandSearchViews14d,brandSearchViews14d,brandSearchViews14d,-,-,-
+units_sold_1d,销售件数(1天归因),Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,unitsSold1d,unitsSold1d,unitsSold1d,-,-,-
+units_sold_7d,销售件数(7天归因),Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,unitsSold7d,unitsSold7d,unitsSold7d,-,-,-
+units_sold_14d_sp,销售件数(14天归因-SP),Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,unitsSold14d,unitsSold14d,unitsSold14d,-,-,-
+units_sold_30d,销售件数(30天归因),Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,unitsSold30d,unitsSold30d,unitsSold30d,-,-,-
+kindle_pages_read_14d,Kindle页面阅读量(14天),Amazon Kindle,-,-,-,-,-,-,-,-,-,-,-,kindleEditionNormalizedPagesRead14d,kindleEditionNormalizedPagesRead14d,kindleEditionNormalizedPagesRead14d,-,-,-
+kindle_pages_royalties_14d,Kindle版税(14天),Amazon Kindle,-,-,-,-,-,-,-,-,-,-,-,kindleEditionNormalizedPagesRoyalties14d,kindleEditionNormalizedPagesRoyalties14d,kindleEditionNormalizedPagesRoyalties14d,-,-,-

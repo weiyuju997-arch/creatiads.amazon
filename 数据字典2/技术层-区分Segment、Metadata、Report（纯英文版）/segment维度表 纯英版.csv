@@ -1,0 +1,83 @@
+标准维度名,维度分组,GG-Campaign,GG-AdGroup,GG-Ad,GG-Keyword,GG-SearchQuery,GG-Geographic,TT-Advertiser,TT-Campaign,TT-AdGroup,TT-Ad,AMZ-Campaign,AMZ-AdGroup,AMZ-Ad,FB-Campaign,FB-AdSet,FB-Ad
+date,Time,segments.date,segments.date,segments.date,segments.date,segments.date,segments.date,stat_time_day,stat_time_day,stat_time_day,stat_time_day,date,date,date,date_start,date_start,date_start
+hour,Time,segments.hour,segments.hour,-,-,-,-,stat_time_hour,stat_time_hour,stat_time_hour,stat_time_hour,-,-,-,-,-,-
+day_of_week,Time,segments.day_of_week,segments.day_of_week,segments.day_of_week,segments.day_of_week,segments.day_of_week,segments.day_of_week,-,-,-,-,-,-,-,-,-,-
+week,Time,segments.week,segments.week,segments.week,segments.week,segments.week,segments.week,-,-,-,-,-,-,-,-,-,-
+month,Time,segments.month,segments.month,segments.month,segments.month,segments.month,segments.month,-,-,-,-,-,-,-,-,-,-
+quarter,Time,segments.quarter,segments.quarter,segments.quarter,segments.quarter,segments.quarter,segments.quarter,-,-,-,-,-,-,-,-,-,-
+year,Time,segments.year,segments.year,segments.year,segments.year,segments.year,segments.year,-,-,-,-,-,-,-,-,-,-
+device,Device & Network,segments.device,segments.device,segments.device,segments.device,segments.device,segments.device,-,-,-,-,-,-,-,device_platform,device_platform,device_platform
+ad_network_type,Device & Network,segments.ad_network_type,segments.ad_network_type,segments.ad_network_type,segments.ad_network_type,segments.ad_network_type,segments.ad_network_type,-,-,-,-,-,-,-,-,-,-
+click_type,Device & Network,segments.click_type,segments.click_type,segments.click_type,segments.click_type,-,-,-,-,-,-,-,-,-,-,-,-
+slot,Device & Network,segments.slot,segments.slot,segments.slot,segments.slot,-,-,-,-,-,-,-,-,-,-,-,-
+sk_ad_network_ad_event_type,Device & Network,segments.sk_ad_network_ad_event_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+sk_ad_network_attribution_credit,Device & Network,segments.sk_ad_network_attribution_credit,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+sk_ad_network_coarse_conversion_value,Device & Network,segments.sk_ad_network_coarse_conversion_value,-,-,-,-,-,-,-,-,-,-,-,-,coarse_conversion_value,coarse_conversion_value,coarse_conversion_value
+sk_ad_network_fine_conversion_value,Device & Network,segments.sk_ad_network_fine_conversion_value,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+sk_ad_network_postback_sequence_index,Device & Network,segments.sk_ad_network_postback_sequence_index,-,-,-,-,-,-,-,-,-,-,-,-,postback_sequence_index,postback_sequence_index,postback_sequence_index
+sk_ad_network_redistributed_fine_conversion_value,Device & Network,segments.sk_ad_network_redistributed_fine_conversion_value,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+sk_ad_network_source_app_id,Device & Network,segments.sk_ad_network_source_app.sk_ad_network_source_app_id,-,-,-,-,-,-,-,-,-,-,-,-,app_id,app_id,app_id
+sk_ad_network_source_domain,Device & Network,segments.sk_ad_network_source_domain,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+sk_ad_network_source_type,Device & Network,segments.sk_ad_network_source_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+sk_ad_network_user_type,Device & Network,segments.sk_ad_network_user_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+sk_ad_network_version,Device & Network,segments.sk_ad_network_version,-,-,-,-,-,-,-,-,-,-,-,-,skan_version,skan_version,skan_version
+platform,Device & Network,-,-,-,-,-,-,platform,platform,platform,platform,-,-,-,publisher_platform,publisher_platform,publisher_platform
+placement,Device & Network,-,-,-,-,-,-,placement,placement,placement,placement,-,-,-,platform_position,platform_position,platform_position
+conversion_action_name,Conversion,segments.conversion_action_name,segments.conversion_action_name,segments.conversion_action_name,segments.conversion_action_name,segments.conversion_action_name,segments.conversion_action_name,-,-,-,-,-,-,-,-,-,-
+conversion_action_category,Conversion,segments.conversion_action_category,segments.conversion_action_category,segments.conversion_action_category,segments.conversion_action_category,segments.conversion_action_category,segments.conversion_action_category,-,-,-,-,-,-,-,-,-,-
+conversion_action,Conversion,segments.conversion_action,segments.conversion_action,segments.conversion_action,segments.conversion_action,segments.conversion_action,segments.conversion_action,-,-,-,-,-,-,-,-,-,-
+conversion_adjustment,Conversion,segments.conversion_adjustment,segments.conversion_adjustment,segments.conversion_adjustment,segments.conversion_adjustment,segments.conversion_adjustment,-,-,-,-,-,-,-,-,-,-,-
+conversion_lag_bucket,Conversion,segments.conversion_lag_bucket,segments.conversion_lag_bucket,segments.conversion_lag_bucket,segments.conversion_lag_bucket,segments.conversion_lag_bucket,-,-,-,-,-,-,-,-,-,-,-
+conversion_or_adjustment_lag_bucket,Conversion,segments.conversion_or_adjustment_lag_bucket,segments.conversion_or_adjustment_lag_bucket,segments.conversion_or_adjustment_lag_bucket,segments.conversion_or_adjustment_lag_bucket,segments.conversion_or_adjustment_lag_bucket,-,-,-,-,-,-,-,-,-,-,-
+external_conversion_source,Conversion,segments.external_conversion_source,segments.external_conversion_source,segments.external_conversion_source,segments.external_conversion_source,segments.external_conversion_source,segments.external_conversion_source,-,-,-,-,-,-,-,-,-,-
+conversion_attribution_event_type,Conversion,segments.conversion_attribution_event_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_value_rule_primary_dimension,Conversion,segments.conversion_value_rule_primary_dimension,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+ad_destination_type,Ad,segments.ad_destination_type,segments.ad_destination_type,segments.ad_destination_type,-,-,-,-,-,-,-,-,-,-,-,-,-
+ad_format_type,Ad,segments.ad_format_type,segments.ad_format_type,segments.ad_format_type,-,-,-,-,-,-,-,-,-,-,-,-,-
+ad_using_product_data,Ad,segments.ad_using_product_data,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+ad_using_video,Ad,segments.ad_using_video,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+keyword_text,Keyword & Search,-,-,segments.keyword.info.text,segments.match_type,segments.keyword.info.text,-,-,-,-,-,-,-,-,-,-,-
+keyword_match_type,Keyword & Search,-,-,segments.keyword.info.match_type,segments.match_type,segments.keyword.info.match_type,-,-,-,-,-,-,-,-,-,-,-
+search_term_match_type,Keyword & Search,-,-,-,-,segments.search_term_match_type,-,-,-,-,-,-,-,-,-,-,-
+search_term_match_source,Keyword & Search,-,-,-,-,segments.search_term_match_source,-,-,-,-,-,-,-,-,-,-,-
+geo_target_city,Geographic,-,-,-,-,-,segments.geo_target_city,-,-,-,-,-,-,-,-,-,-
+geo_target_country,Geographic,-,-,-,-,-,segments.geo_target_most_specific_location,country_code,country_code,country_code,country_code,-,-,-,country,country,country
+geo_target_region,Geographic,-,-,-,-,-,segments.geo_target_region,-,-,-,-,-,-,-,region,region,region
+geo_target_state,Geographic,-,-,-,-,-,segments.geo_target_state,-,-,-,-,-,-,-,-,-,-
+geo_target_postal_code,Geographic,-,-,-,-,-,segments.geo_target_postal_code,-,-,-,-,-,-,-,-,-,-
+geo_target_metro,Geographic,-,-,-,-,-,segments.geo_target_metro,-,-,-,-,-,-,-,dma,dma,dma
+geo_target_province,Geographic,-,-,-,-,-,segments.geo_target_province,-,-,-,-,-,-,-,-,-,-
+geo_target_airport,Geographic,-,-,-,-,-,segments.geo_target_airport,-,-,-,-,-,-,-,-,-,-
+geo_target_canton,Geographic,-,-,-,-,-,segments.geo_target_canton,-,-,-,-,-,-,-,-,-,-
+geo_target_county,Geographic,-,-,-,-,-,segments.geo_target_county,-,-,-,-,-,-,-,-,-,-
+geo_target_district,Geographic,-,-,-,-,-,segments.geo_target_district,-,-,-,-,-,-,-,-,-,-
+age,Demographic,-,-,-,-,-,-,age,age,age,age,-,-,-,age,age,age
+gender,Demographic,-,-,-,-,-,-,gender,gender,gender,gender,-,-,-,gender,gender,gender
+interest_category,Audience,-,-,-,-,-,-,interest_category,interest_category,interest_category,interest_category,-,-,-,-,-,-
+language,Audience,-,-,-,-,-,-,language,language,language,language,-,-,-,-,-,-
+audience_type,Audience,-,-,-,-,-,-,audience_type,audience_type,audience_type,audience_type,-,-,-,-,-,-
+ac,Audience,-,-,-,-,-,-,ac,ac,ac,ac,-,-,-,-,-,-
+adjusted_age_range,Other,segments.adjusted_age_range,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+adjusted_gender,Other,segments.adjusted_gender,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+recommendation_type,Other,segments.recommendation_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+asset_interaction_target_asset,Other,-,segments.asset_interaction_target.asset,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+asset_interaction_on_this_asset,Other,-,segments.asset_interaction_target.interaction_on_this_asset,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_domain,Other,-,segments.auction_insight_domain,-,segments.auction_insight_domain,-,-,-,-,-,-,-,-,-,-,-,-
+new_versus_returning_customers,Other,segments.new_versus_returning_customers,segments.new_versus_returning_customers,segments.new_versus_returning_customers,segments.new_versus_returning_customers,-,-,-,-,-,-,-,-,-,-,-,-
+travel_destination_city,Other,segments.travel_destination_city,segments.travel_destination_city,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+travel_destination_country,Other,segments.travel_destination_country,segments.travel_destination_country,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+travel_destination_region,Other,segments.travel_destination_region,segments.travel_destination_region,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+tiktok_item_id,Creative,-,-,-,-,-,-,tiktok_item_id,tiktok_item_id,tiktok_item_id,tiktok_item_id,-,-,-,-,-,-
+tiktok_account_id,Creative,-,-,-,-,-,-,tiktok_account_id,tiktok_account_id,tiktok_account_id,tiktok_account_id,-,-,-,-,-,-
+tiktok_subplacements,Creative,-,-,-,-,-,-,tiktok_subplacements,tiktok_subplacements,tiktok_subplacements,tiktok_subplacements,-,-,-,-,-,-
+report_type,Other,-,-,-,-,-,-,-,-,-,-,type,type,type,-,-,-
+impression_device,Device & Network,-,-,-,-,-,-,-,-,-,-,-,-,-,impression_device,impression_device,impression_device
+action_type,Conversion,-,-,-,-,-,-,-,-,-,-,-,-,-,action_type,action_type,action_type
+product_id,Other,-,-,-,-,-,-,-,-,-,-,-,-,-,product_id,product_id,product_id
+frequency_value,Other,-,-,-,-,-,-,-,-,-,-,-,-,-,frequency_value,frequency_value,frequency_value
+ad_format_asset,Creative,-,-,-,-,-,-,-,-,-,-,-,-,-,ad_format_asset,ad_format_asset,ad_format_asset
+body_asset,Creative,-,-,-,-,-,-,-,-,-,-,-,-,-,body_asset,body_asset,body_asset
+call_to_action_asset,Creative,-,-,-,-,-,-,-,-,-,-,-,-,-,call_to_action_asset,call_to_action_asset,call_to_action_asset
+image_asset,Creative,-,-,-,-,-,-,-,-,-,-,-,-,-,image_asset,image_asset,image_asset
+video_asset,Creative,-,-,-,-,-,-,-,-,-,-,-,-,-,video_asset,video_asset,video_asset
+title_asset,Creative,-,-,-,-,-,-,-,-,-,-,-,-,-,title_asset,title_asset,title_asset

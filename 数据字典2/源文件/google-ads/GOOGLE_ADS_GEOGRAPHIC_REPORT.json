@@ -1,0 +1,268 @@
+{
+  "platform" : "GOOGLE",
+  "connectorType" : "GOOGLE_ADS_GEOGRAPHIC",
+  "type" : "report",
+  "dimensionGroups" : {
+    "Geographic View" : [ {
+      "apiName" : "geographic_view.resource_name",
+      "dbColumn" : "resource_name",
+      "description" : "Resource name"
+    }, {
+      "apiName" : "geographic_view.country_criterion_id",
+      "dbColumn" : "country_criterion_id",
+      "description" : "Country criterion ID"
+    }, {
+      "apiName" : "geographic_view.location_type",
+      "dbColumn" : "location_type",
+      "description" : "Location type"
+    } ],
+    "Campaign" : [ {
+      "apiName" : "campaign.id",
+      "dbColumn" : "campaign_id",
+      "description" : "Campaign ID"
+    }, {
+      "apiName" : "campaign.name",
+      "dbColumn" : "campaign_name",
+      "description" : "Campaign name"
+    }, {
+      "apiName" : "campaign.status",
+      "dbColumn" : "campaign_status",
+      "description" : "Campaign status"
+    }, {
+      "apiName" : "campaign.advertising_channel_type",
+      "dbColumn" : "campaign_advertising_channel_type",
+      "description" : "Advertising channel type"
+    } ],
+    "Ad Group" : [ {
+      "apiName" : "ad_group.id",
+      "dbColumn" : "ad_group_id",
+      "description" : "Ad group ID"
+    }, {
+      "apiName" : "ad_group.name",
+      "dbColumn" : "ad_group_name",
+      "description" : "Ad group name"
+    }, {
+      "apiName" : "ad_group.status",
+      "dbColumn" : "ad_group_status",
+      "description" : "Ad group status"
+    } ],
+    "Customer" : [ {
+      "apiName" : "customer.id",
+      "dbColumn" : "customer_id",
+      "description" : "Customer ID"
+    }, {
+      "apiName" : "customer.descriptive_name",
+      "dbColumn" : "customer_name",
+      "description" : "Account name"
+    }, {
+      "apiName" : "customer.currency_code",
+      "dbColumn" : "customer_currency_code",
+      "description" : "Currency code"
+    }, {
+      "apiName" : "customer.time_zone",
+      "dbColumn" : "customer_time_zone",
+      "description" : "Time zone"
+    } ]
+  },
+  "segmentGroups" : {
+    "Time" : [ {
+      "name" : "segments.date",
+      "description" : "Date"
+    }, {
+      "name" : "segments.day_of_week",
+      "description" : "Day of week"
+    }, {
+      "name" : "segments.month",
+      "description" : "Month"
+    }, {
+      "name" : "segments.month_of_year",
+      "description" : "Month of year"
+    }, {
+      "name" : "segments.quarter",
+      "description" : "Quarter"
+    }, {
+      "name" : "segments.week",
+      "description" : "Week"
+    }, {
+      "name" : "segments.year",
+      "description" : "Year"
+    } ],
+    "Device & Network" : [ {
+      "name" : "segments.ad_network_type",
+      "description" : "Ad network type"
+    }, {
+      "name" : "segments.device",
+      "description" : "Device"
+    } ],
+    "Conversion" : [ {
+      "name" : "segments.conversion_action",
+      "description" : "Conversion action"
+    }, {
+      "name" : "segments.conversion_action_category",
+      "description" : "Conversion action category"
+    }, {
+      "name" : "segments.conversion_action_name",
+      "description" : "Conversion action name"
+    }, {
+      "name" : "segments.external_conversion_source",
+      "description" : "External conversion source"
+    } ],
+    "Geographic" : [ {
+      "name" : "segments.geo_target_airport",
+      "description" : "Geo target airport"
+    }, {
+      "name" : "segments.geo_target_canton",
+      "description" : "Geo target canton"
+    }, {
+      "name" : "segments.geo_target_city",
+      "description" : "Geo target city"
+    }, {
+      "name" : "segments.geo_target_county",
+      "description" : "Geo target county"
+    }, {
+      "name" : "segments.geo_target_district",
+      "description" : "Geo target district"
+    }, {
+      "name" : "segments.geo_target_metro",
+      "description" : "Geo target metro"
+    }, {
+      "name" : "segments.geo_target_most_specific_location",
+      "description" : "Geo target most specific location"
+    }, {
+      "name" : "segments.geo_target_postal_code",
+      "description" : "Geo target postal code"
+    }, {
+      "name" : "segments.geo_target_province",
+      "description" : "Geo target province"
+    }, {
+      "name" : "segments.geo_target_region",
+      "description" : "Geo target region"
+    }, {
+      "name" : "segments.geo_target_state",
+      "description" : "Geo target state"
+    } ],
+    "Ad" : [ {
+      "name" : "ad_group",
+      "description" : "Ad group"
+    } ],
+    "Other" : [ {
+      "name" : "campaign",
+      "description" : "Campaign"
+    } ]
+  },
+  "metricGroups" : {
+    "Core" : [ {
+      "apiName" : "metrics.average_cost",
+      "dbColumn" : "average_cost",
+      "description" : "Average cost"
+    }, {
+      "apiName" : "metrics.average_cpc",
+      "dbColumn" : "average_cpc",
+      "description" : "Average cpc"
+    }, {
+      "apiName" : "metrics.average_cpm",
+      "dbColumn" : "average_cpm",
+      "description" : "Average cpm"
+    }, {
+      "apiName" : "metrics.clicks",
+      "dbColumn" : "clicks",
+      "description" : "Clicks"
+    }, {
+      "apiName" : "metrics.cost_micros",
+      "dbColumn" : "cost_micros",
+      "description" : "Cost micros"
+    }, {
+      "apiName" : "metrics.ctr",
+      "dbColumn" : "ctr",
+      "description" : "Ctr"
+    }, {
+      "apiName" : "metrics.impressions",
+      "dbColumn" : "impressions",
+      "description" : "Impressions"
+    } ],
+    "Conversions" : [ {
+      "apiName" : "metrics.all_conversions",
+      "dbColumn" : "all_conversions",
+      "description" : "All conversions"
+    }, {
+      "apiName" : "metrics.all_conversions_from_interactions_rate",
+      "dbColumn" : "all_conversions_from_interactions_rate",
+      "description" : "All conversions from interactions rate"
+    }, {
+      "apiName" : "metrics.all_conversions_value",
+      "dbColumn" : "all_conversions_value",
+      "description" : "All conversions value"
+    }, {
+      "apiName" : "metrics.conversions",
+      "dbColumn" : "conversions",
+      "description" : "Conversions"
+    }, {
+      "apiName" : "metrics.conversions_from_interactions_rate",
+      "dbColumn" : "conversions_from_interactions_rate",
+      "description" : "Conversions from interactions rate"
+    }, {
+      "apiName" : "metrics.conversions_value",
+      "dbColumn" : "conversions_value",
+      "description" : "Conversions value"
+    }, {
+      "apiName" : "metrics.cost_per_all_conversions",
+      "dbColumn" : "cost_per_all_conversions",
+      "description" : "Cost per all conversions"
+    }, {
+      "apiName" : "metrics.cost_per_conversion",
+      "dbColumn" : "cost_per_conversion",
+      "description" : "Cost per conversion"
+    }, {
+      "apiName" : "metrics.cross_device_conversions",
+      "dbColumn" : "cross_device_conversions",
+      "description" : "Cross device conversions"
+    }, {
+      "apiName" : "metrics.value_per_all_conversions",
+      "dbColumn" : "value_per_all_conversions",
+      "description" : "Value per all conversions"
+    }, {
+      "apiName" : "metrics.value_per_conversion",
+      "dbColumn" : "value_per_conversion",
+      "description" : "Value per conversion"
+    }, {
+      "apiName" : "metrics.view_through_conversions",
+      "dbColumn" : "view_through_conversions",
+      "description" : "View through conversions"
+    } ],
+    "Engagement" : [ {
+      "apiName" : "metrics.interaction_event_types",
+      "dbColumn" : "interaction_event_types",
+      "description" : "Interaction event types"
+    }, {
+      "apiName" : "metrics.interaction_rate",
+      "dbColumn" : "interaction_rate",
+      "description" : "Interaction rate"
+    }, {
+      "apiName" : "metrics.interactions",
+      "dbColumn" : "interactions",
+      "description" : "Interactions"
+    } ],
+    "Video" : [ {
+      "apiName" : "metrics.trueview_average_cpv",
+      "dbColumn" : "trueview_average_cpv",
+      "description" : "Trueview average cpv"
+    }, {
+      "apiName" : "metrics.video_trueview_view_rate",
+      "dbColumn" : "video_trueview_view_rate",
+      "description" : "Video trueview view rate"
+    }, {
+      "apiName" : "metrics.video_trueview_views",
+      "dbColumn" : "video_trueview_views",
+      "description" : "Video trueview views"
+    } ],
+    "Impression Share" : [ {
+      "apiName" : "metrics.absolute_top_impression_percentage",
+      "dbColumn" : "absolute_top_impression_percentage",
+      "description" : "Absolute top impression percentage"
+    }, {
+      "apiName" : "metrics.top_impression_percentage",
+      "dbColumn" : "top_impression_percentage",
+      "description" : "Top impression percentage"
+    } ]
+  }
+}

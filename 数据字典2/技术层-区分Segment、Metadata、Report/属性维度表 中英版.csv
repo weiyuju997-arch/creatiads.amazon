@@ -1,0 +1,93 @@
+标准维度名,中文名,维度分组,GG-Account,GG-Campaign,GG-AdGroup,GG-Ad,GG-Keyword,GG-SearchQuery,GG-Geographic,GG-CampaignTargeting,GG-ConversionAction,TT-Account,TT-Campaign,TT-AdGroup,TT-Ad,AMZ-Account,AMZ-Campaign,AMZ-AdGroup,AMZ-Ad,FB-Account,FB-Campaign,FB-AdSet,FB-Ad
+customer_id,账户ID,Account,id,customer_id,customer_id,customer_id,customer_id,customer_id,customer_id,-,-,advertiser_id,advertiser_id,advertiser_id,advertiser_id,profileId,advertiserId,advertiserId,advertiserId,account_id,account_id,account_id,account_id
+customer_name,账户名称,Account,descriptive_name,customer_descriptive_name,customer_descriptive_name,customer_descriptive_name,customer_descriptive_name,customer_name,customer_name,-,-,-,-,-,-,name,-,-,-,account_name,account_name,account_name,account_name
+currency_code,货币代码,Account,currency_code,customer_currency_code,customer_currency_code,customer_currency_code,customer_currency_code,customer_currency_code,customer_currency_code,-,-,-,-,-,-,-,-,-,-,account_currency,account_currency,account_currency,account_currency
+time_zone,时区,Account,time_zone,customer_time_zone,customer_time_zone,customer_time_zone,customer_time_zone,customer_time_zone,customer_time_zone,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+auto_tagging_enabled,是否启用自动标记,Account,auto_tagging_enabled,customer_auto_tagging_enabled,customer_auto_tagging_enabled,customer_auto_tagging_enabled,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+optimization_score,优化得分,Account,optimization_score,customer_optimization_score,customer_optimization_score,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+tracking_url_template,跟踪URL模板,Account,tracking_url_template,customer_tracking_url_template,customer_tracking_url_template,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+campaign_id,广告系列ID,Campaign,-,campaign_id,campaign_id,campaign_id,campaign_id,campaign_id,campaign_id,-,-,-,campaign_id,campaign_id,campaign_id,-,orderId/campaignId,orderId/campaignId,orderId/campaignId,-,campaign_id,campaign_id,campaign_id
+campaign_name,广告系列名称,Campaign,-,campaign_name,campaign_name,campaign_name,campaign_name,campaign_name,campaign_name,-,-,-,-,-,-,-,orderName/campaignName,orderName/campaignName,orderName/campaignName,-,campaign_name,campaign_name,campaign_name
+campaign_status,广告系列状态,Campaign,-,campaign_status,campaign_status,campaign_status,campaign_status,campaign_status,campaign_status,-,-,-,-,-,-,-,campaignStatus,campaignStatus,campaignStatus,-,status,status,status
+campaign_start_date,广告系列开始日期,Campaign,-,start_date,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,start_time,start_time,start_time
+campaign_end_date,广告系列结束日期,Campaign,-,end_date,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,stop_time,stop_time,stop_time
+campaign_advertising_channel_type,广告渠道类型,Campaign,-,advertising_channel_type,campaign_advertising_channel_type,campaign_advertising_channel_type,campaign_advertising_channel_type,campaign_advertising_channel_type,campaign_advertising_channel_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+campaign_advertising_channel_sub_type,广告渠道子类型,Campaign,-,advertising_channel_sub_type,campaign_advertising_channel_sub_type,campaign_advertising_channel_sub_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+campaign_bidding_strategy_type,出价策略类型,Campaign,-,bidding_strategy_type,campaign_bidding_strategy_type,campaign_bidding_strategy_type,campaign_bidding_strategy_type,-,-,-,-,-,-,-,-,-,campaignBiddingStrategy,campaignBiddingStrategy,campaignBiddingStrategy,-,bid_strategy,bid_strategy,bid_strategy
+campaign_optimization_score,广告系列优化得分,Campaign,-,optimization_score,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+campaign_primary_status,广告系列主要状态,Campaign,-,primary_status,campaign_primary_status,campaign_primary_status,campaign_primary_status,-,-,-,-,-,-,-,-,-,-,-,-,-,effective_status,effective_status,effective_status
+campaign_serving_status,广告系列投放状态,Campaign,-,serving_status,campaign_serving_status,campaign_serving_status,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+campaign_labels,广告系列标签,Campaign,-,labels,campaign_labels,campaign_labels,campaign_labels,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+budget_id,预算ID,Campaign,-,budget_id,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+budget_amount_micros,预算金额,Campaign,-,budget_amount_micros,-,-,-,-,-,-,-,budget,budget,-,-,-,campaignBudgetAmount,campaignBudgetAmount,campaignBudgetAmount,-,daily_budget,daily_budget,daily_budget
+budget_delivery_method,预算投放方式,Campaign,-,budget_delivery_method,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+ad_group_id,广告组ID,Ad Group,-,-,id,ad_group_id,ad_group_id,ad_group_id,ad_group_id,-,-,-,-,adgroup_id,adgroup_id,-,-,lineItemId/adGroupId,lineItemId/adGroupId,-,-,adset_id,adset_id
+ad_group_name,广告组名称,Ad Group,-,-,name,ad_group_name,ad_group_name,ad_group_name,ad_group_name,-,-,-,-,-,-,-,-,lineItemName/adGroupName,-,-,-,adset_name,adset_name
+ad_group_status,广告组状态,Ad Group,-,-,status,ad_group_status,ad_group_status,ad_group_status,ad_group_status,-,-,-,-,-,-,-,-,-,-,-,-,adset_status,adset_status
+ad_group_type,广告组类型,Ad Group,-,-,type,ad_group_type,ad_group_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+ad_group_primary_status,广告组主要状态,Ad Group,-,-,primary_status,ad_group_primary_status,ad_group_primary_status,-,-,-,-,-,-,-,-,-,-,-,-,-,-,adset_effective_status,adset_effective_status
+ad_group_cpc_bid_micros,广告组CPC出价,Ad Group,-,-,cpc_bid_micros,ad_group_cpc_bid_micros,ad_group_cpc_bid_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-,bid_amount,bid_amount
+ad_group_target_cpa_micros,广告组目标CPA,Ad Group,-,-,target_cpa_micros,ad_group_target_cpa_micros,ad_group_target_cpa_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+ad_group_target_roas,广告组目标ROAS,Ad Group,-,-,target_roas,ad_group_target_roas,ad_group_target_roas,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+ad_id,广告ID,Ad,-,-,-,ad_id,-,-,-,-,-,-,-,-,ad_id,-,-,-,creativeId/targetId/keywordId,-,-,-,ad_id
+ad_name,广告名称,Ad,-,-,-,ad_name,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,ad_name
+ad_type,广告类型,Ad,-,-,-,ad_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+ad_status,广告状态,Ad,-,-,-,status,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,ad_status
+ad_strength,广告质量评级,Ad,-,-,-,ad_strength,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+ad_primary_status,广告主要状态,Ad,-,-,-,primary_status,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,ad_effective_status
+final_urls,最终到达URL,Ad,-,-,-,final_urls,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+display_url,展示URL,Ad,-,-,-,display_url,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+policy_approval_status,政策审核状态,Ad,-,-,-,policy_approval_status,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+policy_review_status,政策审查状态,Ad,-,-,-,policy_review_status,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+rsa_headlines,响应式搜索广告标题,Ad Creative,-,-,-,rsa_headlines,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+rsa_descriptions,响应式搜索广告描述,Ad Creative,-,-,-,rsa_descriptions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+eta_headline_part1,扩展文字广告标题1,Ad Creative,-,-,-,eta_headline_part1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+eta_description,扩展文字广告描述,Ad Creative,-,-,-,eta_description,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+display_ad_headlines,响应式展示广告标题,Ad Creative,-,-,-,display_ad_headlines,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+display_ad_descriptions,响应式展示广告描述,Ad Creative,-,-,-,display_ad_descriptions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+video_ad_video_asset,视频广告素材,Ad Creative,-,-,-,video_ad_video_asset,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+app_ad_headlines,应用广告标题,Ad Creative,-,-,-,app_ad_headlines,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+demand_gen_carousel_headline,需求开发轮播广告标题,Ad Creative,-,-,-,demand_gen_carousel_headline,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+keyword_text,关键词文本,Keyword,-,-,-,-,keyword_text,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+keyword_match_type,关键词匹配类型,Keyword,-,-,-,-,keyword_match_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+keyword_status,关键词状态,Keyword,-,-,-,-,status,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+keyword_quality_score,关键词质量得分,Keyword,-,-,-,-,quality_score,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+keyword_first_page_cpc_micros,首页CPC估算出价,Keyword,-,-,-,-,first_page_cpc_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+keyword_top_of_page_cpc_micros,页首CPC估算出价,Keyword,-,-,-,-,top_of_page_cpc_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+search_term,搜索词,Search Query,-,-,-,-,-,search_term,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+search_term_status,搜索词状态,Search Query,-,-,-,-,-,search_term_status,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+geo_location_type,地理位置类型,Geographic,-,-,-,-,-,-,location_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+geo_country_criterion_id,国家定向条件ID,Geographic,-,-,-,-,-,-,country_criterion_id,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_type,定向条件类型,Campaign Targeting,-,-,-,-,-,-,-,type,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_negative,是否为排除定向,Campaign Targeting,-,-,-,-,-,-,-,negative,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_bid_modifier,出价调整系数,Campaign Targeting,-,-,-,-,-,-,-,bid_modifier,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_device_type,设备定向类型,Campaign Targeting,-,-,-,-,-,-,-,device_type,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_location,地理位置定向,Campaign Targeting,-,-,-,-,-,-,-,location_geo_target_constant,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_age_range,年龄段定向,Campaign Targeting,-,-,-,-,-,-,-,age_range_type,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_gender,性别定向,Campaign Targeting,-,-,-,-,-,-,-,gender_type,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_language,语言定向,Campaign Targeting,-,-,-,-,-,-,-,language_language_constant,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_user_interest,用户兴趣定向,Campaign Targeting,-,-,-,-,-,-,-,user_interest_user_interest_category,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_user_list,用户列表定向,Campaign Targeting,-,-,-,-,-,-,-,user_list_user_list,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_keyword_text,定向关键词文本,Campaign Targeting,-,-,-,-,-,-,-,keyword_text,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_keyword_match_type,定向关键词匹配类型,Campaign Targeting,-,-,-,-,-,-,-,keyword_match_type,-,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_action_id,转化行为ID,Conversion Action,-,-,-,-,-,-,-,-,id,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_action_name,转化行为名称,Conversion Action,-,-,-,-,-,-,-,-,name,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_action_type,转化行为类型,Conversion Action,-,-,-,-,-,-,-,-,type,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_action_category,转化行为类别,Conversion Action,-,-,-,-,-,-,-,-,category,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_action_status,转化行为状态,Conversion Action,-,-,-,-,-,-,-,-,status,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_counting_type,转化计数方式,Conversion Action,-,-,-,-,-,-,-,-,counting_type,-,-,-,-,-,-,-,-,-,-,-,-
+attribution_model,归因模型,Conversion Action,-,-,-,-,-,-,-,-,attribution_model_settings_attribution_model,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_click_through_lookback_days,点击归因回溯窗口天数,Conversion Action,-,-,-,-,-,-,-,-,click_through_lookback_window_days,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_default_value,转化默认价值,Conversion Action,-,-,-,-,-,-,-,-,value_settings_default_value,-,-,-,-,-,-,-,-,-,-,-,-
+campaign_budget_type,预算类型,Campaign,-,-,-,-,-,-,-,-,-,-,-,-,-,campaignBudgetType,campaignBudgetType,campaignBudgetType,-,buying_type,buying_type,buying_type
+targeting_expression,定向表达式,Amazon Targeting,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,targetingExpression,-,-,-,-
+advertised_asin,推广ASIN,Amazon Product,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,advertisedAsin,-,-,-,-
+advertised_sku,推广SKU,Amazon Product,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,advertisedSku,-,-,-,-
+ad_product,广告产品类型,Amazon Product,-,-,-,-,-,-,-,-,-,-,-,-,-,-,adProduct,adProduct,adProduct,-,-,-,-
+fb_creative_id,Facebook创意ID,FB Creative,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,creative
+fb_object_story_id,Facebook帖子ID,FB Creative,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,object_story_id
+fb_call_to_action_type,行动号召类型,FB Creative,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,call_to_action_type
+fb_optimization_goal,优化目标,FB Optimization,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,optimization_goal,optimization_goal,optimization_goal
+fb_destination_type,目标类型,FB Optimization,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,destination_type,destination_type
+fb_billing_event,计费事件,FB Optimization,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,billing_event,billing_event
+fb_attribution_spec,归因设置,FB Attribution,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,attribution_spec,attribution_spec

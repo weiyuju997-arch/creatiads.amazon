@@ -1,0 +1,93 @@
+标准维度名,维度分组,GG-Account,GG-Campaign,GG-AdGroup,GG-Ad,GG-Keyword,GG-SearchQuery,GG-Geographic,GG-CampaignTargeting,GG-ConversionAction,TT-Account,TT-Campaign,TT-AdGroup,TT-Ad,AMZ-Account,AMZ-Campaign,AMZ-AdGroup,AMZ-Ad,FB-Account,FB-Campaign,FB-AdSet,FB-Ad
+customer_id,Account,id,customer_id,customer_id,customer_id,customer_id,customer_id,customer_id,-,-,advertiser_id,advertiser_id,advertiser_id,advertiser_id,profileId,advertiserId,advertiserId,advertiserId,account_id,account_id,account_id,account_id
+customer_name,Account,descriptive_name,customer_descriptive_name,customer_descriptive_name,customer_descriptive_name,customer_descriptive_name,customer_name,customer_name,-,-,-,-,-,-,name,-,-,-,account_name,account_name,account_name,account_name
+currency_code,Account,currency_code,customer_currency_code,customer_currency_code,customer_currency_code,customer_currency_code,customer_currency_code,customer_currency_code,-,-,-,-,-,-,-,-,-,-,account_currency,account_currency,account_currency,account_currency
+time_zone,Account,time_zone,customer_time_zone,customer_time_zone,customer_time_zone,customer_time_zone,customer_time_zone,customer_time_zone,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+auto_tagging_enabled,Account,auto_tagging_enabled,customer_auto_tagging_enabled,customer_auto_tagging_enabled,customer_auto_tagging_enabled,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+optimization_score,Account,optimization_score,customer_optimization_score,customer_optimization_score,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+tracking_url_template,Account,tracking_url_template,customer_tracking_url_template,customer_tracking_url_template,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+campaign_id,Campaign,-,campaign_id,campaign_id,campaign_id,campaign_id,campaign_id,campaign_id,-,-,-,campaign_id,campaign_id,campaign_id,-,orderId/campaignId,orderId/campaignId,orderId/campaignId,-,campaign_id,campaign_id,campaign_id
+campaign_name,Campaign,-,campaign_name,campaign_name,campaign_name,campaign_name,campaign_name,campaign_name,-,-,-,-,-,-,-,orderName/campaignName,orderName/campaignName,orderName/campaignName,-,campaign_name,campaign_name,campaign_name
+campaign_status,Campaign,-,campaign_status,campaign_status,campaign_status,campaign_status,campaign_status,campaign_status,-,-,-,-,-,-,-,campaignStatus,campaignStatus,campaignStatus,-,status,status,status
+campaign_start_date,Campaign,-,start_date,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,start_time,start_time,start_time
+campaign_end_date,Campaign,-,end_date,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,stop_time,stop_time,stop_time
+campaign_advertising_channel_type,Campaign,-,advertising_channel_type,campaign_advertising_channel_type,campaign_advertising_channel_type,campaign_advertising_channel_type,campaign_advertising_channel_type,campaign_advertising_channel_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+campaign_advertising_channel_sub_type,Campaign,-,advertising_channel_sub_type,campaign_advertising_channel_sub_type,campaign_advertising_channel_sub_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+campaign_bidding_strategy_type,Campaign,-,bidding_strategy_type,campaign_bidding_strategy_type,campaign_bidding_strategy_type,campaign_bidding_strategy_type,-,-,-,-,-,-,-,-,-,campaignBiddingStrategy,campaignBiddingStrategy,campaignBiddingStrategy,-,bid_strategy,bid_strategy,bid_strategy
+campaign_optimization_score,Campaign,-,optimization_score,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+campaign_primary_status,Campaign,-,primary_status,campaign_primary_status,campaign_primary_status,campaign_primary_status,-,-,-,-,-,-,-,-,-,-,-,-,-,effective_status,effective_status,effective_status
+campaign_serving_status,Campaign,-,serving_status,campaign_serving_status,campaign_serving_status,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+campaign_labels,Campaign,-,labels,campaign_labels,campaign_labels,campaign_labels,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+budget_id,Campaign,-,budget_id,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+budget_amount_micros,Campaign,-,budget_amount_micros,-,-,-,-,-,-,-,budget,budget,-,-,-,campaignBudgetAmount,campaignBudgetAmount,campaignBudgetAmount,-,daily_budget,daily_budget,daily_budget
+budget_delivery_method,Campaign,-,budget_delivery_method,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+ad_group_id,Ad Group,-,-,id,ad_group_id,ad_group_id,ad_group_id,ad_group_id,-,-,-,-,adgroup_id,adgroup_id,-,-,lineItemId/adGroupId,lineItemId/adGroupId,-,-,adset_id,adset_id
+ad_group_name,Ad Group,-,-,name,ad_group_name,ad_group_name,ad_group_name,ad_group_name,-,-,-,-,-,-,-,-,lineItemName/adGroupName,-,-,-,adset_name,adset_name
+ad_group_status,Ad Group,-,-,status,ad_group_status,ad_group_status,ad_group_status,ad_group_status,-,-,-,-,-,-,-,-,-,-,-,-,adset_status,adset_status
+ad_group_type,Ad Group,-,-,type,ad_group_type,ad_group_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+ad_group_primary_status,Ad Group,-,-,primary_status,ad_group_primary_status,ad_group_primary_status,-,-,-,-,-,-,-,-,-,-,-,-,-,-,adset_effective_status,adset_effective_status
+ad_group_cpc_bid_micros,Ad Group,-,-,cpc_bid_micros,ad_group_cpc_bid_micros,ad_group_cpc_bid_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-,bid_amount,bid_amount
+ad_group_target_cpa_micros,Ad Group,-,-,target_cpa_micros,ad_group_target_cpa_micros,ad_group_target_cpa_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+ad_group_target_roas,Ad Group,-,-,target_roas,ad_group_target_roas,ad_group_target_roas,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+ad_id,Ad,-,-,-,ad_id,-,-,-,-,-,-,-,-,ad_id,-,-,-,creativeId/targetId/keywordId,-,-,-,ad_id
+ad_name,Ad,-,-,-,ad_name,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,ad_name
+ad_type,Ad,-,-,-,ad_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+ad_status,Ad,-,-,-,status,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,ad_status
+ad_strength,Ad,-,-,-,ad_strength,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+ad_primary_status,Ad,-,-,-,primary_status,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,ad_effective_status
+final_urls,Ad,-,-,-,final_urls,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+display_url,Ad,-,-,-,display_url,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+policy_approval_status,Ad,-,-,-,policy_approval_status,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+policy_review_status,Ad,-,-,-,policy_review_status,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+rsa_headlines,Ad Creative,-,-,-,rsa_headlines,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+rsa_descriptions,Ad Creative,-,-,-,rsa_descriptions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+eta_headline_part1,Ad Creative,-,-,-,eta_headline_part1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+eta_description,Ad Creative,-,-,-,eta_description,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+display_ad_headlines,Ad Creative,-,-,-,display_ad_headlines,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+display_ad_descriptions,Ad Creative,-,-,-,display_ad_descriptions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+video_ad_video_asset,Ad Creative,-,-,-,video_ad_video_asset,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+app_ad_headlines,Ad Creative,-,-,-,app_ad_headlines,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+demand_gen_carousel_headline,Ad Creative,-,-,-,demand_gen_carousel_headline,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+keyword_text,Keyword,-,-,-,-,keyword_text,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+keyword_match_type,Keyword,-,-,-,-,keyword_match_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+keyword_status,Keyword,-,-,-,-,status,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+keyword_quality_score,Keyword,-,-,-,-,quality_score,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+keyword_first_page_cpc_micros,Keyword,-,-,-,-,first_page_cpc_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+keyword_top_of_page_cpc_micros,Keyword,-,-,-,-,top_of_page_cpc_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+search_term,Search Query,-,-,-,-,-,search_term,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+search_term_status,Search Query,-,-,-,-,-,search_term_status,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+geo_location_type,Geographic,-,-,-,-,-,-,location_type,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+geo_country_criterion_id,Geographic,-,-,-,-,-,-,country_criterion_id,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_type,Campaign Targeting,-,-,-,-,-,-,-,type,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_negative,Campaign Targeting,-,-,-,-,-,-,-,negative,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_bid_modifier,Campaign Targeting,-,-,-,-,-,-,-,bid_modifier,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_device_type,Campaign Targeting,-,-,-,-,-,-,-,device_type,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_location,Campaign Targeting,-,-,-,-,-,-,-,location_geo_target_constant,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_age_range,Campaign Targeting,-,-,-,-,-,-,-,age_range_type,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_gender,Campaign Targeting,-,-,-,-,-,-,-,gender_type,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_language,Campaign Targeting,-,-,-,-,-,-,-,language_language_constant,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_user_interest,Campaign Targeting,-,-,-,-,-,-,-,user_interest_user_interest_category,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_user_list,Campaign Targeting,-,-,-,-,-,-,-,user_list_user_list,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_keyword_text,Campaign Targeting,-,-,-,-,-,-,-,keyword_text,-,-,-,-,-,-,-,-,-,-,-,-,-
+criterion_keyword_match_type,Campaign Targeting,-,-,-,-,-,-,-,keyword_match_type,-,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_action_id,Conversion Action,-,-,-,-,-,-,-,-,id,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_action_name,Conversion Action,-,-,-,-,-,-,-,-,name,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_action_type,Conversion Action,-,-,-,-,-,-,-,-,type,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_action_category,Conversion Action,-,-,-,-,-,-,-,-,category,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_action_status,Conversion Action,-,-,-,-,-,-,-,-,status,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_counting_type,Conversion Action,-,-,-,-,-,-,-,-,counting_type,-,-,-,-,-,-,-,-,-,-,-,-
+attribution_model,Conversion Action,-,-,-,-,-,-,-,-,attribution_model_settings_attribution_model,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_click_through_lookback_days,Conversion Action,-,-,-,-,-,-,-,-,click_through_lookback_window_days,-,-,-,-,-,-,-,-,-,-,-,-
+conversion_default_value,Conversion Action,-,-,-,-,-,-,-,-,value_settings_default_value,-,-,-,-,-,-,-,-,-,-,-,-
+campaign_budget_type,Campaign,-,-,-,-,-,-,-,-,-,-,-,-,-,campaignBudgetType,campaignBudgetType,campaignBudgetType,-,buying_type,buying_type,buying_type,-
+targeting_expression,Amazon Targeting,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,targetingExpression,-,-,-,-
+advertised_asin,Amazon Product,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,advertisedAsin,-,-,-,-
+advertised_sku,Amazon Product,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,advertisedSku,-,-,-,-
+ad_product,Amazon Product,-,-,-,-,-,-,-,-,-,-,-,-,-,-,adProduct,adProduct,adProduct,-,-,-,-
+fb_creative_id,FB Creative,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,creative
+fb_object_story_id,FB Creative,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,object_story_id
+fb_call_to_action_type,FB Creative,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,call_to_action_type
+fb_optimization_goal,FB Optimization,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,optimization_goal,optimization_goal,optimization_goal
+fb_destination_type,FB Optimization,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,destination_type,destination_type
+fb_billing_event,FB Optimization,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,billing_event,billing_event
+fb_attribution_spec,FB Attribution,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,attribution_spec,attribution_spec

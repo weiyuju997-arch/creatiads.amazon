@@ -484,11 +484,11 @@ function setupSidebar() {
             } else if (key === 'data') {
                 switchPage('autoReport');
             } else if (key === 'ad-studio') {
-                // 主菜单点 Ad Studio → 默认显示 Facebook 子项
+                // 主菜单点 Ad Studio → 默认显示 Amazon DSP 子项
                 document.querySelectorAll('.sub-item').forEach(i => i.classList.remove('active'));
-                const fb = document.querySelector('.sub-item[data-ads-key="facebook"]');
-                if (fb) fb.classList.add('active');
-                switchPage('ad-studio-facebook');
+                const amz = document.querySelector('.sub-item[data-ads-key="amazon"]');
+                if (amz) amz.classList.add('active');
+                switchPage('ad-studio-amazon');
             }
         });
     });

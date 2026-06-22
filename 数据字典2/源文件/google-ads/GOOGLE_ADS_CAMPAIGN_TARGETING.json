@@ -1,0 +1,1058 @@
+{
+  "platform": "GOOGLE",
+  "connectorType": "GOOGLE_ADS_CAMPAIGN_TARGETING",
+  "type": "metadata",
+  "dimensionGroups": {
+    "Criterion Basic Info": [
+      {
+        "apiName": "campaign_criterion.criterion_id",
+        "dbColumn": "criterion_id",
+        "description": "Criterion ID"
+      },
+      {
+        "apiName": "campaign_criterion.resource_name",
+        "dbColumn": "resource_name",
+        "description": "Resource name"
+      },
+      {
+        "apiName": "campaign_criterion.type",
+        "dbColumn": "type",
+        "description": "Criterion type (KEYWORD, LOCATION, DEVICE, AGE_RANGE, GENDER, INCOME_RANGE, PARENTAL_STATUS, LANGUAGE, CONTENT_LABEL, CARRIER, USER_INTEREST, USER_LIST, PROXIMITY, TOPIC, PLACEMENT, MOBILE_APP_CATEGORY, MOBILE_APPLICATION, IP_BLOCK, CUSTOM_AFFINITY, CUSTOM_INTENT, WEBPAGE, OPERATING_SYSTEM_VERSION, LOCATION_GROUP, BRAND_LIST, BRAND etc.)"
+      },
+      {
+        "apiName": "campaign_criterion.negative",
+        "dbColumn": "negative",
+        "description": "Whether is a negative criterion"
+      },
+      {
+        "apiName": "campaign_criterion.bid_modifier",
+        "dbColumn": "bid_modifier",
+        "description": "Bid modifier"
+      },
+      {
+        "apiName": "campaign_criterion.display_name",
+        "dbColumn": "display_name",
+        "description": "Display name"
+      },
+      {
+        "apiName": "campaign_criterion.status",
+        "dbColumn": "status",
+        "description": "Status"
+      },
+      {
+        "apiName": "campaign_criterion.keyword.text",
+        "dbColumn": "keyword_text",
+        "description": "Keyword text"
+      },
+      {
+        "apiName": "campaign_criterion.keyword.match_type",
+        "dbColumn": "keyword_match_type",
+        "description": "Keyword match type"
+      },
+      {
+        "apiName": "campaign_criterion.location.geo_target_constant",
+        "dbColumn": "location_geo_target_constant",
+        "description": "Geo target constant resource name"
+      },
+      {
+        "apiName": "campaign_criterion.device.type",
+        "dbColumn": "device_type",
+        "description": "Device type (MOBILE, TABLET, DESKTOP, CONNECTED_TV, OTHER)"
+      },
+      {
+        "apiName": "campaign_criterion.age_range.type",
+        "dbColumn": "age_range_type",
+        "description": "Age range type"
+      },
+      {
+        "apiName": "campaign_criterion.gender.type",
+        "dbColumn": "gender_type",
+        "description": "Gender type"
+      },
+      {
+        "apiName": "campaign_criterion.income_range.type",
+        "dbColumn": "income_range_type",
+        "description": "Income range type"
+      },
+      {
+        "apiName": "campaign_criterion.parental_status.type",
+        "dbColumn": "parental_status_type",
+        "description": "Parental status type"
+      },
+      {
+        "apiName": "campaign_criterion.language.language_constant",
+        "dbColumn": "language_language_constant",
+        "description": "Language constant resource name"
+      },
+      {
+        "apiName": "campaign_criterion.user_interest.user_interest_category",
+        "dbColumn": "user_interest_user_interest_category",
+        "description": "User interest category"
+      },
+      {
+        "apiName": "campaign_criterion.user_list.user_list",
+        "dbColumn": "user_list_user_list",
+        "description": "User list resource name"
+      },
+      {
+        "apiName": "campaign_criterion.proximity.geo_point.longitude_in_micro_degrees",
+        "dbColumn": "proximity_geo_point_longitude_in_micro_degrees",
+        "description": "Longitude (micro degrees)"
+      },
+      {
+        "apiName": "campaign_criterion.proximity.geo_point.latitude_in_micro_degrees",
+        "dbColumn": "proximity_geo_point_latitude_in_micro_degrees",
+        "description": "Latitude (micro degrees)"
+      },
+      {
+        "apiName": "campaign_criterion.proximity.radius",
+        "dbColumn": "proximity_radius",
+        "description": "Radius"
+      },
+      {
+        "apiName": "campaign_criterion.proximity.radius_units",
+        "dbColumn": "proximity_radius_units",
+        "description": "Radius units"
+      },
+      {
+        "apiName": "campaign_criterion.proximity.address.postal_code",
+        "dbColumn": "proximity_address_postal_code",
+        "description": "Postal code"
+      },
+      {
+        "apiName": "campaign_criterion.proximity.address.province_code",
+        "dbColumn": "proximity_address_province_code",
+        "description": "Province code"
+      },
+      {
+        "apiName": "campaign_criterion.proximity.address.country_code",
+        "dbColumn": "proximity_address_country_code",
+        "description": "Country code"
+      },
+      {
+        "apiName": "campaign_criterion.proximity.address.province_name",
+        "dbColumn": "proximity_address_province_name",
+        "description": "Province name"
+      },
+      {
+        "apiName": "campaign_criterion.proximity.address.street_address",
+        "dbColumn": "proximity_address_street_address",
+        "description": "Street address"
+      },
+      {
+        "apiName": "campaign_criterion.proximity.address.street_address2",
+        "dbColumn": "proximity_address_street_address2",
+        "description": "Street address 2"
+      },
+      {
+        "apiName": "campaign_criterion.proximity.address.city_name",
+        "dbColumn": "proximity_address_city_name",
+        "description": "City name"
+      },
+      {
+        "apiName": "campaign_criterion.topic.topic_constant",
+        "dbColumn": "topic_topic_constant",
+        "description": "Topic constant resource name"
+      },
+      {
+        "apiName": "campaign_criterion.topic.path",
+        "dbColumn": "topic_path",
+        "description": "Topic path"
+      },
+      {
+        "apiName": "campaign_criterion.placement.url",
+        "dbColumn": "placement_url",
+        "description": "Placement URL"
+      },
+      {
+        "apiName": "campaign_criterion.webpage.conditions",
+        "dbColumn": "webpage_conditions",
+        "description": "Webpage conditions"
+      },
+      {
+        "apiName": "campaign_criterion.webpage.coverage_percentage",
+        "dbColumn": "webpage_coverage_percentage",
+        "description": "Coverage percentage"
+      },
+      {
+        "apiName": "campaign_criterion.content_label.type",
+        "dbColumn": "content_label_type",
+        "description": "Content label type"
+      },
+      {
+        "apiName": "campaign_criterion.carrier.carrier_constant",
+        "dbColumn": "carrier_carrier_constant",
+        "description": "Carrier constant resource name"
+      },
+      {
+        "apiName": "campaign_criterion.operating_system_version.os_version_constant",
+        "dbColumn": "operating_system_version_os_version_constant",
+        "description": "Operating system version constant"
+      },
+      {
+        "apiName": "campaign_criterion.mobile_app_category.mobile_app_category_constant",
+        "dbColumn": "mobile_app_category_mobile_app_category_constant",
+        "description": "Mobile app category constant"
+      },
+      {
+        "apiName": "campaign_criterion.mobile_application.app_id",
+        "dbColumn": "mobile_application_app_id",
+        "description": "Mobile application ID"
+      },
+      {
+        "apiName": "campaign_criterion.mobile_application.name",
+        "dbColumn": "mobile_application_name",
+        "description": "Mobile application name"
+      },
+      {
+        "apiName": "campaign_criterion.location_group.feed",
+        "dbColumn": "location_group_feed",
+        "description": "Location group feed"
+      },
+      {
+        "apiName": "campaign_criterion.location_group.geo_target_constants",
+        "dbColumn": "location_group_geo_target_constants",
+        "description": "Geo target constants list"
+      },
+      {
+        "apiName": "campaign_criterion.location_group.radius",
+        "dbColumn": "location_group_radius",
+        "description": "Location group radius"
+      },
+      {
+        "apiName": "campaign_criterion.location_group.radius_units",
+        "dbColumn": "location_group_radius_units",
+        "description": "Location group radius units"
+      },
+      {
+        "apiName": "campaign_criterion.location_group.feed_item_sets",
+        "dbColumn": "location_group_feed_item_sets",
+        "description": "Feed item sets list"
+      },
+      {
+        "apiName": "campaign_criterion.custom_affinity.custom_affinity",
+        "dbColumn": "custom_affinity_custom_affinity",
+        "description": "Custom affinity audience"
+      },
+      {
+        "apiName": "campaign_criterion.custom_audience.custom_audience",
+        "dbColumn": "custom_audience_custom_audience",
+        "description": "Custom audience"
+      },
+      {
+        "apiName": "campaign_criterion.combined_audience.combined_audience",
+        "dbColumn": "combined_audience_combined_audience",
+        "description": "Combined audience"
+      }
+    ],
+    "Campaign": [
+      {
+        "apiName": "campaign.accessible_bidding_strategy",
+        "dbColumn": "campaign_accessible_bidding_strategy",
+        "description": "Accessible bidding strategy"
+      },
+      {
+        "apiName": "campaign.ad_serving_optimization_status",
+        "dbColumn": "campaign_ad_serving_optimization_status",
+        "description": "Ad serving optimization status"
+      },
+      {
+        "apiName": "campaign.advertising_channel_sub_type",
+        "dbColumn": "campaign_advertising_channel_sub_type",
+        "description": "Advertising channel sub type"
+      },
+      {
+        "apiName": "campaign.advertising_channel_type",
+        "dbColumn": "campaign_advertising_channel_type",
+        "description": "Advertising channel type"
+      },
+      {
+        "apiName": "campaign.ai_max_setting.bundling_required",
+        "dbColumn": "campaign_ai_max_setting_bundling_required",
+        "description": "Ai max setting bundling required"
+      },
+      {
+        "apiName": "campaign.ai_max_setting.enable_ai_max",
+        "dbColumn": "campaign_ai_max_setting_enable_ai_max",
+        "description": "Ai max setting enable ai max"
+      },
+      {
+        "apiName": "campaign.app_campaign_setting.app_id",
+        "dbColumn": "campaign_app_campaign_setting_app_id",
+        "description": "App campaign setting app id"
+      },
+      {
+        "apiName": "campaign.app_campaign_setting.app_store",
+        "dbColumn": "campaign_app_campaign_setting_app_store",
+        "description": "App campaign setting app store"
+      },
+      {
+        "apiName": "campaign.app_campaign_setting.bidding_strategy_goal_type",
+        "dbColumn": "campaign_app_campaign_setting_bidding_strategy_goal_type",
+        "description": "App campaign setting bidding strategy goal type"
+      },
+      {
+        "apiName": "campaign.asset_automation_settings",
+        "dbColumn": "campaign_asset_automation_settings",
+        "description": "Asset automation settings"
+      },
+      {
+        "apiName": "campaign.audience_setting.use_audience_grouped",
+        "dbColumn": "campaign_audience_setting_use_audience_grouped",
+        "description": "Audience setting use audience grouped"
+      },
+      {
+        "apiName": "campaign.base_campaign",
+        "dbColumn": "campaign_base_campaign",
+        "description": "Base campaign"
+      },
+      {
+        "apiName": "campaign.bidding_strategy",
+        "dbColumn": "campaign_bidding_strategy",
+        "description": "Bidding strategy"
+      },
+      {
+        "apiName": "campaign.bidding_strategy_system_status",
+        "dbColumn": "campaign_bidding_strategy_system_status",
+        "description": "Bidding strategy system status"
+      },
+      {
+        "apiName": "campaign.bidding_strategy_type",
+        "dbColumn": "campaign_bidding_strategy_type",
+        "description": "Bidding strategy type"
+      },
+      {
+        "apiName": "campaign.brand_guidelines.accent_color",
+        "dbColumn": "campaign_brand_guidelines_accent_color",
+        "description": "Brand guidelines accent color"
+      },
+      {
+        "apiName": "campaign.brand_guidelines.main_color",
+        "dbColumn": "campaign_brand_guidelines_main_color",
+        "description": "Brand guidelines main color"
+      },
+      {
+        "apiName": "campaign.brand_guidelines.predefined_font_family",
+        "dbColumn": "campaign_brand_guidelines_predefined_font_family",
+        "description": "Brand guidelines predefined font family"
+      },
+      {
+        "apiName": "campaign.brand_guidelines_enabled",
+        "dbColumn": "campaign_brand_guidelines_enabled",
+        "description": "Brand guidelines enabled"
+      },
+      {
+        "apiName": "campaign.campaign_budget",
+        "dbColumn": "campaign_campaign_budget",
+        "description": "Campaign budget"
+      },
+      {
+        "apiName": "campaign.campaign_group",
+        "dbColumn": "campaign_campaign_group",
+        "description": "Campaign group"
+      },
+      {
+        "apiName": "campaign.commission.commission_rate_micros",
+        "dbColumn": "campaign_commission_commission_rate_micros",
+        "description": "Commission commission rate micros"
+      },
+      {
+        "apiName": "campaign.contains_eu_political_advertising",
+        "dbColumn": "campaign_contains_eu_political_advertising",
+        "description": "Contains eu political advertising"
+      },
+      {
+        "apiName": "campaign.demand_gen_campaign_settings.upgraded_targeting",
+        "dbColumn": "campaign_demand_gen_campaign_settings_upgraded_targeting",
+        "description": "Demand gen campaign settings upgraded targeting"
+      },
+      {
+        "apiName": "campaign.dynamic_search_ads_setting.domain_name",
+        "dbColumn": "campaign_dynamic_search_ads_setting_domain_name",
+        "description": "Dynamic search ads setting domain name"
+      },
+      {
+        "apiName": "campaign.dynamic_search_ads_setting.language_code",
+        "dbColumn": "campaign_dynamic_search_ads_setting_language_code",
+        "description": "Dynamic search ads setting language code"
+      },
+      {
+        "apiName": "campaign.dynamic_search_ads_setting.use_supplied_urls_only",
+        "dbColumn": "campaign_dynamic_search_ads_setting_use_supplied_urls_only",
+        "description": "Dynamic search ads setting use supplied urls only"
+      },
+      {
+        "apiName": "campaign.end_date",
+        "dbColumn": "campaign_end_date",
+        "description": "End date"
+      },
+      {
+        "apiName": "campaign.excluded_parent_asset_field_types",
+        "dbColumn": "campaign_excluded_parent_asset_field_types",
+        "description": "Excluded parent asset field types"
+      },
+      {
+        "apiName": "campaign.excluded_parent_asset_set_types",
+        "dbColumn": "campaign_excluded_parent_asset_set_types",
+        "description": "Excluded parent asset set types"
+      },
+      {
+        "apiName": "campaign.experiment_type",
+        "dbColumn": "campaign_experiment_type",
+        "description": "Experiment type"
+      },
+      {
+        "apiName": "campaign.feed_types",
+        "dbColumn": "campaign_feed_types",
+        "description": "Feed types"
+      },
+      {
+        "apiName": "campaign.final_url_suffix",
+        "dbColumn": "campaign_final_url_suffix",
+        "description": "Final url suffix"
+      },
+      {
+        "apiName": "campaign.fixed_cpm.goal",
+        "dbColumn": "campaign_fixed_cpm_goal",
+        "description": "Fixed cpm goal"
+      },
+      {
+        "apiName": "campaign.fixed_cpm.target_frequency_info.target_count",
+        "dbColumn": "campaign_fixed_cpm_target_frequency_info_target_count",
+        "description": "Fixed cpm target frequency info target count"
+      },
+      {
+        "apiName": "campaign.fixed_cpm.target_frequency_info.time_unit",
+        "dbColumn": "campaign_fixed_cpm_target_frequency_info_time_unit",
+        "description": "Fixed cpm target frequency info time unit"
+      },
+      {
+        "apiName": "campaign.frequency_caps",
+        "dbColumn": "campaign_frequency_caps",
+        "description": "Frequency caps"
+      },
+      {
+        "apiName": "campaign.geo_target_type_setting.negative_geo_target_type",
+        "dbColumn": "campaign_geo_target_type_setting_negative_geo_target_type",
+        "description": "Geo target type setting negative geo target type"
+      },
+      {
+        "apiName": "campaign.geo_target_type_setting.positive_geo_target_type",
+        "dbColumn": "campaign_geo_target_type_setting_positive_geo_target_type",
+        "description": "Geo target type setting positive geo target type"
+      },
+      {
+        "apiName": "campaign.hotel_property_asset_set",
+        "dbColumn": "campaign_hotel_property_asset_set",
+        "description": "Hotel property asset set"
+      },
+      {
+        "apiName": "campaign.hotel_setting.hotel_center_id",
+        "dbColumn": "campaign_hotel_setting_hotel_center_id",
+        "description": "Hotel setting hotel center id"
+      },
+      {
+        "apiName": "campaign.id",
+        "dbColumn": "campaign_id",
+        "description": "Id"
+      },
+      {
+        "apiName": "campaign.keyword_match_type",
+        "dbColumn": "campaign_keyword_match_type",
+        "description": "Keyword match type"
+      },
+      {
+        "apiName": "campaign.labels",
+        "dbColumn": "campaign_labels",
+        "description": "Labels"
+      },
+      {
+        "apiName": "campaign.listing_type",
+        "dbColumn": "campaign_listing_type",
+        "description": "Listing type"
+      },
+      {
+        "apiName": "campaign.local_campaign_setting.location_source_type",
+        "dbColumn": "campaign_local_campaign_setting_location_source_type",
+        "description": "Local campaign setting location source type"
+      },
+      {
+        "apiName": "campaign.local_services_campaign_settings.category_bids",
+        "dbColumn": "campaign_local_services_campaign_settings_category_bids",
+        "description": "Local services campaign settings category bids"
+      },
+      {
+        "apiName": "campaign.manual_cpa",
+        "dbColumn": "campaign_manual_cpa",
+        "description": "Manual cpa"
+      },
+      {
+        "apiName": "campaign.manual_cpc.enhanced_cpc_enabled",
+        "dbColumn": "campaign_manual_cpc_enhanced_cpc_enabled",
+        "description": "Manual cpc enhanced cpc enabled"
+      },
+      {
+        "apiName": "campaign.manual_cpm",
+        "dbColumn": "campaign_manual_cpm",
+        "description": "Manual cpm"
+      },
+      {
+        "apiName": "campaign.manual_cpv",
+        "dbColumn": "campaign_manual_cpv",
+        "description": "Manual cpv"
+      },
+      {
+        "apiName": "campaign.maximize_conversion_value.target_roas",
+        "dbColumn": "campaign_maximize_conversion_value_target_roas",
+        "description": "Maximize conversion value target roas"
+      },
+      {
+        "apiName": "campaign.maximize_conversion_value.target_roas_tolerance_percent_millis",
+        "dbColumn": "campaign_maximize_conversion_value_target_roas_tolerance_percent_millis",
+        "description": "Maximize conversion value target roas tolerance percent millis"
+      },
+      {
+        "apiName": "campaign.maximize_conversions.target_cpa_micros",
+        "dbColumn": "campaign_maximize_conversions_target_cpa_micros",
+        "description": "Maximize conversions target cpa micros"
+      },
+      {
+        "apiName": "campaign.missing_eu_political_advertising_declaration",
+        "dbColumn": "campaign_missing_eu_political_advertising_declaration",
+        "description": "Missing eu political advertising declaration"
+      },
+      {
+        "apiName": "campaign.name",
+        "dbColumn": "campaign_name",
+        "description": "Name"
+      },
+      {
+        "apiName": "campaign.network_settings.target_content_network",
+        "dbColumn": "campaign_network_settings_target_content_network",
+        "description": "Network settings target content network"
+      },
+      {
+        "apiName": "campaign.network_settings.target_google_search",
+        "dbColumn": "campaign_network_settings_target_google_search",
+        "description": "Network settings target google search"
+      },
+      {
+        "apiName": "campaign.network_settings.target_google_tv_network",
+        "dbColumn": "campaign_network_settings_target_google_tv_network",
+        "description": "Network settings target google tv network"
+      },
+      {
+        "apiName": "campaign.network_settings.target_partner_search_network",
+        "dbColumn": "campaign_network_settings_target_partner_search_network",
+        "description": "Network settings target partner search network"
+      },
+      {
+        "apiName": "campaign.network_settings.target_search_network",
+        "dbColumn": "campaign_network_settings_target_search_network",
+        "description": "Network settings target search network"
+      },
+      {
+        "apiName": "campaign.network_settings.target_youtube",
+        "dbColumn": "campaign_network_settings_target_youtube",
+        "description": "Network settings target youtube"
+      },
+      {
+        "apiName": "campaign.optimization_goal_setting.optimization_goal_types",
+        "dbColumn": "campaign_optimization_goal_setting_optimization_goal_types",
+        "description": "Optimization goal setting optimization goal types"
+      },
+      {
+        "apiName": "campaign.optimization_score",
+        "dbColumn": "campaign_optimization_score",
+        "description": "Optimization score"
+      },
+      {
+        "apiName": "campaign.payment_mode",
+        "dbColumn": "campaign_payment_mode",
+        "description": "Payment mode"
+      },
+      {
+        "apiName": "campaign.percent_cpc.cpc_bid_ceiling_micros",
+        "dbColumn": "campaign_percent_cpc_cpc_bid_ceiling_micros",
+        "description": "Percent cpc cpc bid ceiling micros"
+      },
+      {
+        "apiName": "campaign.percent_cpc.enhanced_cpc_enabled",
+        "dbColumn": "campaign_percent_cpc_enhanced_cpc_enabled",
+        "description": "Percent cpc enhanced cpc enabled"
+      },
+      {
+        "apiName": "campaign.performance_max_upgrade.performance_max_campaign",
+        "dbColumn": "campaign_performance_max_upgrade_performance_max_campaign",
+        "description": "Performance max upgrade performance max campaign"
+      },
+      {
+        "apiName": "campaign.performance_max_upgrade.pre_upgrade_campaign",
+        "dbColumn": "campaign_performance_max_upgrade_pre_upgrade_campaign",
+        "description": "Performance max upgrade pre upgrade campaign"
+      },
+      {
+        "apiName": "campaign.performance_max_upgrade.status",
+        "dbColumn": "campaign_performance_max_upgrade_status",
+        "description": "Performance max upgrade status"
+      },
+      {
+        "apiName": "campaign.pmax_campaign_settings.brand_targeting_overrides.ignore_exclusions_for_shopping_ads",
+        "dbColumn": "campaign_pmax_campaign_settings_brand_targeting_overrides_ignore_exclusions_for_shopping_ads",
+        "description": "Pmax campaign settings brand targeting overrides ignore exclusions for shopping ads"
+      },
+      {
+        "apiName": "campaign.primary_status",
+        "dbColumn": "campaign_primary_status",
+        "description": "Primary status"
+      },
+      {
+        "apiName": "campaign.primary_status_reasons",
+        "dbColumn": "campaign_primary_status_reasons",
+        "description": "Primary status reasons"
+      },
+      {
+        "apiName": "campaign.real_time_bidding_setting.opt_in",
+        "dbColumn": "campaign_real_time_bidding_setting_opt_in",
+        "description": "Real time bidding setting opt in"
+      },
+      {
+        "apiName": "campaign.resource_name",
+        "dbColumn": "campaign_resource_name",
+        "description": "Resource name"
+      },
+      {
+        "apiName": "campaign.selective_optimization.conversion_actions",
+        "dbColumn": "campaign_selective_optimization_conversion_actions",
+        "description": "Selective optimization conversion actions"
+      },
+      {
+        "apiName": "campaign.serving_status",
+        "dbColumn": "campaign_serving_status",
+        "description": "Serving status"
+      },
+      {
+        "apiName": "campaign.shopping_setting.advertising_partner_ids",
+        "dbColumn": "campaign_shopping_setting_advertising_partner_ids",
+        "description": "Shopping setting advertising partner ids"
+      },
+      {
+        "apiName": "campaign.shopping_setting.campaign_priority",
+        "dbColumn": "campaign_shopping_setting_campaign_priority",
+        "description": "Shopping setting campaign priority"
+      },
+      {
+        "apiName": "campaign.shopping_setting.disable_product_feed",
+        "dbColumn": "campaign_shopping_setting_disable_product_feed",
+        "description": "Shopping setting disable product feed"
+      },
+      {
+        "apiName": "campaign.shopping_setting.enable_local",
+        "dbColumn": "campaign_shopping_setting_enable_local",
+        "description": "Shopping setting enable local"
+      },
+      {
+        "apiName": "campaign.shopping_setting.feed_label",
+        "dbColumn": "campaign_shopping_setting_feed_label",
+        "description": "Shopping setting feed label"
+      },
+      {
+        "apiName": "campaign.shopping_setting.merchant_id",
+        "dbColumn": "campaign_shopping_setting_merchant_id",
+        "description": "Shopping setting merchant id"
+      },
+      {
+        "apiName": "campaign.shopping_setting.use_vehicle_inventory",
+        "dbColumn": "campaign_shopping_setting_use_vehicle_inventory",
+        "description": "Shopping setting use vehicle inventory"
+      },
+      {
+        "apiName": "campaign.start_date",
+        "dbColumn": "campaign_start_date",
+        "description": "Start date"
+      },
+      {
+        "apiName": "campaign.status",
+        "dbColumn": "campaign_status",
+        "description": "Status"
+      },
+      {
+        "apiName": "campaign.target_cpa.cpc_bid_ceiling_micros",
+        "dbColumn": "campaign_target_cpa_cpc_bid_ceiling_micros",
+        "description": "Target cpa cpc bid ceiling micros"
+      },
+      {
+        "apiName": "campaign.target_cpa.cpc_bid_floor_micros",
+        "dbColumn": "campaign_target_cpa_cpc_bid_floor_micros",
+        "description": "Target cpa cpc bid floor micros"
+      },
+      {
+        "apiName": "campaign.target_cpa.target_cpa_micros",
+        "dbColumn": "campaign_target_cpa_target_cpa_micros",
+        "description": "Target cpa target cpa micros"
+      },
+      {
+        "apiName": "campaign.target_cpc.target_cpc_micros",
+        "dbColumn": "campaign_target_cpc_target_cpc_micros",
+        "description": "Target cpc target cpc micros"
+      },
+      {
+        "apiName": "campaign.target_cpm.target_frequency_goal.target_count",
+        "dbColumn": "campaign_target_cpm_target_frequency_goal_target_count",
+        "description": "Target cpm target frequency goal target count"
+      },
+      {
+        "apiName": "campaign.target_cpm.target_frequency_goal.time_unit",
+        "dbColumn": "campaign_target_cpm_target_frequency_goal_time_unit",
+        "description": "Target cpm target frequency goal time unit"
+      },
+      {
+        "apiName": "campaign.target_cpv",
+        "dbColumn": "campaign_target_cpv",
+        "description": "Target cpv"
+      },
+      {
+        "apiName": "campaign.target_impression_share.cpc_bid_ceiling_micros",
+        "dbColumn": "campaign_target_impression_share_cpc_bid_ceiling_micros",
+        "description": "Target impression share cpc bid ceiling micros"
+      },
+      {
+        "apiName": "campaign.target_impression_share.location",
+        "dbColumn": "campaign_target_impression_share_location",
+        "description": "Target impression share location"
+      },
+      {
+        "apiName": "campaign.target_impression_share.location_fraction_micros",
+        "dbColumn": "campaign_target_impression_share_location_fraction_micros",
+        "description": "Target impression share location fraction micros"
+      },
+      {
+        "apiName": "campaign.target_roas.cpc_bid_ceiling_micros",
+        "dbColumn": "campaign_target_roas_cpc_bid_ceiling_micros",
+        "description": "Target roas cpc bid ceiling micros"
+      },
+      {
+        "apiName": "campaign.target_roas.cpc_bid_floor_micros",
+        "dbColumn": "campaign_target_roas_cpc_bid_floor_micros",
+        "description": "Target roas cpc bid floor micros"
+      },
+      {
+        "apiName": "campaign.target_roas.target_roas",
+        "dbColumn": "campaign_target_roas_target_roas",
+        "description": "Target roas target roas"
+      },
+      {
+        "apiName": "campaign.target_roas.target_roas_tolerance_percent_millis",
+        "dbColumn": "campaign_target_roas_target_roas_tolerance_percent_millis",
+        "description": "Target roas target roas tolerance percent millis"
+      },
+      {
+        "apiName": "campaign.target_spend.cpc_bid_ceiling_micros",
+        "dbColumn": "campaign_target_spend_cpc_bid_ceiling_micros",
+        "description": "Target spend cpc bid ceiling micros"
+      },
+      {
+        "apiName": "campaign.target_spend.target_spend_micros",
+        "dbColumn": "campaign_target_spend_target_spend_micros",
+        "description": "Target spend target spend micros"
+      },
+      {
+        "apiName": "campaign.targeting_setting.target_restrictions",
+        "dbColumn": "campaign_targeting_setting_target_restrictions",
+        "description": "Targeting setting target restrictions"
+      },
+      {
+        "apiName": "campaign.third_party_integration_partners.brand_lift_integration_partners",
+        "dbColumn": "campaign_third_party_integration_partners_brand_lift_integration_partners",
+        "description": "Third party integration partners brand lift integration partners"
+      },
+      {
+        "apiName": "campaign.third_party_integration_partners.brand_safety_integration_partners",
+        "dbColumn": "campaign_third_party_integration_partners_brand_safety_integration_partners",
+        "description": "Third party integration partners brand safety integration partners"
+      },
+      {
+        "apiName": "campaign.third_party_integration_partners.reach_integration_partners",
+        "dbColumn": "campaign_third_party_integration_partners_reach_integration_partners",
+        "description": "Third party integration partners reach integration partners"
+      },
+      {
+        "apiName": "campaign.third_party_integration_partners.viewability_integration_partners",
+        "dbColumn": "campaign_third_party_integration_partners_viewability_integration_partners",
+        "description": "Third party integration partners viewability integration partners"
+      },
+      {
+        "apiName": "campaign.tracking_setting.tracking_url",
+        "dbColumn": "campaign_tracking_setting_tracking_url",
+        "description": "Tracking setting tracking url"
+      },
+      {
+        "apiName": "campaign.tracking_url_template",
+        "dbColumn": "campaign_tracking_url_template",
+        "description": "Tracking url template"
+      },
+      {
+        "apiName": "campaign.travel_campaign_settings.travel_account_id",
+        "dbColumn": "campaign_travel_campaign_settings_travel_account_id",
+        "description": "Travel campaign settings travel account id"
+      },
+      {
+        "apiName": "campaign.url_custom_parameters",
+        "dbColumn": "campaign_url_custom_parameters",
+        "description": "Url custom parameters"
+      },
+      {
+        "apiName": "campaign.vanity_pharma.vanity_pharma_display_url_mode",
+        "dbColumn": "campaign_vanity_pharma_vanity_pharma_display_url_mode",
+        "description": "Vanity pharma vanity pharma display url mode"
+      },
+      {
+        "apiName": "campaign.vanity_pharma.vanity_pharma_text",
+        "dbColumn": "campaign_vanity_pharma_vanity_pharma_text",
+        "description": "Vanity pharma vanity pharma text"
+      },
+      {
+        "apiName": "campaign.video_brand_safety_suitability",
+        "dbColumn": "campaign_video_brand_safety_suitability",
+        "description": "Video brand safety suitability"
+      },
+      {
+        "apiName": "campaign.video_campaign_settings.video_ad_format_control.format_restriction",
+        "dbColumn": "campaign_video_campaign_settings_video_ad_format_control_format_restriction",
+        "description": "Video campaign settings video ad format control format restriction"
+      },
+      {
+        "apiName": "campaign.video_campaign_settings.video_ad_format_control.non_skippable_in_stream_restrictions.max_duration",
+        "dbColumn": "campaign_video_campaign_settings_video_ad_format_control_non_skippable_in_stream_restrictions_max_duration",
+        "description": "Video campaign settings video ad format control non skippable in stream restrictions max duration"
+      },
+      {
+        "apiName": "campaign.video_campaign_settings.video_ad_format_control.non_skippable_in_stream_restrictions.min_duration",
+        "dbColumn": "campaign_video_campaign_settings_video_ad_format_control_non_skippable_in_stream_restrictions_min_duration",
+        "description": "Video campaign settings video ad format control non skippable in stream restrictions min duration"
+      },
+      {
+        "apiName": "campaign.video_campaign_settings.video_ad_inventory_control.allow_in_feed",
+        "dbColumn": "campaign_video_campaign_settings_video_ad_inventory_control_allow_in_feed",
+        "description": "Video campaign settings video ad inventory control allow in feed"
+      },
+      {
+        "apiName": "campaign.video_campaign_settings.video_ad_inventory_control.allow_in_stream",
+        "dbColumn": "campaign_video_campaign_settings_video_ad_inventory_control_allow_in_stream",
+        "description": "Video campaign settings video ad inventory control allow in stream"
+      },
+      {
+        "apiName": "campaign.video_campaign_settings.video_ad_inventory_control.allow_non_skippable_in_stream",
+        "dbColumn": "campaign_video_campaign_settings_video_ad_inventory_control_allow_non_skippable_in_stream",
+        "description": "Video campaign settings video ad inventory control allow non skippable in stream"
+      },
+      {
+        "apiName": "campaign.video_campaign_settings.video_ad_inventory_control.allow_shorts",
+        "dbColumn": "campaign_video_campaign_settings_video_ad_inventory_control_allow_shorts",
+        "description": "Video campaign settings video ad inventory control allow shorts"
+      },
+      {
+        "apiName": "campaign.video_campaign_settings.video_ad_sequence.minimum_duration",
+        "dbColumn": "campaign_video_campaign_settings_video_ad_sequence_minimum_duration",
+        "description": "Video campaign settings video ad sequence minimum duration"
+      },
+      {
+        "apiName": "campaign.video_campaign_settings.video_ad_sequence.steps",
+        "dbColumn": "campaign_video_campaign_settings_video_ad_sequence_steps",
+        "description": "Video campaign settings video ad sequence steps"
+      }
+    ],
+    "Customer": [
+      {
+        "apiName": "customer.auto_tagging_enabled",
+        "dbColumn": "customer_auto_tagging_enabled",
+        "description": "Auto tagging enabled"
+      },
+      {
+        "apiName": "customer.call_reporting_setting.call_conversion_action",
+        "dbColumn": "customer_call_reporting_setting_call_conversion_action",
+        "description": "Call reporting setting call conversion action"
+      },
+      {
+        "apiName": "customer.call_reporting_setting.call_conversion_reporting_enabled",
+        "dbColumn": "customer_call_reporting_setting_call_conversion_reporting_enabled",
+        "description": "Call reporting setting call conversion reporting enabled"
+      },
+      {
+        "apiName": "customer.call_reporting_setting.call_reporting_enabled",
+        "dbColumn": "customer_call_reporting_setting_call_reporting_enabled",
+        "description": "Call reporting setting call reporting enabled"
+      },
+      {
+        "apiName": "customer.contains_eu_political_advertising",
+        "dbColumn": "customer_contains_eu_political_advertising",
+        "description": "Contains eu political advertising"
+      },
+      {
+        "apiName": "customer.conversion_tracking_setting.accepted_customer_data_terms",
+        "dbColumn": "customer_conversion_tracking_setting_accepted_customer_data_terms",
+        "description": "Conversion tracking setting accepted customer data terms"
+      },
+      {
+        "apiName": "customer.conversion_tracking_setting.conversion_tracking_id",
+        "dbColumn": "customer_conversion_tracking_setting_conversion_tracking_id",
+        "description": "Conversion tracking setting conversion tracking id"
+      },
+      {
+        "apiName": "customer.conversion_tracking_setting.conversion_tracking_status",
+        "dbColumn": "customer_conversion_tracking_setting_conversion_tracking_status",
+        "description": "Conversion tracking setting conversion tracking status"
+      },
+      {
+        "apiName": "customer.conversion_tracking_setting.cross_account_conversion_tracking_id",
+        "dbColumn": "customer_conversion_tracking_setting_cross_account_conversion_tracking_id",
+        "description": "Conversion tracking setting cross account conversion tracking id"
+      },
+      {
+        "apiName": "customer.conversion_tracking_setting.enhanced_conversions_for_leads_enabled",
+        "dbColumn": "customer_conversion_tracking_setting_enhanced_conversions_for_leads_enabled",
+        "description": "Conversion tracking setting enhanced conversions for leads enabled"
+      },
+      {
+        "apiName": "customer.conversion_tracking_setting.google_ads_conversion_customer",
+        "dbColumn": "customer_conversion_tracking_setting_google_ads_conversion_customer",
+        "description": "Conversion tracking setting google ads conversion customer"
+      },
+      {
+        "apiName": "customer.currency_code",
+        "dbColumn": "customer_currency_code",
+        "description": "Currency code"
+      },
+      {
+        "apiName": "customer.customer_agreement_setting.accepted_lead_form_terms",
+        "dbColumn": "customer_customer_agreement_setting_accepted_lead_form_terms",
+        "description": "Customer agreement setting accepted lead form terms"
+      },
+      {
+        "apiName": "customer.descriptive_name",
+        "dbColumn": "customer_descriptive_name",
+        "description": "Descriptive name"
+      },
+      {
+        "apiName": "customer.final_url_suffix",
+        "dbColumn": "customer_final_url_suffix",
+        "description": "Final url suffix"
+      },
+      {
+        "apiName": "customer.has_partners_badge",
+        "dbColumn": "customer_has_partners_badge",
+        "description": "Has partners badge"
+      },
+      {
+        "apiName": "customer.id",
+        "dbColumn": "customer_id",
+        "description": "Id"
+      },
+      {
+        "apiName": "customer.image_asset_auto_migration_done",
+        "dbColumn": "customer_image_asset_auto_migration_done",
+        "description": "Image asset auto migration done"
+      },
+      {
+        "apiName": "customer.image_asset_auto_migration_done_date_time",
+        "dbColumn": "customer_image_asset_auto_migration_done_date_time",
+        "description": "Image asset auto migration done date time"
+      },
+      {
+        "apiName": "customer.local_services_settings.granular_insurance_statuses",
+        "dbColumn": "customer_local_services_settings_granular_insurance_statuses",
+        "description": "Local services settings granular insurance statuses"
+      },
+      {
+        "apiName": "customer.local_services_settings.granular_license_statuses",
+        "dbColumn": "customer_local_services_settings_granular_license_statuses",
+        "description": "Local services settings granular license statuses"
+      },
+      {
+        "apiName": "customer.location_asset_auto_migration_done",
+        "dbColumn": "customer_location_asset_auto_migration_done",
+        "description": "Location asset auto migration done"
+      },
+      {
+        "apiName": "customer.location_asset_auto_migration_done_date_time",
+        "dbColumn": "customer_location_asset_auto_migration_done_date_time",
+        "description": "Location asset auto migration done date time"
+      },
+      {
+        "apiName": "customer.manager",
+        "dbColumn": "customer_manager",
+        "description": "Manager"
+      },
+      {
+        "apiName": "customer.optimization_score",
+        "dbColumn": "customer_optimization_score",
+        "description": "Optimization score"
+      },
+      {
+        "apiName": "customer.optimization_score_weight",
+        "dbColumn": "customer_optimization_score_weight",
+        "description": "Optimization score weight"
+      },
+      {
+        "apiName": "customer.pay_per_conversion_eligibility_failure_reasons",
+        "dbColumn": "customer_pay_per_conversion_eligibility_failure_reasons",
+        "description": "Pay per conversion eligibility failure reasons"
+      },
+      {
+        "apiName": "customer.remarketing_setting.google_global_site_tag",
+        "dbColumn": "customer_remarketing_setting_google_global_site_tag",
+        "description": "Remarketing setting google global site tag"
+      },
+      {
+        "apiName": "customer.resource_name",
+        "dbColumn": "customer_resource_name",
+        "description": "Resource name"
+      },
+      {
+        "apiName": "customer.status",
+        "dbColumn": "customer_status",
+        "description": "Status"
+      },
+      {
+        "apiName": "customer.test_account",
+        "dbColumn": "customer_test_account",
+        "description": "Test account"
+      },
+      {
+        "apiName": "customer.time_zone",
+        "dbColumn": "customer_time_zone",
+        "description": "Time zone"
+      },
+      {
+        "apiName": "customer.tracking_url_template",
+        "dbColumn": "customer_tracking_url_template",
+        "description": "Tracking url template"
+      },
+      {
+        "apiName": "customer.video_brand_safety_suitability",
+        "dbColumn": "customer_video_brand_safety_suitability",
+        "description": "Video brand safety suitability"
+      },
+      {
+        "apiName": "customer.video_customer.third_party_integration_partners.brand_lift_integration_partners",
+        "dbColumn": "customer_video_customer_third_party_integration_partners_brand_lift_integration_partners",
+        "description": "Video customer third party integration partners brand lift integration partners"
+      },
+      {
+        "apiName": "customer.video_customer.third_party_integration_partners.brand_safety_integration_partners",
+        "dbColumn": "customer_video_customer_third_party_integration_partners_brand_safety_integration_partners",
+        "description": "Video customer third party integration partners brand safety integration partners"
+      },
+      {
+        "apiName": "customer.video_customer.third_party_integration_partners.reach_integration_partners",
+        "dbColumn": "customer_video_customer_third_party_integration_partners_reach_integration_partners",
+        "description": "Video customer third party integration partners reach integration partners"
+      },
+      {
+        "apiName": "customer.video_customer.third_party_integration_partners.viewability_integration_partners",
+        "dbColumn": "customer_video_customer_third_party_integration_partners_viewability_integration_partners",
+        "description": "Video customer third party integration partners viewability integration partners"
+      }
+    ]
+  }
+}

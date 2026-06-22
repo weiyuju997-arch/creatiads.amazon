@@ -1,0 +1,832 @@
+{
+  "platform" : "GOOGLE",
+  "connectorType" : "GOOGLE_ADS_CAMPAIGN",
+  "type" : "report",
+  "dimensionsRef" : "GOOGLE_ADS_CAMPAIGN_METADATA",
+  "segmentGroups" : {
+    "Time" : [ {
+      "name" : "segments.date",
+      "description" : "Date"
+    }, {
+      "name" : "segments.day_of_week",
+      "description" : "Day of week"
+    }, {
+      "name" : "segments.hour",
+      "description" : "Hour"
+    }, {
+      "name" : "segments.month",
+      "description" : "Month"
+    }, {
+      "name" : "segments.month_of_year",
+      "description" : "Month of year"
+    }, {
+      "name" : "segments.quarter",
+      "description" : "Quarter"
+    }, {
+      "name" : "segments.week",
+      "description" : "Week"
+    }, {
+      "name" : "segments.year",
+      "description" : "Year"
+    } ],
+    "Device & Network" : [ {
+      "name" : "segments.ad_network_type",
+      "description" : "Ad network type"
+    }, {
+      "name" : "segments.click_type",
+      "description" : "Click type"
+    }, {
+      "name" : "segments.device",
+      "description" : "Device"
+    }, {
+      "name" : "segments.sk_ad_network_ad_event_type",
+      "description" : "Sk ad network ad event type"
+    }, {
+      "name" : "segments.sk_ad_network_attribution_credit",
+      "description" : "Sk ad network attribution credit"
+    }, {
+      "name" : "segments.sk_ad_network_coarse_conversion_value",
+      "description" : "Sk ad network coarse conversion value"
+    }, {
+      "name" : "segments.sk_ad_network_fine_conversion_value",
+      "description" : "Sk ad network fine conversion value"
+    }, {
+      "name" : "segments.sk_ad_network_postback_sequence_index",
+      "description" : "Sk ad network postback sequence index"
+    }, {
+      "name" : "segments.sk_ad_network_redistributed_fine_conversion_value",
+      "description" : "Sk ad network redistributed fine conversion value"
+    }, {
+      "name" : "segments.sk_ad_network_source_app.sk_ad_network_source_app_id",
+      "description" : "Sk ad network source app.sk ad network source app id"
+    }, {
+      "name" : "segments.sk_ad_network_source_domain",
+      "description" : "Sk ad network source domain"
+    }, {
+      "name" : "segments.sk_ad_network_source_type",
+      "description" : "Sk ad network source type"
+    }, {
+      "name" : "segments.sk_ad_network_user_type",
+      "description" : "Sk ad network user type"
+    }, {
+      "name" : "segments.sk_ad_network_version",
+      "description" : "Sk ad network version"
+    }, {
+      "name" : "segments.slot",
+      "description" : "Slot"
+    } ],
+    "Conversion" : [ {
+      "name" : "segments.conversion_action",
+      "description" : "Conversion action"
+    }, {
+      "name" : "segments.conversion_action_category",
+      "description" : "Conversion action category"
+    }, {
+      "name" : "segments.conversion_action_name",
+      "description" : "Conversion action name"
+    }, {
+      "name" : "segments.conversion_adjustment",
+      "description" : "Conversion adjustment"
+    }, {
+      "name" : "segments.conversion_attribution_event_type",
+      "description" : "Conversion attribution event type"
+    }, {
+      "name" : "segments.conversion_lag_bucket",
+      "description" : "Conversion lag bucket"
+    }, {
+      "name" : "segments.conversion_or_adjustment_lag_bucket",
+      "description" : "Conversion or adjustment lag bucket"
+    }, {
+      "name" : "segments.conversion_value_rule_primary_dimension",
+      "description" : "Conversion value rule primary dimension"
+    }, {
+      "name" : "segments.external_conversion_source",
+      "description" : "External conversion source"
+    } ],
+    "Ad" : [ {
+      "name" : "segments.ad_destination_type",
+      "description" : "Ad destination type"
+    }, {
+      "name" : "segments.ad_format_type",
+      "description" : "Ad format type"
+    }, {
+      "name" : "segments.ad_using_product_data",
+      "description" : "Ad using product data"
+    }, {
+      "name" : "segments.ad_using_video",
+      "description" : "Ad using video"
+    } ],
+    "Other" : [ {
+      "name" : "segments.adjusted_age_range",
+      "description" : "Adjusted age range"
+    }, {
+      "name" : "segments.adjusted_gender",
+      "description" : "Adjusted gender"
+    }, {
+      "name" : "segments.asset_interaction_target.asset",
+      "description" : "Asset interaction target.asset"
+    }, {
+      "name" : "segments.asset_interaction_target.interaction_on_this_asset",
+      "description" : "Asset interaction target.interaction on this asset"
+    }, {
+      "name" : "segments.auction_insight_domain",
+      "description" : "Auction insight domain"
+    }, {
+      "name" : "segments.new_versus_returning_customers",
+      "description" : "New versus returning customers"
+    }, {
+      "name" : "segments.recommendation_type",
+      "description" : "Recommendation type"
+    }, {
+      "name" : "segments.travel_destination_city",
+      "description" : "Travel destination city"
+    }, {
+      "name" : "segments.travel_destination_country",
+      "description" : "Travel destination country"
+    }, {
+      "name" : "segments.travel_destination_region",
+      "description" : "Travel destination region"
+    } ]
+  },
+  "metricGroups" : {
+    "Core" : [ {
+      "apiName" : "metrics.average_cost",
+      "dbColumn" : "average_cost",
+      "description" : "Average cost"
+    }, {
+      "apiName" : "metrics.average_cpc",
+      "dbColumn" : "average_cpc",
+      "description" : "Average cpc"
+    }, {
+      "apiName" : "metrics.average_cpe",
+      "dbColumn" : "average_cpe",
+      "description" : "Average cpe"
+    }, {
+      "apiName" : "metrics.average_cpm",
+      "dbColumn" : "average_cpm",
+      "description" : "Average cpm"
+    }, {
+      "apiName" : "metrics.clicks",
+      "dbColumn" : "clicks",
+      "description" : "Clicks"
+    }, {
+      "apiName" : "metrics.clicks_unique_query_clusters",
+      "dbColumn" : "clicks_unique_query_clusters",
+      "description" : "Clicks unique query clusters"
+    }, {
+      "apiName" : "metrics.cost_micros",
+      "dbColumn" : "cost_micros",
+      "description" : "Cost micros"
+    }, {
+      "apiName" : "metrics.coviewed_impressions",
+      "dbColumn" : "coviewed_impressions",
+      "description" : "Coviewed impressions"
+    }, {
+      "apiName" : "metrics.ctr",
+      "dbColumn" : "ctr",
+      "description" : "Ctr"
+    }, {
+      "apiName" : "metrics.eligible_impressions_from_location_asset_store_reach",
+      "dbColumn" : "eligible_impressions_from_location_asset_store_reach",
+      "description" : "Eligible impressions from location asset store reach"
+    }, {
+      "apiName" : "metrics.general_invalid_clicks",
+      "dbColumn" : "general_invalid_clicks",
+      "description" : "General invalid clicks"
+    }, {
+      "apiName" : "metrics.impressions",
+      "dbColumn" : "impressions",
+      "description" : "Impressions"
+    }, {
+      "apiName" : "metrics.impressions_unique_query_clusters",
+      "dbColumn" : "impressions_unique_query_clusters",
+      "description" : "Impressions unique query clusters"
+    }, {
+      "apiName" : "metrics.invalid_clicks",
+      "dbColumn" : "invalid_clicks",
+      "description" : "Invalid clicks"
+    }, {
+      "apiName" : "metrics.primary_impressions",
+      "dbColumn" : "primary_impressions",
+      "description" : "Primary impressions"
+    }, {
+      "apiName" : "metrics.publisher_organic_clicks",
+      "dbColumn" : "publisher_organic_clicks",
+      "description" : "Publisher organic clicks"
+    }, {
+      "apiName" : "metrics.publisher_purchased_clicks",
+      "dbColumn" : "publisher_purchased_clicks",
+      "description" : "Publisher purchased clicks"
+    }, {
+      "apiName" : "metrics.publisher_unknown_clicks",
+      "dbColumn" : "publisher_unknown_clicks",
+      "description" : "Publisher unknown clicks"
+    }, {
+      "apiName" : "metrics.relative_ctr",
+      "dbColumn" : "relative_ctr",
+      "description" : "Relative ctr"
+    } ],
+    "Conversions" : [ {
+      "apiName" : "metrics.all_conversions",
+      "dbColumn" : "all_conversions",
+      "description" : "All conversions"
+    }, {
+      "apiName" : "metrics.all_conversions_by_conversion_date",
+      "dbColumn" : "all_conversions_by_conversion_date",
+      "description" : "All conversions by conversion date"
+    }, {
+      "apiName" : "metrics.all_conversions_from_click_to_call",
+      "dbColumn" : "all_conversions_from_click_to_call",
+      "description" : "All conversions from click to call"
+    }, {
+      "apiName" : "metrics.all_conversions_from_directions",
+      "dbColumn" : "all_conversions_from_directions",
+      "description" : "All conversions from directions"
+    }, {
+      "apiName" : "metrics.all_conversions_from_interactions_rate",
+      "dbColumn" : "all_conversions_from_interactions_rate",
+      "description" : "All conversions from interactions rate"
+    }, {
+      "apiName" : "metrics.all_conversions_from_location_asset_click_to_call",
+      "dbColumn" : "all_conversions_from_location_asset_click_to_call",
+      "description" : "All conversions from location asset click to call"
+    }, {
+      "apiName" : "metrics.all_conversions_from_location_asset_directions",
+      "dbColumn" : "all_conversions_from_location_asset_directions",
+      "description" : "All conversions from location asset directions"
+    }, {
+      "apiName" : "metrics.all_conversions_from_location_asset_menu",
+      "dbColumn" : "all_conversions_from_location_asset_menu",
+      "description" : "All conversions from location asset menu"
+    }, {
+      "apiName" : "metrics.all_conversions_from_location_asset_order",
+      "dbColumn" : "all_conversions_from_location_asset_order",
+      "description" : "All conversions from location asset order"
+    }, {
+      "apiName" : "metrics.all_conversions_from_location_asset_other_engagement",
+      "dbColumn" : "all_conversions_from_location_asset_other_engagement",
+      "description" : "All conversions from location asset other engagement"
+    }, {
+      "apiName" : "metrics.all_conversions_from_location_asset_store_visits",
+      "dbColumn" : "all_conversions_from_location_asset_store_visits",
+      "description" : "All conversions from location asset store visits"
+    }, {
+      "apiName" : "metrics.all_conversions_from_location_asset_website",
+      "dbColumn" : "all_conversions_from_location_asset_website",
+      "description" : "All conversions from location asset website"
+    }, {
+      "apiName" : "metrics.all_conversions_from_menu",
+      "dbColumn" : "all_conversions_from_menu",
+      "description" : "All conversions from menu"
+    }, {
+      "apiName" : "metrics.all_conversions_from_order",
+      "dbColumn" : "all_conversions_from_order",
+      "description" : "All conversions from order"
+    }, {
+      "apiName" : "metrics.all_conversions_from_other_engagement",
+      "dbColumn" : "all_conversions_from_other_engagement",
+      "description" : "All conversions from other engagement"
+    }, {
+      "apiName" : "metrics.all_conversions_from_store_visit",
+      "dbColumn" : "all_conversions_from_store_visit",
+      "description" : "All conversions from store visit"
+    }, {
+      "apiName" : "metrics.all_conversions_from_store_website",
+      "dbColumn" : "all_conversions_from_store_website",
+      "description" : "All conversions from store website"
+    }, {
+      "apiName" : "metrics.all_conversions_value",
+      "dbColumn" : "all_conversions_value",
+      "description" : "All conversions value"
+    }, {
+      "apiName" : "metrics.all_conversions_value_by_conversion_date",
+      "dbColumn" : "all_conversions_value_by_conversion_date",
+      "description" : "All conversions value by conversion date"
+    }, {
+      "apiName" : "metrics.biddable_app_install_conversions",
+      "dbColumn" : "biddable_app_install_conversions",
+      "description" : "Biddable app install conversions"
+    }, {
+      "apiName" : "metrics.biddable_app_post_install_conversions",
+      "dbColumn" : "biddable_app_post_install_conversions",
+      "description" : "Biddable app post install conversions"
+    }, {
+      "apiName" : "metrics.biddable_cohort_app_post_install_conversions",
+      "dbColumn" : "biddable_cohort_app_post_install_conversions",
+      "description" : "Biddable cohort app post install conversions"
+    }, {
+      "apiName" : "metrics.conversions",
+      "dbColumn" : "conversions",
+      "description" : "Conversions"
+    }, {
+      "apiName" : "metrics.conversions_by_conversion_date",
+      "dbColumn" : "conversions_by_conversion_date",
+      "description" : "Conversions by conversion date"
+    }, {
+      "apiName" : "metrics.conversions_from_interactions_rate",
+      "dbColumn" : "conversions_from_interactions_rate",
+      "description" : "Conversions from interactions rate"
+    }, {
+      "apiName" : "metrics.conversions_unique_query_clusters",
+      "dbColumn" : "conversions_unique_query_clusters",
+      "description" : "Conversions unique query clusters"
+    }, {
+      "apiName" : "metrics.conversions_value",
+      "dbColumn" : "conversions_value",
+      "description" : "Conversions value"
+    }, {
+      "apiName" : "metrics.conversions_value_by_conversion_date",
+      "dbColumn" : "conversions_value_by_conversion_date",
+      "description" : "Conversions value by conversion date"
+    }, {
+      "apiName" : "metrics.cost_converted_currency_per_platform_comparable_conversion",
+      "dbColumn" : "cost_converted_currency_per_platform_comparable_conversion",
+      "description" : "Cost converted currency per platform comparable conversion"
+    }, {
+      "apiName" : "metrics.cost_per_all_conversions",
+      "dbColumn" : "cost_per_all_conversions",
+      "description" : "Cost per all conversions"
+    }, {
+      "apiName" : "metrics.cost_per_conversion",
+      "dbColumn" : "cost_per_conversion",
+      "description" : "Cost per conversion"
+    }, {
+      "apiName" : "metrics.cost_per_current_model_attributed_conversion",
+      "dbColumn" : "cost_per_current_model_attributed_conversion",
+      "description" : "Cost per current model attributed conversion"
+    }, {
+      "apiName" : "metrics.cost_per_platform_comparable_conversion",
+      "dbColumn" : "cost_per_platform_comparable_conversion",
+      "description" : "Cost per platform comparable conversion"
+    }, {
+      "apiName" : "metrics.cross_device_conversions",
+      "dbColumn" : "cross_device_conversions",
+      "description" : "Cross device conversions"
+    }, {
+      "apiName" : "metrics.cross_device_conversions_value_micros",
+      "dbColumn" : "cross_device_conversions_value_micros",
+      "description" : "Cross device conversions value micros"
+    }, {
+      "apiName" : "metrics.current_model_attributed_conversions",
+      "dbColumn" : "current_model_attributed_conversions",
+      "description" : "Current model attributed conversions"
+    }, {
+      "apiName" : "metrics.current_model_attributed_conversions_from_interactions_rate",
+      "dbColumn" : "current_model_attributed_conversions_from_interactions_rate",
+      "description" : "Current model attributed conversions from interactions rate"
+    }, {
+      "apiName" : "metrics.current_model_attributed_conversions_from_interactions_value_per_interaction",
+      "dbColumn" : "current_model_attributed_conversions_from_interactions_value_per_interaction",
+      "description" : "Current model attributed conversions from interactions value per interaction"
+    }, {
+      "apiName" : "metrics.current_model_attributed_conversions_value",
+      "dbColumn" : "current_model_attributed_conversions_value",
+      "description" : "Current model attributed conversions value"
+    }, {
+      "apiName" : "metrics.current_model_attributed_conversions_value_per_cost",
+      "dbColumn" : "current_model_attributed_conversions_value_per_cost",
+      "description" : "Current model attributed conversions value per cost"
+    }, {
+      "apiName" : "metrics.platform_comparable_conversions",
+      "dbColumn" : "platform_comparable_conversions",
+      "description" : "Platform comparable conversions"
+    }, {
+      "apiName" : "metrics.platform_comparable_conversions_by_conversion_date",
+      "dbColumn" : "platform_comparable_conversions_by_conversion_date",
+      "description" : "Platform comparable conversions by conversion date"
+    }, {
+      "apiName" : "metrics.platform_comparable_conversions_from_interactions_rate",
+      "dbColumn" : "platform_comparable_conversions_from_interactions_rate",
+      "description" : "Platform comparable conversions from interactions rate"
+    }, {
+      "apiName" : "metrics.platform_comparable_conversions_from_interactions_value_per_interaction",
+      "dbColumn" : "platform_comparable_conversions_from_interactions_value_per_interaction",
+      "description" : "Platform comparable conversions from interactions value per interaction"
+    }, {
+      "apiName" : "metrics.platform_comparable_conversions_value",
+      "dbColumn" : "platform_comparable_conversions_value",
+      "description" : "Platform comparable conversions value"
+    }, {
+      "apiName" : "metrics.platform_comparable_conversions_value_by_conversion_date",
+      "dbColumn" : "platform_comparable_conversions_value_by_conversion_date",
+      "description" : "Platform comparable conversions value by conversion date"
+    }, {
+      "apiName" : "metrics.platform_comparable_conversions_value_per_cost",
+      "dbColumn" : "platform_comparable_conversions_value_per_cost",
+      "description" : "Platform comparable conversions value per cost"
+    }, {
+      "apiName" : "metrics.results_conversions_purchase",
+      "dbColumn" : "results_conversions_purchase",
+      "description" : "Results conversions purchase"
+    }, {
+      "apiName" : "metrics.sk_ad_network_total_conversions",
+      "dbColumn" : "sk_ad_network_total_conversions",
+      "description" : "Sk ad network total conversions"
+    }, {
+      "apiName" : "metrics.store_visits_last_click_model_attributed_conversions",
+      "dbColumn" : "store_visits_last_click_model_attributed_conversions",
+      "description" : "Store visits last click model attributed conversions"
+    }, {
+      "apiName" : "metrics.value_per_all_conversions",
+      "dbColumn" : "value_per_all_conversions",
+      "description" : "Value per all conversions"
+    }, {
+      "apiName" : "metrics.value_per_all_conversions_by_conversion_date",
+      "dbColumn" : "value_per_all_conversions_by_conversion_date",
+      "description" : "Value per all conversions by conversion date"
+    }, {
+      "apiName" : "metrics.value_per_conversion",
+      "dbColumn" : "value_per_conversion",
+      "description" : "Value per conversion"
+    }, {
+      "apiName" : "metrics.value_per_conversions_by_conversion_date",
+      "dbColumn" : "value_per_conversions_by_conversion_date",
+      "description" : "Value per conversions by conversion date"
+    }, {
+      "apiName" : "metrics.value_per_current_model_attributed_conversion",
+      "dbColumn" : "value_per_current_model_attributed_conversion",
+      "description" : "Value per current model attributed conversion"
+    }, {
+      "apiName" : "metrics.value_per_platform_comparable_conversion",
+      "dbColumn" : "value_per_platform_comparable_conversion",
+      "description" : "Value per platform comparable conversion"
+    }, {
+      "apiName" : "metrics.value_per_platform_comparable_conversions_by_conversion_date",
+      "dbColumn" : "value_per_platform_comparable_conversions_by_conversion_date",
+      "description" : "Value per platform comparable conversions by conversion date"
+    }, {
+      "apiName" : "metrics.view_through_conversions",
+      "dbColumn" : "view_through_conversions",
+      "description" : "View through conversions"
+    }, {
+      "apiName" : "metrics.view_through_conversions_from_location_asset_click_to_call",
+      "dbColumn" : "view_through_conversions_from_location_asset_click_to_call",
+      "description" : "View through conversions from location asset click to call"
+    }, {
+      "apiName" : "metrics.view_through_conversions_from_location_asset_directions",
+      "dbColumn" : "view_through_conversions_from_location_asset_directions",
+      "description" : "View through conversions from location asset directions"
+    }, {
+      "apiName" : "metrics.view_through_conversions_from_location_asset_menu",
+      "dbColumn" : "view_through_conversions_from_location_asset_menu",
+      "description" : "View through conversions from location asset menu"
+    }, {
+      "apiName" : "metrics.view_through_conversions_from_location_asset_order",
+      "dbColumn" : "view_through_conversions_from_location_asset_order",
+      "description" : "View through conversions from location asset order"
+    }, {
+      "apiName" : "metrics.view_through_conversions_from_location_asset_other_engagement",
+      "dbColumn" : "view_through_conversions_from_location_asset_other_engagement",
+      "description" : "View through conversions from location asset other engagement"
+    }, {
+      "apiName" : "metrics.view_through_conversions_from_location_asset_store_visits",
+      "dbColumn" : "view_through_conversions_from_location_asset_store_visits",
+      "description" : "View through conversions from location asset store visits"
+    }, {
+      "apiName" : "metrics.view_through_conversions_from_location_asset_website",
+      "dbColumn" : "view_through_conversions_from_location_asset_website",
+      "description" : "View through conversions from location asset website"
+    } ],
+    "Engagement" : [ {
+      "apiName" : "metrics.average_page_views",
+      "dbColumn" : "average_page_views",
+      "description" : "Average page views"
+    }, {
+      "apiName" : "metrics.average_time_on_site",
+      "dbColumn" : "average_time_on_site",
+      "description" : "Average time on site"
+    }, {
+      "apiName" : "metrics.bounce_rate",
+      "dbColumn" : "bounce_rate",
+      "description" : "Bounce rate"
+    }, {
+      "apiName" : "metrics.engagement_rate",
+      "dbColumn" : "engagement_rate",
+      "description" : "Engagement rate"
+    }, {
+      "apiName" : "metrics.engagements",
+      "dbColumn" : "engagements",
+      "description" : "Engagements"
+    }, {
+      "apiName" : "metrics.gmail_forwards",
+      "dbColumn" : "gmail_forwards",
+      "description" : "Gmail forwards"
+    }, {
+      "apiName" : "metrics.gmail_saves",
+      "dbColumn" : "gmail_saves",
+      "description" : "Gmail saves"
+    }, {
+      "apiName" : "metrics.gmail_secondary_clicks",
+      "dbColumn" : "gmail_secondary_clicks",
+      "description" : "Gmail secondary clicks"
+    }, {
+      "apiName" : "metrics.interaction_event_types",
+      "dbColumn" : "interaction_event_types",
+      "description" : "Interaction event types"
+    }, {
+      "apiName" : "metrics.interaction_rate",
+      "dbColumn" : "interaction_rate",
+      "description" : "Interaction rate"
+    }, {
+      "apiName" : "metrics.interactions",
+      "dbColumn" : "interactions",
+      "description" : "Interactions"
+    } ],
+    "Video" : [ {
+      "apiName" : "metrics.average_video_watch_time_duration_millis",
+      "dbColumn" : "average_video_watch_time_duration_millis",
+      "description" : "Average video watch time duration millis"
+    }, {
+      "apiName" : "metrics.trueview_average_cpv",
+      "dbColumn" : "trueview_average_cpv",
+      "description" : "Trueview average cpv"
+    }, {
+      "apiName" : "metrics.video_quartile_p100_rate",
+      "dbColumn" : "video_quartile_p100_rate",
+      "description" : "Video quartile p100 rate"
+    }, {
+      "apiName" : "metrics.video_quartile_p25_rate",
+      "dbColumn" : "video_quartile_p25_rate",
+      "description" : "Video quartile p25 rate"
+    }, {
+      "apiName" : "metrics.video_quartile_p50_rate",
+      "dbColumn" : "video_quartile_p50_rate",
+      "description" : "Video quartile p50 rate"
+    }, {
+      "apiName" : "metrics.video_quartile_p75_rate",
+      "dbColumn" : "video_quartile_p75_rate",
+      "description" : "Video quartile p75 rate"
+    }, {
+      "apiName" : "metrics.video_trueview_view_rate",
+      "dbColumn" : "video_trueview_view_rate",
+      "description" : "Video trueview view rate"
+    }, {
+      "apiName" : "metrics.video_trueview_view_rate_in_feed",
+      "dbColumn" : "video_trueview_view_rate_in_feed",
+      "description" : "Video trueview view rate in feed"
+    }, {
+      "apiName" : "metrics.video_trueview_view_rate_in_stream",
+      "dbColumn" : "video_trueview_view_rate_in_stream",
+      "description" : "Video trueview view rate in stream"
+    }, {
+      "apiName" : "metrics.video_trueview_view_rate_shorts",
+      "dbColumn" : "video_trueview_view_rate_shorts",
+      "description" : "Video trueview view rate shorts"
+    }, {
+      "apiName" : "metrics.video_trueview_views",
+      "dbColumn" : "video_trueview_views",
+      "description" : "Video trueview views"
+    }, {
+      "apiName" : "metrics.video_watch_time_duration_millis",
+      "dbColumn" : "video_watch_time_duration_millis",
+      "description" : "Video watch time duration millis"
+    } ],
+    "Impression Share" : [ {
+      "apiName" : "metrics.absolute_top_impression_percentage",
+      "dbColumn" : "absolute_top_impression_percentage",
+      "description" : "Absolute top impression percentage"
+    }, {
+      "apiName" : "metrics.auction_insight_search_absolute_top_impression_percentage",
+      "dbColumn" : "auction_insight_search_absolute_top_impression_percentage",
+      "description" : "Auction insight search absolute top impression percentage"
+    }, {
+      "apiName" : "metrics.auction_insight_search_impression_share",
+      "dbColumn" : "auction_insight_search_impression_share",
+      "description" : "Auction insight search impression share"
+    }, {
+      "apiName" : "metrics.auction_insight_search_top_impression_percentage",
+      "dbColumn" : "auction_insight_search_top_impression_percentage",
+      "description" : "Auction insight search top impression percentage"
+    }, {
+      "apiName" : "metrics.content_budget_lost_impression_share",
+      "dbColumn" : "content_budget_lost_impression_share",
+      "description" : "Content budget lost impression share"
+    }, {
+      "apiName" : "metrics.content_impression_share",
+      "dbColumn" : "content_impression_share",
+      "description" : "Content impression share"
+    }, {
+      "apiName" : "metrics.content_rank_lost_impression_share",
+      "dbColumn" : "content_rank_lost_impression_share",
+      "description" : "Content rank lost impression share"
+    }, {
+      "apiName" : "metrics.search_absolute_top_impression_share",
+      "dbColumn" : "search_absolute_top_impression_share",
+      "description" : "Search absolute top impression share"
+    }, {
+      "apiName" : "metrics.search_budget_lost_absolute_top_impression_share",
+      "dbColumn" : "search_budget_lost_absolute_top_impression_share",
+      "description" : "Search budget lost absolute top impression share"
+    }, {
+      "apiName" : "metrics.search_budget_lost_impression_share",
+      "dbColumn" : "search_budget_lost_impression_share",
+      "description" : "Search budget lost impression share"
+    }, {
+      "apiName" : "metrics.search_budget_lost_top_impression_share",
+      "dbColumn" : "search_budget_lost_top_impression_share",
+      "description" : "Search budget lost top impression share"
+    }, {
+      "apiName" : "metrics.search_click_share",
+      "dbColumn" : "search_click_share",
+      "description" : "Search click share"
+    }, {
+      "apiName" : "metrics.search_exact_match_impression_share",
+      "dbColumn" : "search_exact_match_impression_share",
+      "description" : "Search exact match impression share"
+    }, {
+      "apiName" : "metrics.search_impression_share",
+      "dbColumn" : "search_impression_share",
+      "description" : "Search impression share"
+    }, {
+      "apiName" : "metrics.search_rank_lost_absolute_top_impression_share",
+      "dbColumn" : "search_rank_lost_absolute_top_impression_share",
+      "description" : "Search rank lost absolute top impression share"
+    }, {
+      "apiName" : "metrics.search_rank_lost_impression_share",
+      "dbColumn" : "search_rank_lost_impression_share",
+      "description" : "Search rank lost impression share"
+    }, {
+      "apiName" : "metrics.search_rank_lost_top_impression_share",
+      "dbColumn" : "search_rank_lost_top_impression_share",
+      "description" : "Search rank lost top impression share"
+    }, {
+      "apiName" : "metrics.search_top_impression_share",
+      "dbColumn" : "search_top_impression_share",
+      "description" : "Search top impression share"
+    }, {
+      "apiName" : "metrics.top_impression_percentage",
+      "dbColumn" : "top_impression_percentage",
+      "description" : "Top impression percentage"
+    } ],
+    "Active View" : [ {
+      "apiName" : "metrics.active_view_cpm",
+      "dbColumn" : "active_view_cpm",
+      "description" : "Active view cpm"
+    }, {
+      "apiName" : "metrics.active_view_ctr",
+      "dbColumn" : "active_view_ctr",
+      "description" : "Active view ctr"
+    }, {
+      "apiName" : "metrics.active_view_impressions",
+      "dbColumn" : "active_view_impressions",
+      "description" : "Active view impressions"
+    }, {
+      "apiName" : "metrics.active_view_measurability",
+      "dbColumn" : "active_view_measurability",
+      "description" : "Active view measurability"
+    }, {
+      "apiName" : "metrics.active_view_measurable_cost_micros",
+      "dbColumn" : "active_view_measurable_cost_micros",
+      "description" : "Active view measurable cost micros"
+    }, {
+      "apiName" : "metrics.active_view_measurable_impressions",
+      "dbColumn" : "active_view_measurable_impressions",
+      "description" : "Active view measurable impressions"
+    }, {
+      "apiName" : "metrics.active_view_viewability",
+      "dbColumn" : "active_view_viewability",
+      "description" : "Active view viewability"
+    } ],
+    "Phone" : [ {
+      "apiName" : "metrics.phone_calls",
+      "dbColumn" : "phone_calls",
+      "description" : "Phone calls"
+    }, {
+      "apiName" : "metrics.phone_impressions",
+      "dbColumn" : "phone_impressions",
+      "description" : "Phone impressions"
+    }, {
+      "apiName" : "metrics.phone_through_rate",
+      "dbColumn" : "phone_through_rate",
+      "description" : "Phone through rate"
+    } ],
+    "Auction Insight" : [ {
+      "apiName" : "metrics.auction_insight_search_outranking_share",
+      "dbColumn" : "auction_insight_search_outranking_share",
+      "description" : "Auction insight search outranking share"
+    }, {
+      "apiName" : "metrics.auction_insight_search_overlap_rate",
+      "dbColumn" : "auction_insight_search_overlap_rate",
+      "description" : "Auction insight search overlap rate"
+    }, {
+      "apiName" : "metrics.auction_insight_search_position_above_rate",
+      "dbColumn" : "auction_insight_search_position_above_rate",
+      "description" : "Auction insight search position above rate"
+    } ],
+    "Shopping & Revenue" : [ {
+      "apiName" : "metrics.average_cart_size",
+      "dbColumn" : "average_cart_size",
+      "description" : "Average cart size"
+    }, {
+      "apiName" : "metrics.average_order_value_micros",
+      "dbColumn" : "average_order_value_micros",
+      "description" : "Average order value micros"
+    }, {
+      "apiName" : "metrics.cost_of_goods_sold_micros",
+      "dbColumn" : "cost_of_goods_sold_micros",
+      "description" : "Cost of goods sold micros"
+    }, {
+      "apiName" : "metrics.cross_sell_cost_of_goods_sold_micros",
+      "dbColumn" : "cross_sell_cost_of_goods_sold_micros",
+      "description" : "Cross sell cost of goods sold micros"
+    }, {
+      "apiName" : "metrics.cross_sell_gross_profit_micros",
+      "dbColumn" : "cross_sell_gross_profit_micros",
+      "description" : "Cross sell gross profit micros"
+    }, {
+      "apiName" : "metrics.cross_sell_revenue_micros",
+      "dbColumn" : "cross_sell_revenue_micros",
+      "description" : "Cross sell revenue micros"
+    }, {
+      "apiName" : "metrics.cross_sell_units_sold",
+      "dbColumn" : "cross_sell_units_sold",
+      "description" : "Cross sell units sold"
+    }, {
+      "apiName" : "metrics.gross_profit_margin",
+      "dbColumn" : "gross_profit_margin",
+      "description" : "Gross profit margin"
+    }, {
+      "apiName" : "metrics.gross_profit_micros",
+      "dbColumn" : "gross_profit_micros",
+      "description" : "Gross profit micros"
+    }, {
+      "apiName" : "metrics.lead_cost_of_goods_sold_micros",
+      "dbColumn" : "lead_cost_of_goods_sold_micros",
+      "description" : "Lead cost of goods sold micros"
+    }, {
+      "apiName" : "metrics.lead_gross_profit_micros",
+      "dbColumn" : "lead_gross_profit_micros",
+      "description" : "Lead gross profit micros"
+    }, {
+      "apiName" : "metrics.lead_revenue_micros",
+      "dbColumn" : "lead_revenue_micros",
+      "description" : "Lead revenue micros"
+    }, {
+      "apiName" : "metrics.lead_units_sold",
+      "dbColumn" : "lead_units_sold",
+      "description" : "Lead units sold"
+    }, {
+      "apiName" : "metrics.orders",
+      "dbColumn" : "orders",
+      "description" : "Orders"
+    }, {
+      "apiName" : "metrics.revenue_micros",
+      "dbColumn" : "revenue_micros",
+      "description" : "Revenue micros"
+    }, {
+      "apiName" : "metrics.units_sold",
+      "dbColumn" : "units_sold",
+      "description" : "Units sold"
+    } ],
+    "SKAdNetwork" : [ {
+      "apiName" : "metrics.sk_ad_network_installs",
+      "dbColumn" : "sk_ad_network_installs",
+      "description" : "Sk ad network installs"
+    } ],
+    "Other" : [ {
+      "apiName" : "metrics.all_new_customer_lifetime_value",
+      "dbColumn" : "all_new_customer_lifetime_value",
+      "description" : "All new customer lifetime value"
+    }, {
+      "apiName" : "metrics.average_impression_frequency_per_user",
+      "dbColumn" : "average_impression_frequency_per_user",
+      "description" : "Average impression frequency per user"
+    }, {
+      "apiName" : "metrics.average_target_cpa_micros",
+      "dbColumn" : "average_target_cpa_micros",
+      "description" : "Average target cpa micros"
+    }, {
+      "apiName" : "metrics.average_target_roas",
+      "dbColumn" : "average_target_roas",
+      "description" : "Average target roas"
+    }, {
+      "apiName" : "metrics.general_invalid_click_rate",
+      "dbColumn" : "general_invalid_click_rate",
+      "description" : "General invalid click rate"
+    }, {
+      "apiName" : "metrics.invalid_click_rate",
+      "dbColumn" : "invalid_click_rate",
+      "description" : "Invalid click rate"
+    }, {
+      "apiName" : "metrics.new_customer_lifetime_value",
+      "dbColumn" : "new_customer_lifetime_value",
+      "description" : "New customer lifetime value"
+    }, {
+      "apiName" : "metrics.optimization_score_uplift",
+      "dbColumn" : "optimization_score_uplift",
+      "description" : "Optimization score uplift"
+    }, {
+      "apiName" : "metrics.optimization_score_url",
+      "dbColumn" : "optimization_score_url",
+      "description" : "Optimization score url"
+    }, {
+      "apiName" : "metrics.percent_new_visitors",
+      "dbColumn" : "percent_new_visitors",
+      "description" : "Percent new visitors"
+    }, {
+      "apiName" : "metrics.unique_users",
+      "dbColumn" : "unique_users",
+      "description" : "Unique users"
+    } ]
+  }
+}

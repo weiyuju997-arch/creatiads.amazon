@@ -1,0 +1,249 @@
+标准指标名,指标分组,GG-Account,GG-Campaign,GG-AdGroup,GG-Ad,GG-Keyword,GG-SearchQuery,GG-Geographic,TT-Advertiser,TT-Campaign,TT-AdGroup,TT-Ad,AMZ-Campaign,AMZ-AdGroup,AMZ-Ad,FB-Campaign,FB-AdSet,FB-Ad
+impressions,Core,-,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions,impressions
+clicks,Core,-,clicks,clicks,clicks,clicks,clicks,clicks,clicks,clicks,clicks,clicks,clickThroughs/clicks,clickThroughs/clicks,clickThroughs/clicks,clicks,clicks,clicks
+cost_micros,Core,-,cost_micros,cost_micros,cost_micros,cost_micros,cost_micros,cost_micros,spend,spend,spend,spend,totalCost/cost,totalCost/cost,totalCost/cost,spend,spend,spend
+ctr,Core,-,ctr,ctr,ctr,ctr,ctr,ctr,ctr,ctr,ctr,ctr,CTR,CTR,CTR,ctr,ctr,ctr
+average_cpc,Core,-,average_cpc,average_cpc,average_cpc,average_cpc,average_cpc,average_cpc,cpc,cpc,cpc,cpc,eCPC,eCPC,eCPC,cpc,cpc,cpc
+average_cpm,Core,-,average_cpm,average_cpm,average_cpm,average_cpm,-,-,cpm,cpm,cpm,cpm,eCPM,eCPM,eCPM,cpm,cpm,cpm
+average_cost,Core,-,average_cost,average_cost,average_cost,average_cost,average_cost,-,-,-,-,-,-,-,-,-,-,-
+average_cpe,Core,-,average_cpe,average_cpe,average_cpe,average_cpe,average_cpe,-,-,-,-,-,-,-,-,-,-,-
+relative_ctr,Core,-,relative_ctr,relative_ctr,relative_ctr,-,-,-,-,-,-,-,-,-,-,-,-,-
+coviewed_impressions,Core,-,coviewed_impressions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+primary_impressions,Core,-,primary_impressions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+invalid_clicks,Core,-,invalid_clicks,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+general_invalid_clicks,Core,-,general_invalid_clicks,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+invalid_click_rate,Core,-,invalid_click_rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+general_invalid_click_rate,Core,-,general_invalid_click_rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+clicks_unique_query_clusters,Core,-,clicks_unique_query_clusters,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+impressions_unique_query_clusters,Core,-,impressions_unique_query_clusters,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+publisher_organic_clicks,Core,-,publisher_organic_clicks,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+publisher_purchased_clicks,Core,-,publisher_purchased_clicks,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+publisher_unknown_clicks,Core,-,publisher_unknown_clicks,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+eligible_impressions_from_location_asset_store_reach,Core,-,eligible_impressions_from_location_asset_store_reach,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+reach,Core,-,-,-,-,-,-,-,reach,reach,reach,reach,-,-,-,reach,reach,reach
+frequency,Core,-,-,-,-,-,-,-,frequency,frequency,frequency,frequency,-,-,-,frequency,frequency,frequency
+budget,Core,-,-,-,-,-,-,-,budget,budget,budget,budget,-,-,-,-,-,-
+conversions,Conversions,-,conversions,conversions,conversions,conversions,conversions,conversions,conversion,conversion,conversion,conversion,totalPurchases14d/purchases7d,totalPurchases14d/purchases7d,totalPurchases14d/purchases7d,actions:purchase,actions:purchase,actions:purchase
+all_conversions,Conversions,-,all_conversions,all_conversions,all_conversions,all_conversions,all_conversions,all_conversions,-,-,-,-,-,-,-,-,-,-
+conversions_value,Conversions,-,conversions_value,conversions_value,conversions_value,conversions_value,conversions_value,-,-,-,-,-,totalSales14d/sales7d,totalSales14d/sales7d,totalSales14d/sales7d,action_values:purchase,action_values:purchase,action_values:purchase
+all_conversions_value,Conversions,-,all_conversions_value,all_conversions_value,all_conversions_value,all_conversions_value,all_conversions_value,all_conversions_value,-,-,-,-,-,-,-,-,-,-
+cost_per_conversion,Conversions,-,cost_per_conversion,cost_per_conversion,cost_per_conversion,cost_per_conversion,cost_per_conversion,cost_per_conversion,cost_per_conversion,cost_per_conversion,cost_per_conversion,cost_per_conversion,-,-,-,cost_per_action_type:purchase,cost_per_action_type:purchase,cost_per_action_type:purchase
+cost_per_all_conversions,Conversions,-,cost_per_all_conversions,cost_per_all_conversions,cost_per_all_conversions,cost_per_all_conversions,cost_per_all_conversions,cost_per_all_conversions,-,-,-,-,-,-,-,-,-,-
+conversions_from_interactions_rate,Conversions,-,conversions_from_interactions_rate,conversions_from_interactions_rate,conversions_from_interactions_rate,conversions_from_interactions_rate,conversions_from_interactions_rate,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_interactions_rate,Conversions,-,all_conversions_from_interactions_rate,all_conversions_from_interactions_rate,all_conversions_from_interactions_rate,all_conversions_from_interactions_rate,all_conversions_from_interactions_rate,all_conversions_from_interactions_rate,-,-,-,-,-,-,-,-,-,-
+value_per_conversion,Conversions,-,value_per_conversion,value_per_conversion,value_per_conversion,value_per_conversion,value_per_conversion,-,-,-,-,-,-,-,-,-,-,-
+value_per_all_conversions,Conversions,-,value_per_all_conversions,value_per_all_conversions,value_per_all_conversions,value_per_all_conversions,value_per_all_conversions,value_per_all_conversions,-,-,-,-,-,-,-,-,-,-
+cross_device_conversions,Conversions,-,cross_device_conversions,cross_device_conversions,cross_device_conversions,cross_device_conversions,cross_device_conversions,-,-,-,-,-,-,-,-,-,-,-
+cross_device_conversions_value_micros,Conversions,-,cross_device_conversions_value_micros,cross_device_conversions_value_micros,cross_device_conversions_value_micros,cross_device_conversions_value_micros,-,-,-,-,-,-,-,-,-,-,-,-
+view_through_conversions,Conversions,-,view_through_conversions,view_through_conversions,view_through_conversions,view_through_conversions,view_through_conversions,view_through_conversions,-,-,-,-,-,-,-,-,-,-
+current_model_attributed_conversions,Conversions,-,current_model_attributed_conversions,current_model_attributed_conversions,current_model_attributed_conversions,current_model_attributed_conversions,-,-,-,-,-,-,-,-,-,-,-,-
+current_model_attributed_conversions_value,Conversions,-,current_model_attributed_conversions_value,current_model_attributed_conversions_value,current_model_attributed_conversions_value,current_model_attributed_conversions_value,-,-,-,-,-,-,-,-,-,-,-,-
+cost_per_current_model_attributed_conversion,Conversions,-,cost_per_current_model_attributed_conversion,cost_per_current_model_attributed_conversion,cost_per_current_model_attributed_conversion,cost_per_current_model_attributed_conversion,-,-,-,-,-,-,-,-,-,-,-,-
+conversions_value_by_conversion_date,Conversions,-,conversions_value_by_conversion_date,conversions_value_by_conversion_date,conversions_value_by_conversion_date,conversions_value_by_conversion_date,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_by_conversion_date,Conversions,-,all_conversions_by_conversion_date,all_conversions_by_conversion_date,all_conversions_by_conversion_date,all_conversions_by_conversion_date,-,-,-,-,-,-,-,-,-,-,-,-
+biddable_app_install_conversions,Conversions,-,biddable_app_install_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+biddable_app_post_install_conversions,Conversions,-,biddable_app_post_install_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+biddable_cohort_app_post_install_conversions,Conversions,-,biddable_cohort_app_post_install_conversions,biddable_cohort_app_post_install_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+platform_comparable_conversions,Conversions,-,platform_comparable_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+platform_comparable_conversions_value,Conversions,-,platform_comparable_conversions_value,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+cost_per_platform_comparable_conversion,Conversions,-,cost_per_platform_comparable_conversion,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+results_conversions_purchase,Conversions,-,results_conversions_purchase,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+sk_ad_network_total_conversions,Conversions,-,sk_ad_network_total_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_click_to_call,Conversions,-,all_conversions_from_click_to_call,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_directions,Conversions,-,all_conversions_from_directions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_location_asset_store_visits,Conversions,-,all_conversions_from_location_asset_store_visits,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_location_asset_website,Conversions,-,all_conversions_from_location_asset_website,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_store_visit,Conversions,-,all_conversions_from_store_visit,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+store_visits_last_click_model_attributed_conversions,Conversions,-,store_visits_last_click_model_attributed_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+conversions_unique_query_clusters,Conversions,-,conversions_unique_query_clusters,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_value_per_cost,Conversions,-,-,-,-,all_conversions_value_per_cost,all_conversions_value_per_cost,-,-,-,-,-,-,-,-,-,-,-
+conversions_value_per_cost,Conversions,-,-,-,-,conversions_value_per_cost,conversions_value_per_cost,-,-,-,-,-,-,-,-,-,-,-
+conversion_rate,Conversions,-,-,-,-,-,-,-,conversion_rate,conversion_rate,conversion_rate,conversion_rate,-,-,-,-,-,-
+purchase,Conversions,-,-,-,-,-,-,-,purchase,purchase,purchase,purchase,totalPurchases14d/purchases7d,totalPurchases14d/purchases7d,totalPurchases14d/purchases7d,actions:purchase,actions:purchase,actions:purchase
+complete_payment,Conversions,-,-,-,-,-,-,-,complete_payment,complete_payment,complete_payment,complete_payment,-,-,-,-,-,-
+purchase_roas,Conversions,-,-,-,-,-,-,-,purchase_roas,purchase_roas,purchase_roas,purchase_roas,-,-,-,purchase_roas,purchase_roas,purchase_roas
+total_purchase_value,Conversions,-,-,-,-,-,-,-,total_purchase_value,total_purchase_value,total_purchase_value,total_purchase_value,totalSales14d/sales7d,totalSales14d/sales7d,totalSales14d/sales7d,action_values:purchase,action_values:purchase,action_values:purchase
+registration,Conversions,-,-,-,-,-,-,-,registration,registration,registration,registration,-,-,-,actions:complete_registration,actions:complete_registration,actions:complete_registration
+app_install,Conversions,-,-,-,-,-,-,-,app_install,app_install,app_install,app_install,-,-,-,actions:app_install,actions:app_install,actions:app_install
+download_start,Conversions,-,-,-,-,-,-,-,download_start,download_start,download_start,download_start,-,-,-,-,-,-
+add_payment_info,Conversions,-,-,-,-,-,-,-,add_payment_info,add_payment_info,add_payment_info,add_payment_info,-,-,-,actions:add_payment_info,actions:add_payment_info,actions:add_payment_info
+skan_conversion,SKAN,-,-,-,-,-,-,-,skan_conversion,skan_conversion,skan_conversion,skan_conversion,-,-,-,-,-,-
+skan_app_install,SKAN,-,-,-,-,-,-,-,skan_app_install,skan_app_install,skan_app_install,skan_app_install,-,-,-,-,-,-
+skan_purchase,SKAN,-,-,-,-,-,-,-,skan_purchase,skan_purchase,skan_purchase,skan_purchase,-,-,-,-,-,-
+vta_purchase,Attribution,-,-,-,-,-,-,-,vta_purchase,vta_purchase,vta_purchase,vta_purchase,-,-,-,-,-,-
+cta_app_install,Attribution,-,-,-,-,-,-,-,cta_app_install,cta_app_install,cta_app_install,cta_app_install,-,-,-,-,-,-
+cta_purchase,Attribution,-,-,-,-,-,-,-,cta_purchase,cta_purchase,cta_purchase,cta_purchase,-,-,-,-,-,-
+engagements,Engagement,-,engagements,engagements,engagements,engagements,engagements,-,-,-,-,-,-,-,-,-,-,-
+engagement_rate,Engagement,-,engagement_rate,engagement_rate,engagement_rate,engagement_rate,engagement_rate,-,-,-,-,-,-,-,-,-,-,-
+interactions,Engagement,-,interactions,interactions,interactions,interactions,interactions,interactions,-,-,-,-,-,-,-,-,-,-
+interaction_rate,Engagement,-,interaction_rate,interaction_rate,interaction_rate,interaction_rate,interaction_rate,interaction_rate,-,-,-,-,-,-,-,-,-,-
+interaction_event_types,Engagement,-,interaction_event_types,interaction_event_types,interaction_event_types,interaction_event_types,interaction_event_types,interaction_event_types,-,-,-,-,-,-,-,-,-,-
+bounce_rate,Engagement,-,bounce_rate,bounce_rate,bounce_rate,bounce_rate,bounce_rate,-,-,-,-,-,-,-,-,-,-,-
+average_page_views,Engagement,-,average_page_views,average_page_views,average_page_views,average_page_views,average_page_views,-,-,-,-,-,-,-,-,-,-,-
+average_time_on_site,Engagement,-,average_time_on_site,average_time_on_site,average_time_on_site,average_time_on_site,average_time_on_site,-,-,-,-,-,-,-,-,-,-,-
+gmail_forwards,Engagement,-,gmail_forwards,gmail_forwards,gmail_forwards,gmail_forwards,-,-,-,-,-,-,-,-,-,-,-,-
+gmail_saves,Engagement,-,gmail_saves,gmail_saves,gmail_saves,gmail_saves,-,-,-,-,-,-,-,-,-,-,-,-
+gmail_secondary_clicks,Engagement,-,gmail_secondary_clicks,gmail_secondary_clicks,gmail_secondary_clicks,gmail_secondary_clicks,-,-,-,-,-,-,-,-,-,-,-,-
+likes,Engagement,-,-,-,-,-,-,-,likes,likes,likes,likes,-,-,-,-,-,-
+follows,Engagement,-,-,-,-,-,-,-,follows,follows,follows,follows,-,-,-,-,-,-
+comments,Engagement,-,-,-,-,-,-,-,comments,comments,comments,comments,-,-,-,-,-,-
+shares,Engagement,-,-,-,-,-,-,-,shares,shares,shares,shares,-,-,-,-,-,-
+profile_visits,Engagement,-,-,-,-,-,-,-,profile_visits,profile_visits,profile_visits,profile_visits,-,-,-,-,-,-
+clicks_on_music_disc,Engagement,-,-,-,-,-,-,-,clicks_on_music_disc,clicks_on_music_disc,clicks_on_music_disc,clicks_on_music_disc,-,-,-,-,-,-
+video_play_actions,Video,-,-,-,-,-,-,-,video_play_actions,video_play_actions,video_play_actions,video_play_actions,-,-,-,-,-,-
+video_watched_2s,Video,-,-,-,-,-,-,-,video_watched_2s,video_watched_2s,video_watched_2s,video_watched_2s,-,-,-,-,-,-
+video_watched_6s,Video,-,-,-,-,-,-,-,video_watched_6s,video_watched_6s,video_watched_6s,video_watched_6s,-,-,-,-,-,-
+video_views_p25,Video,-,video_quartile_p25_rate,video_quartile_p25_rate,video_quartile_p25_rate,video_quartile_p25_rate,video_quartile_p25_rate,-,video_views_p25,video_views_p25,video_views_p25,video_views_p25,-,-,-,video_p25_watched_actions,video_p25_watched_actions,video_p25_watched_actions
+video_views_p50,Video,-,video_quartile_p50_rate,video_quartile_p50_rate,video_quartile_p50_rate,video_quartile_p50_rate,video_quartile_p50_rate,-,video_views_p50,video_views_p50,video_views_p50,video_views_p50,-,-,-,video_p50_watched_actions,video_p50_watched_actions,video_p50_watched_actions
+video_views_p75,Video,-,video_quartile_p75_rate,video_quartile_p75_rate,video_quartile_p75_rate,video_quartile_p75_rate,video_quartile_p75_rate,-,video_views_p75,video_views_p75,video_views_p75,video_views_p75,-,-,-,video_p75_watched_actions,video_p75_watched_actions,video_p75_watched_actions
+video_views_p100,Video,-,video_quartile_p100_rate,video_quartile_p100_rate,video_quartile_p100_rate,video_quartile_p100_rate,video_quartile_p100_rate,-,video_views_p100,video_views_p100,video_views_p100,video_views_p100,videoCompleted,videoCompleted,videoCompleted,video_p100_watched_actions,video_p100_watched_actions,video_p100_watched_actions
+average_video_watch_time,Video,-,average_video_watch_time_duration_millis,average_video_watch_time_duration_millis,average_video_watch_time_duration_millis,-,-,-,average_video_play,average_video_play,average_video_play,average_video_play,-,-,-,video_avg_time_watched_actions,video_avg_time_watched_actions,video_avg_time_watched_actions
+video_watch_time_total,Video,-,video_watch_time_duration_millis,video_watch_time_duration_millis,video_watch_time_duration_millis,-,-,-,-,-,-,-,-,-,-,-,-,-
+trueview_views,Video,-,video_trueview_views,video_trueview_views,video_trueview_views,video_trueview_views,video_trueview_views,video_trueview_views,-,-,-,-,-,-,-,-,-,-
+trueview_view_rate,Video,-,video_trueview_view_rate,video_trueview_view_rate,video_trueview_view_rate,video_trueview_view_rate,video_trueview_view_rate,video_trueview_view_rate,-,-,-,-,-,-,-,-,-,-
+trueview_view_rate_in_feed,Video,-,video_trueview_view_rate_in_feed,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+trueview_view_rate_in_stream,Video,-,video_trueview_view_rate_in_stream,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+trueview_view_rate_shorts,Video,-,video_trueview_view_rate_shorts,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+trueview_average_cpv,Video,-,trueview_average_cpv,trueview_average_cpv,trueview_average_cpv,trueview_average_cpv,trueview_average_cpv,trueview_average_cpv,-,-,-,-,-,-,-,-,-,-
+engaged_view,Video,-,-,-,-,-,-,-,engaged_view,engaged_view,engaged_view,engaged_view,-,-,-,-,-,-
+absolute_top_impression_percentage,Impression Share,-,absolute_top_impression_percentage,absolute_top_impression_percentage,absolute_top_impression_percentage,absolute_top_impression_percentage,absolute_top_impression_percentage,absolute_top_impression_percentage,-,-,-,-,-,-,-,-,-,-
+top_impression_percentage,Impression Share,-,top_impression_percentage,top_impression_percentage,top_impression_percentage,top_impression_percentage,top_impression_percentage,top_impression_percentage,-,-,-,-,-,-,-,-,-,-
+search_impression_share,Impression Share,-,search_impression_share,search_impression_share,-,search_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_absolute_top_impression_share,Impression Share,-,search_absolute_top_impression_share,search_absolute_top_impression_share,-,search_absolute_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_exact_match_impression_share,Impression Share,-,search_exact_match_impression_share,search_exact_match_impression_share,-,search_exact_match_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_rank_lost_impression_share,Impression Share,-,search_rank_lost_impression_share,search_rank_lost_impression_share,-,search_rank_lost_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_rank_lost_absolute_top_impression_share,Impression Share,-,search_rank_lost_absolute_top_impression_share,search_rank_lost_absolute_top_impression_share,-,search_rank_lost_absolute_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_rank_lost_top_impression_share,Impression Share,-,search_rank_lost_top_impression_share,search_rank_lost_top_impression_share,-,search_rank_lost_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_budget_lost_impression_share,Impression Share,-,search_budget_lost_impression_share,search_budget_lost_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+search_budget_lost_absolute_top_impression_share,Impression Share,-,search_budget_lost_absolute_top_impression_share,search_budget_lost_absolute_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+search_budget_lost_top_impression_share,Impression Share,-,search_budget_lost_top_impression_share,search_budget_lost_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+search_top_impression_share,Impression Share,-,search_top_impression_share,search_top_impression_share,-,search_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_click_share,Impression Share,-,search_click_share,search_click_share,-,search_click_share,-,-,-,-,-,-,-,-,-,-,-,-
+content_impression_share,Impression Share,-,content_impression_share,content_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+content_rank_lost_impression_share,Impression Share,-,content_rank_lost_impression_share,content_rank_lost_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+content_budget_lost_impression_share,Impression Share,-,content_budget_lost_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_impression_share,Impression Share,-,auction_insight_search_impression_share,auction_insight_search_impression_share,-,auction_insight_search_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_absolute_top_impression_percentage,Impression Share,-,auction_insight_search_absolute_top_impression_percentage,auction_insight_search_absolute_top_impression_percentage,-,auction_insight_search_absolute_top_impression_percentage,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_top_impression_percentage,Impression Share,-,auction_insight_search_top_impression_percentage,auction_insight_search_top_impression_percentage,-,auction_insight_search_top_impression_percentage,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_impressions,Active View,-,active_view_impressions,active_view_impressions,active_view_impressions,active_view_impressions,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_cpm,Active View,-,active_view_cpm,active_view_cpm,active_view_cpm,active_view_cpm,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_ctr,Active View,-,active_view_ctr,active_view_ctr,active_view_ctr,active_view_ctr,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_viewability,Active View,-,active_view_viewability,active_view_viewability,active_view_viewability,active_view_viewability,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_measurability,Active View,-,active_view_measurability,active_view_measurability,active_view_measurability,active_view_measurability,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_measurable_impressions,Active View,-,active_view_measurable_impressions,active_view_measurable_impressions,active_view_measurable_impressions,active_view_measurable_impressions,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_measurable_cost_micros,Active View,-,active_view_measurable_cost_micros,active_view_measurable_cost_micros,active_view_measurable_cost_micros,active_view_measurable_cost_micros,-,-,-,-,-,-,-,-,-,-,-,-
+phone_calls,Phone,-,phone_calls,phone_calls,-,phone_calls,-,-,-,-,-,-,-,-,-,-,-,-
+phone_impressions,Phone,-,phone_impressions,phone_impressions,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+phone_through_rate,Phone,-,phone_through_rate,phone_through_rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_outranking_share,Auction Insight,-,auction_insight_search_outranking_share,auction_insight_search_outranking_share,-,auction_insight_search_outranking_share,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_overlap_rate,Auction Insight,-,auction_insight_search_overlap_rate,auction_insight_search_overlap_rate,-,auction_insight_search_overlap_rate,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_position_above_rate,Auction Insight,-,auction_insight_search_position_above_rate,auction_insight_search_position_above_rate,-,auction_insight_search_position_above_rate,-,-,-,-,-,-,-,-,-,-,-,-
+orders,Shopping & Revenue,-,orders,orders,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+revenue_micros,Shopping & Revenue,-,revenue_micros,revenue_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+gross_profit_micros,Shopping & Revenue,-,gross_profit_micros,gross_profit_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+gross_profit_margin,Shopping & Revenue,-,gross_profit_margin,gross_profit_margin,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+units_sold,Shopping & Revenue,-,units_sold,units_sold,-,-,-,-,-,-,-,-,totalUnitsSold14d/unitsSold14d,totalUnitsSold14d/unitsSold14d,totalUnitsSold14d/unitsSold14d,-,-,-
+average_order_value_micros,Shopping & Revenue,-,average_order_value_micros,average_order_value_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+average_cart_size,Shopping & Revenue,-,average_cart_size,average_cart_size,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+cost_of_goods_sold_micros,Shopping & Revenue,-,cost_of_goods_sold_micros,cost_of_goods_sold_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+lead_revenue_micros,Shopping & Revenue,-,lead_revenue_micros,lead_revenue_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+lead_gross_profit_micros,Shopping & Revenue,-,lead_gross_profit_micros,lead_gross_profit_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+lead_units_sold,Shopping & Revenue,-,lead_units_sold,lead_units_sold,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+cross_sell_revenue_micros,Shopping & Revenue,-,cross_sell_revenue_micros,cross_sell_revenue_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+cross_sell_gross_profit_micros,Shopping & Revenue,-,cross_sell_gross_profit_micros,cross_sell_gross_profit_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+cross_sell_units_sold,Shopping & Revenue,-,cross_sell_units_sold,cross_sell_units_sold,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+onsite_shopping,Shopping & Revenue,-,-,-,-,-,-,-,onsite_shopping,onsite_shopping,onsite_shopping,onsite_shopping,-,-,-,-,-,-
+onsite_total_purchase_value,Shopping & Revenue,-,-,-,-,-,-,-,onsite_total_purchase_value,onsite_total_purchase_value,onsite_total_purchase_value,onsite_total_purchase_value,-,-,-,-,-,-
+sk_ad_network_installs,SKAdNetwork,-,sk_ad_network_installs,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+historical_quality_score,Quality,-,-,-,-,historical_quality_score,-,-,-,-,-,-,-,-,-,-,-,-
+historical_creative_quality_score,Quality,-,-,-,-,historical_creative_quality_score,-,-,-,-,-,-,-,-,-,-,-,-
+historical_landing_page_quality_score,Quality,-,-,-,-,historical_landing_page_quality_score,-,-,-,-,-,-,-,-,-,-,-,-
+historical_search_predicted_ctr,Quality,-,-,-,-,historical_search_predicted_ctr,-,-,-,-,-,-,-,-,-,-,-,-
+percent_new_visitors,Other,-,percent_new_visitors,percent_new_visitors,percent_new_visitors,percent_new_visitors,-,-,-,-,-,-,-,-,-,-,-,-
+new_customer_lifetime_value,Other,-,new_customer_lifetime_value,new_customer_lifetime_value,new_customer_lifetime_value,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_new_customer_lifetime_value,Other,-,all_new_customer_lifetime_value,all_new_customer_lifetime_value,all_new_customer_lifetime_value,-,-,-,-,-,-,-,-,-,-,-,-,-
+average_impression_frequency_per_user,Other,-,average_impression_frequency_per_user,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+unique_users,Other,-,unique_users,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+average_target_cpa_micros,Other,-,average_target_cpa_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+average_target_roas,Other,-,average_target_roas,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+optimization_score_uplift,Other,-,optimization_score_uplift,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+optimization_score_url,Other,-,optimization_score_url,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+shop_total_items_purchased,Other,-,-,-,-,-,-,-,shop_total_items_purchased,shop_total_items_purchased,shop_total_items_purchased,shop_total_items_purchased,-,-,-,-,-,-
+app_event_add_to_cart,Other,-,-,-,-,-,-,-,app_event_add_to_cart,app_event_add_to_cart,app_event_add_to_cart,app_event_add_to_cart,-,-,-,-,-,-
+complete_payment_roas,Other,-,-,-,-,-,-,-,complete_payment_roas,complete_payment_roas,complete_payment_roas,complete_payment_roas,-,-,-,-,-,-
+value_per_complete_payment,Other,-,-,-,-,-,-,-,value_per_complete_payment,value_per_complete_payment,value_per_complete_payment,value_per_complete_payment,-,-,-,-,-,-
+total_fee,Amazon Fee,-,-,-,-,-,-,-,-,-,-,-,totalFee,totalFee,totalFee,-,-,-
+agency_fee,Amazon Fee,-,-,-,-,-,-,-,-,-,-,-,agencyFee,agencyFee,agencyFee,-,-,-
+dpv_views_14d,Amazon DPV,-,-,-,-,-,-,-,-,-,-,-,dpvViews14d,dpvViews14d,dpvViews14d,-,-,-
+total_detail_page_views_14d,Amazon DPV,-,-,-,-,-,-,-,-,-,-,-,totalDetailPageViews14d,totalDetailPageViews14d,totalDetailPageViews14d,-,-,-
+total_add_to_cart_14d,Amazon Cart,-,-,-,-,-,-,-,-,-,-,-,totalAddToCart14d,totalAddToCart14d,totalAddToCart14d,-,-,-
+total_add_to_list_14d,Amazon Cart,-,-,-,-,-,-,-,-,-,-,-,totalAddToList14d,totalAddToList14d,totalAddToList14d,-,-,-
+total_purchases_14d,Amazon Purchase,-,-,-,-,-,-,-,-,-,-,-,totalPurchases14d,totalPurchases14d,totalPurchases14d,-,-,-
+total_purchase_rate_14d,Amazon Purchase,-,-,-,-,-,-,-,-,-,-,-,totalPurchaseRate14d,totalPurchaseRate14d,totalPurchaseRate14d,-,-,-
+total_sales_14d,Amazon Sales,-,-,-,-,-,-,-,-,-,-,-,totalSales14d,totalSales14d,totalSales14d,-,-,-
+total_units_sold_14d,Amazon Sales,-,-,-,-,-,-,-,-,-,-,-,totalUnitsSold14d,totalUnitsSold14d,totalUnitsSold14d,-,-,-
+ntb_purchases_14d,Amazon NTB,-,-,-,-,-,-,-,-,-,-,-,newToBrandPurchases14d,newToBrandPurchases14d,newToBrandPurchases14d,-,-,-
+ntb_purchase_rate_14d,Amazon NTB,-,-,-,-,-,-,-,-,-,-,-,newToBrandPurchaseRate14d,newToBrandPurchaseRate14d,newToBrandPurchaseRate14d,-,-,-
+measurable_impressions,Amazon Viewability,-,-,-,-,-,-,-,-,-,-,-,measurableImpressions,measurableImpressions,measurableImpressions,-,-,-
+viewable_impressions,Amazon Viewability,-,-,-,-,-,-,-,-,-,-,-,viewableImpressions,viewableImpressions,viewableImpressions,-,-,-
+viewability_rate,Amazon Viewability,-,-,-,-,-,-,-,-,-,-,-,viewabilityRate,viewabilityRate,viewabilityRate,-,-,-
+video_started,Video,-,-,-,-,-,-,-,-,-,-,-,videoStarted,videoStarted,videoStarted,-,-,-
+purchases_1d,Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,purchases1d,purchases1d,purchases1d,-,-,-
+purchases_7d,Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,purchases7d,purchases7d,purchases7d,-,-,-
+purchases_14d,Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,purchases14d,purchases14d,purchases14d,-,-,-
+purchases_30d,Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,purchases30d,purchases30d,purchases30d,-,-,-
+sales_1d,Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,sales1d,sales1d,sales1d,-,-,-
+sales_7d,Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,sales7d,sales7d,sales7d,-,-,-
+sales_14d,Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,sales14d,sales14d,sales14d,-,-,-
+sales_30d,Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,sales30d,sales30d,sales30d,-,-,-
+add_to_cart,Conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:add_to_cart,actions:add_to_cart,actions:add_to_cart
+initiate_checkout,Conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:initiate_checkout,actions:initiate_checkout,actions:initiate_checkout
+view_content,Conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:view_content,actions:view_content,actions:view_content
+lead,Conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:lead,actions:lead,actions:lead
+video_play_actions,Video,-,-,-,-,-,-,-,-,-,-,-,-,-,-,video_play_actions,video_play_actions,video_play_actions
+video_watched_2s,Video,-,-,-,-,-,-,-,-,-,-,-,-,-,-,video_continuous_2_sec_watched_actions,video_continuous_2_sec_watched_actions,video_continuous_2_sec_watched_actions
+video_thruplay,Video,-,-,-,-,-,-,-,-,-,-,-,-,-,-,video_thruplay_watched_actions,video_thruplay_watched_actions,video_thruplay_watched_actions
+video_30_sec_watched,Video,-,-,-,-,-,-,-,-,-,-,-,-,-,-,video_30_sec_watched_actions,video_30_sec_watched_actions,video_30_sec_watched_actions
+cpp,Core,-,-,-,-,-,-,-,-,-,-,-,-,-,-,cpp,cpp,cpp
+unique_clicks,Core,-,-,-,-,-,-,-,-,-,-,-,-,-,-,unique_clicks,unique_clicks,unique_clicks
+unique_ctr,Core,-,-,-,-,-,-,-,-,-,-,-,-,-,-,unique_ctr,unique_ctr,unique_ctr
+inline_link_clicks,Engagement,-,-,-,-,-,-,-,-,-,-,-,-,-,-,inline_link_clicks,inline_link_clicks,inline_link_clicks
+inline_post_engagement,Engagement,-,-,-,-,-,-,-,-,-,-,-,-,-,-,inline_post_engagement,inline_post_engagement,inline_post_engagement
+post_engagement,Engagement,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:post_engagement,actions:post_engagement,actions:post_engagement
+page_engagement,Engagement,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:page_engagement,actions:page_engagement,actions:page_engagement
+link_click,Engagement,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:link_click,actions:link_click,actions:link_click
+landing_page_view,Engagement,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:landing_page_view,actions:landing_page_view,actions:landing_page_view
+cost_per_thruplay,FB Video Cost,-,-,-,-,-,-,-,-,-,-,-,-,-,-,cost_per_thruplay,cost_per_thruplay,cost_per_thruplay
+cost_per_inline_link_click,FB Click Cost,-,-,-,-,-,-,-,-,-,-,-,-,-,-,cost_per_inline_link_click,cost_per_inline_link_click,cost_per_inline_link_click
+cost_per_outbound_click,FB Click Cost,-,-,-,-,-,-,-,-,-,-,-,-,-,-,cost_per_outbound_click,cost_per_outbound_click,cost_per_outbound_click
+cost_per_unique_click,FB Click Cost,-,-,-,-,-,-,-,-,-,-,-,-,-,-,cost_per_unique_click,cost_per_unique_click,cost_per_unique_click
+outbound_clicks,FB Click,-,-,-,-,-,-,-,-,-,-,-,-,-,-,outbound_clicks,outbound_clicks,outbound_clicks
+social_spend,FB Engagement,-,-,-,-,-,-,-,-,-,-,-,-,-,-,social_spend,social_spend,social_spend
+website_purchase_roas,FB ROAS,-,-,-,-,-,-,-,-,-,-,-,-,-,-,website_purchase_roas,website_purchase_roas,website_purchase_roas
+canvas_avg_view_percent,FB Canvas,-,-,-,-,-,-,-,-,-,-,-,-,-,-,canvas_avg_view_percent,canvas_avg_view_percent,canvas_avg_view_percent
+quality_ranking,FB Quality,-,-,-,-,-,-,-,-,-,-,-,-,-,-,quality_ranking,quality_ranking,quality_ranking
+engagement_rate_ranking,FB Quality,-,-,-,-,-,-,-,-,-,-,-,-,-,-,engagement_rate_ranking,engagement_rate_ranking,engagement_rate_ranking
+conversion_rate_ranking,FB Quality,-,-,-,-,-,-,-,-,-,-,-,-,-,-,conversion_rate_ranking,conversion_rate_ranking,conversion_rate_ranking
+dpv_clicks_14d,Amazon DPV,-,-,-,-,-,-,-,-,-,-,-,dpvClicks14d,dpvClicks14d,dpvClicks14d,-,-,-
+total_add_to_cart_clicks_14d,Amazon Cart,-,-,-,-,-,-,-,-,-,-,-,totalAddToCartClicks14d,totalAddToCartClicks14d,totalAddToCartClicks14d,-,-,-
+total_add_to_cart_views_14d,Amazon Cart,-,-,-,-,-,-,-,-,-,-,-,totalAddToCartViews14d,totalAddToCartViews14d,totalAddToCartViews14d,-,-,-
+total_purchases_clicks_14d,Amazon Purchase,-,-,-,-,-,-,-,-,-,-,-,totalPurchasesClicks14d,totalPurchasesClicks14d,totalPurchasesClicks14d,-,-,-
+total_purchases_views_14d,Amazon Purchase,-,-,-,-,-,-,-,-,-,-,-,totalPurchasesViews14d,totalPurchasesViews14d,totalPurchasesViews14d,-,-,-
+purchases_clicks_14d,Amazon Purchase,-,-,-,-,-,-,-,-,-,-,-,purchasesClicks14d,purchasesClicks14d,purchasesClicks14d,-,-,-
+purchases_views_14d,Amazon Purchase,-,-,-,-,-,-,-,-,-,-,-,purchasesViews14d,purchasesViews14d,purchasesViews14d,-,-,-
+units_sold_14d,Amazon Sales,-,-,-,-,-,-,-,-,-,-,-,unitsSold14d,unitsSold14d,unitsSold14d,-,-,-
+ntb_purchases_clicks_14d,Amazon NTB,-,-,-,-,-,-,-,-,-,-,-,newToBrandPurchasesClicks14d,newToBrandPurchasesClicks14d,newToBrandPurchasesClicks14d,-,-,-
+ntb_purchases_views_14d,Amazon NTB,-,-,-,-,-,-,-,-,-,-,-,newToBrandPurchasesViews14d,newToBrandPurchasesViews14d,newToBrandPurchasesViews14d,-,-,-
+ntb_ecpp_14d,Amazon NTB,-,-,-,-,-,-,-,-,-,-,-,newToBrandEcpp14d,newToBrandEcpp14d,newToBrandEcpp14d,-,-,-
+total_ntb_purchases_14d,Amazon NTB,-,-,-,-,-,-,-,-,-,-,-,totalNewToBrandPurchases14d,totalNewToBrandPurchases14d,totalNewToBrandPurchases14d,-,-,-
+new_subscribe_and_save_14d,Amazon Subscribe,-,-,-,-,-,-,-,-,-,-,-,newSubscribeAndSave14d,newSubscribeAndSave14d,newSubscribeAndSave14d,-,-,-
+total_subscribe_and_save_14d,Amazon Subscribe,-,-,-,-,-,-,-,-,-,-,-,totalSubscribeAndSave14d,totalSubscribeAndSave14d,totalSubscribeAndSave14d,-,-,-
+brand_search_14d,Amazon Brand,-,-,-,-,-,-,-,-,-,-,-,brandSearch14d,brandSearch14d,brandSearch14d,-,-,-
+brand_search_clicks_14d,Amazon Brand,-,-,-,-,-,-,-,-,-,-,-,brandSearchClicks14d,brandSearchClicks14d,brandSearchClicks14d,-,-,-
+brand_search_views_14d,Amazon Brand,-,-,-,-,-,-,-,-,-,-,-,brandSearchViews14d,brandSearchViews14d,brandSearchViews14d,-,-,-
+units_sold_1d,Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,unitsSold1d,unitsSold1d,unitsSold1d,-,-,-
+units_sold_7d,Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,unitsSold7d,unitsSold7d,unitsSold7d,-,-,-
+units_sold_14d_sp,Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,unitsSold14d,unitsSold14d,unitsSold14d,-,-,-
+units_sold_30d,Amazon Attribution,-,-,-,-,-,-,-,-,-,-,-,unitsSold30d,unitsSold30d,unitsSold30d,-,-,-
+kindle_pages_read_14d,Amazon Kindle,-,-,-,-,-,-,-,-,-,-,-,kindleEditionNormalizedPagesRead14d,kindleEditionNormalizedPagesRead14d,kindleEditionNormalizedPagesRead14d,-,-,-
+kindle_pages_royalties_14d,Amazon Kindle,-,-,-,-,-,-,-,-,-,-,-,kindleEditionNormalizedPagesRoyalties14d,kindleEditionNormalizedPagesRoyalties14d,kindleEditionNormalizedPagesRoyalties14d,-,-,-

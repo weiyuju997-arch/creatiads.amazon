@@ -1,0 +1,233 @@
+标准指标名,中文名,指标分组,指标分类（中文）,专属平台,GG-Account,GG-Campaign,GG-AdGroup,GG-Ad,GG-Keyword,GG-SearchQuery,GG-Geographic,TT-Advertiser,TT-Campaign,TT-AdGroup,TT-Ad,AMZ-Campaign,AMZ-AdGroup,AMZ-Ad,FB-Campaign,FB-AdSet,FB-Ad
+average_cost,平均费用,Core,核心指标,Google,-,average_cost,average_cost,average_cost,average_cost,average_cost,-,-,-,-,-,-,-,-,-,-,-
+average_cpe,平均互动成本,Core,核心指标,Google,-,average_cpe,average_cpe,average_cpe,average_cpe,average_cpe,-,-,-,-,-,-,-,-,-,-,-
+relative_ctr,相对点击率,Core,核心指标,Google,-,relative_ctr,relative_ctr,relative_ctr,-,-,-,-,-,-,-,-,-,-,-,-,-
+coviewed_impressions,共同观看展示量,Core,核心指标,Google,-,coviewed_impressions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+primary_impressions,主要展示量,Core,核心指标,Google,-,primary_impressions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+invalid_clicks,无效点击量,Core,核心指标,Google,-,invalid_clicks,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+general_invalid_clicks,一般无效点击量,Core,核心指标,Google,-,general_invalid_clicks,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+invalid_click_rate,无效点击率,Core,核心指标,Google,-,invalid_click_rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+general_invalid_click_rate,一般无效点击率,Core,核心指标,Google,-,general_invalid_click_rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+clicks_unique_query_clusters,唯一查询集群点击量,Core,核心指标,Google,-,clicks_unique_query_clusters,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+impressions_unique_query_clusters,唯一查询集群展示量,Core,核心指标,Google,-,impressions_unique_query_clusters,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+publisher_organic_clicks,发布商自然点击量,Core,核心指标,Google,-,publisher_organic_clicks,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+publisher_purchased_clicks,发布商付费点击量,Core,核心指标,Google,-,publisher_purchased_clicks,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+publisher_unknown_clicks,发布商未知点击量,Core,核心指标,Google,-,publisher_unknown_clicks,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+eligible_impressions_from_location_asset_store_reach,店铺覆盖可用展示量,Core,核心指标,Google,-,eligible_impressions_from_location_asset_store_reach,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+reach,触达人数,Core,核心指标,TikTok/Facebook,-,-,-,-,-,-,-,reach,reach,reach,reach,-,-,-,reach,reach,reach
+frequency,频次,Core,核心指标,TikTok/Facebook,-,-,-,-,-,-,-,frequency,frequency,frequency,frequency,-,-,-,frequency,frequency,frequency
+budget,预算,Core,核心指标,TikTok,-,-,-,-,-,-,-,budget,budget,budget,budget,-,-,-,-,-,-
+all_conversions,总转化量,Conversions,转化指标,Google,-,all_conversions,all_conversions,all_conversions,all_conversions,all_conversions,all_conversions,-,-,-,-,-,-,-,-,-,-
+all_conversions_value,总转化价值,Conversions,转化指标,Google,-,all_conversions_value,all_conversions_value,all_conversions_value,all_conversions_value,all_conversions_value,all_conversions_value,-,-,-,-,-,-,-,-,-,-
+cost_per_all_conversions,每次总转化费用,Conversions,转化指标,Google,-,cost_per_all_conversions,cost_per_all_conversions,cost_per_all_conversions,cost_per_all_conversions,cost_per_all_conversions,cost_per_all_conversions,-,-,-,-,-,-,-,-,-,-
+conversions_from_interactions_rate,互动转化率,Conversions,转化指标,Google,-,conversions_from_interactions_rate,conversions_from_interactions_rate,conversions_from_interactions_rate,conversions_from_interactions_rate,conversions_from_interactions_rate,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_interactions_rate,总互动转化率,Conversions,转化指标,Google,-,all_conversions_from_interactions_rate,all_conversions_from_interactions_rate,all_conversions_from_interactions_rate,all_conversions_from_interactions_rate,all_conversions_from_interactions_rate,all_conversions_from_interactions_rate,-,-,-,-,-,-,-,-,-,-
+value_per_conversion,每次转化价值,Conversions,转化指标,Google,-,value_per_conversion,value_per_conversion,value_per_conversion,value_per_conversion,value_per_conversion,-,-,-,-,-,-,-,-,-,-,-
+value_per_all_conversions,每次总转化价值,Conversions,转化指标,Google,-,value_per_all_conversions,value_per_all_conversions,value_per_all_conversions,value_per_all_conversions,value_per_all_conversions,value_per_all_conversions,-,-,-,-,-,-,-,-,-,-
+cross_device_conversions,跨设备转化量,Conversions,转化指标,Google,-,cross_device_conversions,cross_device_conversions,cross_device_conversions,cross_device_conversions,cross_device_conversions,-,-,-,-,-,-,-,-,-,-,-
+cross_device_conversions_value_micros,跨设备转化价值,Conversions,转化指标,Google,-,cross_device_conversions_value_micros,cross_device_conversions_value_micros,cross_device_conversions_value_micros,cross_device_conversions_value_micros,-,-,-,-,-,-,-,-,-,-,-,-
+view_through_conversions,浏览转化量,Conversions,转化指标,Google,-,view_through_conversions,view_through_conversions,view_through_conversions,view_through_conversions,view_through_conversions,view_through_conversions,-,-,-,-,-,-,-,-,-,-
+current_model_attributed_conversions,当前归因模型转化量,Conversions,转化指标,Google,-,current_model_attributed_conversions,current_model_attributed_conversions,current_model_attributed_conversions,current_model_attributed_conversions,-,-,-,-,-,-,-,-,-,-,-,-
+current_model_attributed_conversions_value,当前归因模型转化价值,Conversions,转化指标,Google,-,current_model_attributed_conversions_value,current_model_attributed_conversions_value,current_model_attributed_conversions_value,current_model_attributed_conversions_value,-,-,-,-,-,-,-,-,-,-,-,-
+cost_per_current_model_attributed_conversion,当前归因模型每次转化费用,Conversions,转化指标,Google,-,cost_per_current_model_attributed_conversion,cost_per_current_model_attributed_conversion,cost_per_current_model_attributed_conversion,cost_per_current_model_attributed_conversion,-,-,-,-,-,-,-,-,-,-,-,-
+conversions_value_by_conversion_date,按转化日期的转化价值,Conversions,转化指标,Google,-,conversions_value_by_conversion_date,conversions_value_by_conversion_date,conversions_value_by_conversion_date,conversions_value_by_conversion_date,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_by_conversion_date,按转化日期的总转化量,Conversions,转化指标,Google,-,all_conversions_by_conversion_date,all_conversions_by_conversion_date,all_conversions_by_conversion_date,all_conversions_by_conversion_date,-,-,-,-,-,-,-,-,-,-,-,-
+biddable_app_install_conversions,可出价应用安装转化量,Conversions,转化指标,Google,-,biddable_app_install_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+biddable_app_post_install_conversions,可出价应用安装后转化量,Conversions,转化指标,Google,-,biddable_app_post_install_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+biddable_cohort_app_post_install_conversions,可出价同期群应用安装后转化量,Conversions,转化指标,Google,-,biddable_cohort_app_post_install_conversions,biddable_cohort_app_post_install_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+platform_comparable_conversions,平台可比转化量,Conversions,转化指标,Google,-,platform_comparable_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+platform_comparable_conversions_value,平台可比转化价值,Conversions,转化指标,Google,-,platform_comparable_conversions_value,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+cost_per_platform_comparable_conversion,平台可比每次转化费用,Conversions,转化指标,Google,-,cost_per_platform_comparable_conversion,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+results_conversions_purchase,购买结果转化量,Conversions,转化指标,Google,-,results_conversions_purchase,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+sk_ad_network_total_conversions,SKAdNetwork总转化量,Conversions,转化指标,Google,-,sk_ad_network_total_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_click_to_call,来电转化量,Conversions,转化指标,Google,-,all_conversions_from_click_to_call,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_directions,获取路线转化量,Conversions,转化指标,Google,-,all_conversions_from_directions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_location_asset_store_visits,店铺资产到店转化量,Conversions,转化指标,Google,-,all_conversions_from_location_asset_store_visits,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_location_asset_website,店铺资产网站转化量,Conversions,转化指标,Google,-,all_conversions_from_location_asset_website,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_from_store_visit,到店转化量,Conversions,转化指标,Google,-,all_conversions_from_store_visit,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+store_visits_last_click_model_attributed_conversions,末次点击归因到店转化量,Conversions,转化指标,Google,-,store_visits_last_click_model_attributed_conversions,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+conversions_unique_query_clusters,唯一查询集群转化量,Conversions,转化指标,Google,-,conversions_unique_query_clusters,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_conversions_value_per_cost,总转化价值/费用,Conversions,转化指标,Google,-,-,-,-,all_conversions_value_per_cost,all_conversions_value_per_cost,-,-,-,-,-,-,-,-,-,-,-
+conversions_value_per_cost,转化价值/费用(ROAS),Conversions,转化指标,Google,-,-,-,-,conversions_value_per_cost,conversions_value_per_cost,-,-,-,-,-,-,-,-,-,-,-
+conversion_rate,转化率,Conversions,转化指标,TikTok,-,-,-,-,-,-,-,conversion_rate,conversion_rate,conversion_rate,conversion_rate,-,-,-,-,-,-
+complete_payment,完成支付量,Conversions,转化指标,TikTok,-,-,-,-,-,-,-,complete_payment,complete_payment,complete_payment,complete_payment,-,-,-,-,-,-
+purchase_roas,购买广告支出回报率,Conversions,转化指标,TikTok/Facebook,-,-,-,-,-,-,-,purchase_roas,purchase_roas,purchase_roas,purchase_roas,-,-,-,purchase_roas,purchase_roas,purchase_roas
+registration,注册量,Conversions,转化指标,TikTok/Facebook,-,-,-,-,-,-,-,registration,registration,registration,registration,-,-,-,actions:complete_registration,actions:complete_registration,actions:complete_registration
+app_install,应用安装量,Conversions,转化指标,TikTok/Facebook,-,-,-,-,-,-,-,app_install,app_install,app_install,app_install,-,-,-,actions:app_install,actions:app_install,actions:app_install
+download_start,开始下载量,Conversions,转化指标,TikTok,-,-,-,-,-,-,-,download_start,download_start,download_start,download_start,-,-,-,-,-,-
+add_payment_info,添加支付信息量,Conversions,转化指标,TikTok/Facebook,-,-,-,-,-,-,-,add_payment_info,add_payment_info,add_payment_info,add_payment_info,-,-,-,actions:add_payment_info,actions:add_payment_info,actions:add_payment_info
+skan_conversion,SKAN转化量,SKAN,苹果归因,TikTok,-,-,-,-,-,-,-,skan_conversion,skan_conversion,skan_conversion,skan_conversion,-,-,-,-,-,-
+skan_app_install,SKAN应用安装量,SKAN,苹果归因,TikTok,-,-,-,-,-,-,-,skan_app_install,skan_app_install,skan_app_install,skan_app_install,-,-,-,-,-,-
+skan_purchase,SKAN购买量,SKAN,苹果归因,TikTok,-,-,-,-,-,-,-,skan_purchase,skan_purchase,skan_purchase,skan_purchase,-,-,-,-,-,-
+vta_purchase,浏览归因购买量,Attribution,归因,TikTok,-,-,-,-,-,-,-,vta_purchase,vta_purchase,vta_purchase,vta_purchase,-,-,-,-,-,-
+cta_app_install,点击归因应用安装量,Attribution,归因,TikTok,-,-,-,-,-,-,-,cta_app_install,cta_app_install,cta_app_install,cta_app_install,-,-,-,-,-,-
+cta_purchase,点击归因购买量,Attribution,归因,TikTok,-,-,-,-,-,-,-,cta_purchase,cta_purchase,cta_purchase,cta_purchase,-,-,-,-,-,-
+engagements,互动次数,Engagement,互动指标,Google,-,engagements,engagements,engagements,engagements,engagements,-,-,-,-,-,-,-,-,-,-,-
+engagement_rate,互动率,Engagement,互动指标,Google,-,engagement_rate,engagement_rate,engagement_rate,engagement_rate,engagement_rate,-,-,-,-,-,-,-,-,-,-,-
+interactions,交互量,Engagement,互动指标,Google,-,interactions,interactions,interactions,interactions,interactions,interactions,-,-,-,-,-,-,-,-,-,-
+interaction_rate,交互率,Engagement,互动指标,Google,-,interaction_rate,interaction_rate,interaction_rate,interaction_rate,interaction_rate,interaction_rate,-,-,-,-,-,-,-,-,-,-
+interaction_event_types,交互事件类型,Engagement,互动指标,Google,-,interaction_event_types,interaction_event_types,interaction_event_types,interaction_event_types,interaction_event_types,interaction_event_types,-,-,-,-,-,-,-,-,-,-
+bounce_rate,跳出率,Engagement,互动指标,Google,-,bounce_rate,bounce_rate,bounce_rate,bounce_rate,bounce_rate,-,-,-,-,-,-,-,-,-,-,-
+average_page_views,平均页面浏览量,Engagement,互动指标,Google,-,average_page_views,average_page_views,average_page_views,average_page_views,average_page_views,-,-,-,-,-,-,-,-,-,-,-
+average_time_on_site,平均网站停留时间,Engagement,互动指标,Google,-,average_time_on_site,average_time_on_site,average_time_on_site,average_time_on_site,average_time_on_site,-,-,-,-,-,-,-,-,-,-,-
+gmail_forwards,Gmail转发量,Engagement,互动指标,Google,-,gmail_forwards,gmail_forwards,gmail_forwards,gmail_forwards,-,-,-,-,-,-,-,-,-,-,-,-
+gmail_saves,Gmail保存量,Engagement,互动指标,Google,-,gmail_saves,gmail_saves,gmail_saves,gmail_saves,-,-,-,-,-,-,-,-,-,-,-,-
+gmail_secondary_clicks,Gmail二次点击量,Engagement,互动指标,Google,-,gmail_secondary_clicks,gmail_secondary_clicks,gmail_secondary_clicks,gmail_secondary_clicks,-,-,-,-,-,-,-,-,-,-,-,-
+likes,点赞量,Engagement,互动指标,TikTok,-,-,-,-,-,-,-,likes,likes,likes,likes,-,-,-,-,-,-
+follows,关注量,Engagement,互动指标,TikTok,-,-,-,-,-,-,-,follows,follows,follows,follows,-,-,-,-,-,-
+comments,评论量,Engagement,互动指标,TikTok,-,-,-,-,-,-,-,comments,comments,comments,comments,-,-,-,-,-,-
+shares,分享量,Engagement,互动指标,TikTok,-,-,-,-,-,-,-,shares,shares,shares,shares,-,-,-,-,-,-
+profile_visits,主页访问量,Engagement,互动指标,TikTok,-,-,-,-,-,-,-,profile_visits,profile_visits,profile_visits,profile_visits,-,-,-,-,-,-
+clicks_on_music_disc,音乐唱片点击量,Engagement,互动指标,TikTok,-,-,-,-,-,-,-,clicks_on_music_disc,clicks_on_music_disc,clicks_on_music_disc,clicks_on_music_disc,-,-,-,-,-,-
+video_play_actions,视频播放量,Video,视频指标,TikTok,-,-,-,-,-,-,-,video_play_actions,video_play_actions,video_play_actions,video_play_actions,-,-,-,-,-,-
+video_watched_2s,视频2秒观看量,Video,视频指标,TikTok,-,-,-,-,-,-,-,video_watched_2s,video_watched_2s,video_watched_2s,video_watched_2s,-,-,-,-,-,-
+video_watched_6s,视频6秒观看量,Video,视频指标,TikTok,-,-,-,-,-,-,-,video_watched_6s,video_watched_6s,video_watched_6s,video_watched_6s,-,-,-,-,-,-
+video_watch_time_total,视频总观看时间,Video,视频指标,Google,-,video_watch_time_duration_millis,video_watch_time_duration_millis,video_watch_time_duration_millis,-,-,-,-,-,-,-,-,-,-,-,-,-
+trueview_views,TrueView观看量,Video,视频指标,Google,-,video_trueview_views,video_trueview_views,video_trueview_views,video_trueview_views,video_trueview_views,video_trueview_views,-,-,-,-,-,-,-,-,-,-
+trueview_view_rate,TrueView观看率,Video,视频指标,Google,-,video_trueview_view_rate,video_trueview_view_rate,video_trueview_view_rate,video_trueview_view_rate,video_trueview_view_rate,video_trueview_view_rate,-,-,-,-,-,-,-,-,-,-
+trueview_view_rate_in_feed,信息流TrueView观看率,Video,视频指标,Google,-,video_trueview_view_rate_in_feed,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+trueview_view_rate_in_stream,插播TrueView观看率,Video,视频指标,Google,-,video_trueview_view_rate_in_stream,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+trueview_view_rate_shorts,Shorts TrueView观看率,Video,视频指标,Google,-,video_trueview_view_rate_shorts,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+trueview_average_cpv,平均每次观看费用,Video,视频指标,Google,-,trueview_average_cpv,trueview_average_cpv,trueview_average_cpv,trueview_average_cpv,trueview_average_cpv,trueview_average_cpv,-,-,-,-,-,-,-,-,-,-
+engaged_view,有效观看量,Video,视频指标,TikTok,-,-,-,-,-,-,-,engaged_view,engaged_view,engaged_view,engaged_view,-,-,-,-,-,-
+absolute_top_impression_percentage,最顶部展示率,Impression Share,展示份额,Google,-,absolute_top_impression_percentage,absolute_top_impression_percentage,absolute_top_impression_percentage,absolute_top_impression_percentage,absolute_top_impression_percentage,absolute_top_impression_percentage,-,-,-,-,-,-,-,-,-,-
+top_impression_percentage,顶部展示率,Impression Share,展示份额,Google,-,top_impression_percentage,top_impression_percentage,top_impression_percentage,top_impression_percentage,top_impression_percentage,top_impression_percentage,-,-,-,-,-,-,-,-,-,-
+search_impression_share,搜索展示份额,Impression Share,展示份额,Google,-,search_impression_share,search_impression_share,-,search_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_absolute_top_impression_share,搜索最顶部展示份额,Impression Share,展示份额,Google,-,search_absolute_top_impression_share,search_absolute_top_impression_share,-,search_absolute_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_exact_match_impression_share,搜索完全匹配展示份额,Impression Share,展示份额,Google,-,search_exact_match_impression_share,search_exact_match_impression_share,-,search_exact_match_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_rank_lost_impression_share,搜索排名丢失展示份额,Impression Share,展示份额,Google,-,search_rank_lost_impression_share,search_rank_lost_impression_share,-,search_rank_lost_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_rank_lost_absolute_top_impression_share,搜索排名丢失最顶部展示份额,Impression Share,展示份额,Google,-,search_rank_lost_absolute_top_impression_share,search_rank_lost_absolute_top_impression_share,-,search_rank_lost_absolute_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_rank_lost_top_impression_share,搜索排名丢失顶部展示份额,Impression Share,展示份额,Google,-,search_rank_lost_top_impression_share,search_rank_lost_top_impression_share,-,search_rank_lost_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_budget_lost_impression_share,搜索预算丢失展示份额,Impression Share,展示份额,Google,-,search_budget_lost_impression_share,search_budget_lost_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+search_budget_lost_absolute_top_impression_share,搜索预算丢失最顶部展示份额,Impression Share,展示份额,Google,-,search_budget_lost_absolute_top_impression_share,search_budget_lost_absolute_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+search_budget_lost_top_impression_share,搜索预算丢失顶部展示份额,Impression Share,展示份额,Google,-,search_budget_lost_top_impression_share,search_budget_lost_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+search_top_impression_share,搜索顶部展示份额,Impression Share,展示份额,Google,-,search_top_impression_share,search_top_impression_share,-,search_top_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+search_click_share,搜索点击份额,Impression Share,展示份额,Google,-,search_click_share,search_click_share,-,search_click_share,-,-,-,-,-,-,-,-,-,-,-,-
+content_impression_share,展示网络展示份额,Impression Share,展示份额,Google,-,content_impression_share,content_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+content_rank_lost_impression_share,展示网络排名丢失展示份额,Impression Share,展示份额,Google,-,content_rank_lost_impression_share,content_rank_lost_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+content_budget_lost_impression_share,展示网络预算丢失展示份额,Impression Share,展示份额,Google,-,content_budget_lost_impression_share,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_impression_share,竞价洞察搜索展示份额,Impression Share,展示份额,Google,-,auction_insight_search_impression_share,auction_insight_search_impression_share,-,auction_insight_search_impression_share,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_absolute_top_impression_percentage,竞价洞察搜索最顶部展示率,Impression Share,展示份额,Google,-,auction_insight_search_absolute_top_impression_percentage,auction_insight_search_absolute_top_impression_percentage,-,auction_insight_search_absolute_top_impression_percentage,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_top_impression_percentage,竞价洞察搜索顶部展示率,Impression Share,展示份额,Google,-,auction_insight_search_top_impression_percentage,auction_insight_search_top_impression_percentage,-,auction_insight_search_top_impression_percentage,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_impressions,可见性展示量,Active View,有效曝光与观看,Google,-,active_view_impressions,active_view_impressions,active_view_impressions,active_view_impressions,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_cpm,可见性千次展示成本,Active View,有效曝光与观看,Google,-,active_view_cpm,active_view_cpm,active_view_cpm,active_view_cpm,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_ctr,可见性点击率,Active View,有效曝光与观看,Google,-,active_view_ctr,active_view_ctr,active_view_ctr,active_view_ctr,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_viewability,可见性可见率,Active View,有效曝光与观看,Google,-,active_view_viewability,active_view_viewability,active_view_viewability,active_view_viewability,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_measurability,可见性可衡量率,Active View,有效曝光与观看,Google,-,active_view_measurability,active_view_measurability,active_view_measurability,active_view_measurability,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_measurable_impressions,可见性可衡量展示量,Active View,有效曝光与观看,Google,-,active_view_measurable_impressions,active_view_measurable_impressions,active_view_measurable_impressions,active_view_measurable_impressions,-,-,-,-,-,-,-,-,-,-,-,-
+active_view_measurable_cost_micros,可见性可衡量费用,Active View,有效曝光与观看,Google,-,active_view_measurable_cost_micros,active_view_measurable_cost_micros,active_view_measurable_cost_micros,active_view_measurable_cost_micros,-,-,-,-,-,-,-,-,-,-,-,-
+phone_calls,电话呼叫量,Phone,电话转化,Google,-,phone_calls,phone_calls,-,phone_calls,-,-,-,-,-,-,-,-,-,-,-,-
+phone_impressions,电话展示量,Phone,电话转化,Google,-,phone_impressions,phone_impressions,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+phone_through_rate,电话接通率,Phone,电话转化,Google,-,phone_through_rate,phone_through_rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_outranking_share,竞价洞察超越率,Auction Insight,竞价洞察,Google,-,auction_insight_search_outranking_share,auction_insight_search_outranking_share,-,auction_insight_search_outranking_share,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_overlap_rate,竞价洞察重叠率,Auction Insight,竞价洞察,Google,-,auction_insight_search_overlap_rate,auction_insight_search_overlap_rate,-,auction_insight_search_overlap_rate,-,-,-,-,-,-,-,-,-,-,-,-
+auction_insight_search_position_above_rate,竞价洞察排名高于率,Auction Insight,竞价洞察,Google,-,auction_insight_search_position_above_rate,auction_insight_search_position_above_rate,-,auction_insight_search_position_above_rate,-,-,-,-,-,-,-,-,-,-,-,-
+orders,订单量,Shopping & Revenue,购物 & 营收,Google,-,orders,orders,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+revenue_micros,营收,Shopping & Revenue,购物 & 营收,Google,-,revenue_micros,revenue_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+gross_profit_micros,毛利润,Shopping & Revenue,购物 & 营收,Google,-,gross_profit_micros,gross_profit_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+gross_profit_margin,毛利率,Shopping & Revenue,购物 & 营收,Google,-,gross_profit_margin,gross_profit_margin,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+units_sold,销售件数,Shopping & Revenue,购物 & 营收,Google/Amazon,-,units_sold,units_sold,-,-,-,-,-,-,-,-,totalUnitsSold14d/unitsSold14d,totalUnitsSold14d/unitsSold14d,totalUnitsSold14d/unitsSold14d,-,-,-
+average_order_value_micros,平均订单价值,Shopping & Revenue,购物 & 营收,Google,-,average_order_value_micros,average_order_value_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+average_cart_size,平均购物车件数,Shopping & Revenue,购物 & 营收,Google,-,average_cart_size,average_cart_size,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+cost_of_goods_sold_micros,销售成本,Shopping & Revenue,购物 & 营收,Google,-,cost_of_goods_sold_micros,cost_of_goods_sold_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+lead_revenue_micros,直接产品营收,Shopping & Revenue,购物 & 营收,Google,-,lead_revenue_micros,lead_revenue_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+lead_gross_profit_micros,直接产品毛利润,Shopping & Revenue,购物 & 营收,Google,-,lead_gross_profit_micros,lead_gross_profit_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+lead_units_sold,直接销售件数,Shopping & Revenue,购物 & 营收,Google,-,lead_units_sold,lead_units_sold,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+cross_sell_revenue_micros,交叉销售营收,Shopping & Revenue,购物 & 营收,Google,-,cross_sell_revenue_micros,cross_sell_revenue_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+cross_sell_gross_profit_micros,交叉销售毛利润,Shopping & Revenue,购物 & 营收,Google,-,cross_sell_gross_profit_micros,cross_sell_gross_profit_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+cross_sell_units_sold,交叉销售件数,Shopping & Revenue,购物 & 营收,Google,-,cross_sell_units_sold,cross_sell_units_sold,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+onsite_shopping,站内购物量,Shopping & Revenue,购物 & 营收,TikTok,-,-,-,-,-,-,-,onsite_shopping,onsite_shopping,onsite_shopping,onsite_shopping,-,-,-,-,-,-
+onsite_total_purchase_value,站内总购买价值,Shopping & Revenue,购物 & 营收,TikTok,-,-,-,-,-,-,-,onsite_total_purchase_value,onsite_total_purchase_value,onsite_total_purchase_value,onsite_total_purchase_value,-,-,-,-,-,-
+sk_ad_network_installs,SKAdNetwork安装量,SKAdNetwork,苹果归因,Google,-,sk_ad_network_installs,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+historical_quality_score,历史质量得分,Quality,质量指标,Google,-,-,-,-,historical_quality_score,-,-,-,-,-,-,-,-,-,-,-,-
+historical_creative_quality_score,历史创意质量得分,Quality,质量指标,Google,-,-,-,-,historical_creative_quality_score,-,-,-,-,-,-,-,-,-,-,-,-
+historical_landing_page_quality_score,历史落地页质量得分,Quality,质量指标,Google,-,-,-,-,historical_landing_page_quality_score,-,-,-,-,-,-,-,-,-,-,-,-
+historical_search_predicted_ctr,历史搜索预测点击率,Quality,质量指标,Google,-,-,-,-,historical_search_predicted_ctr,-,-,-,-,-,-,-,-,-,-,-,-
+percent_new_visitors,新访客占比,Other,其他,Google,-,percent_new_visitors,percent_new_visitors,percent_new_visitors,percent_new_visitors,-,-,-,-,-,-,-,-,-,-,-,-
+new_customer_lifetime_value,新客户生命周期价值,Other,其他,Google,-,new_customer_lifetime_value,new_customer_lifetime_value,new_customer_lifetime_value,-,-,-,-,-,-,-,-,-,-,-,-,-
+all_new_customer_lifetime_value,全部新客户生命周期价值,Other,其他,Google,-,all_new_customer_lifetime_value,all_new_customer_lifetime_value,all_new_customer_lifetime_value,-,-,-,-,-,-,-,-,-,-,-,-,-
+average_impression_frequency_per_user,人均展示频次,Other,其他,Google,-,average_impression_frequency_per_user,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+unique_users,唯一用户数,Other,其他,Google,-,unique_users,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+average_target_cpa_micros,平均目标CPA,Other,其他,Google,-,average_target_cpa_micros,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+average_target_roas,平均目标ROAS,Other,其他,Google,-,average_target_roas,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+optimization_score_uplift,优化得分提升空间,Other,其他,Google,-,optimization_score_uplift,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+optimization_score_url,优化建议链接,Other,其他,Google,-,optimization_score_url,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+shop_total_items_purchased,商店总购买商品数,Other,其他,TikTok,-,-,-,-,-,-,-,shop_total_items_purchased,shop_total_items_purchased,shop_total_items_purchased,shop_total_items_purchased,-,-,-,-,-,-
+app_event_add_to_cart,加入购物车事件量,Other,其他,TikTok,-,-,-,-,-,-,-,app_event_add_to_cart,app_event_add_to_cart,app_event_add_to_cart,app_event_add_to_cart,-,-,-,-,-,-
+complete_payment_roas,完成支付广告支出回报率,Other,其他,TikTok,-,-,-,-,-,-,-,complete_payment_roas,complete_payment_roas,complete_payment_roas,complete_payment_roas,-,-,-,-,-,-
+value_per_complete_payment,每次完成支付价值,Other,其他,TikTok,-,-,-,-,-,-,-,value_per_complete_payment,value_per_complete_payment,value_per_complete_payment,value_per_complete_payment,-,-,-,-,-,-
+total_fee,总费用,Amazon Fee,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,totalFee,totalFee,totalFee,-,-,-
+agency_fee,代理费,Amazon Fee,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,agencyFee,agencyFee,agencyFee,-,-,-
+dpv_views_14d,详情页浏览量(14天),Amazon DPV,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,dpvViews14d,dpvViews14d,dpvViews14d,-,-,-
+total_detail_page_views_14d,总详情页浏览量(14天),Amazon DPV,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,totalDetailPageViews14d,totalDetailPageViews14d,totalDetailPageViews14d,-,-,-
+total_add_to_cart_14d,加入购物车量(14天),Amazon Cart,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,totalAddToCart14d,totalAddToCart14d,totalAddToCart14d,-,-,-
+total_add_to_list_14d,加入列表量(14天),Amazon Cart,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,totalAddToList14d,totalAddToList14d,totalAddToList14d,-,-,-
+total_purchases_14d,总购买量(14天),Amazon Purchase,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,totalPurchases14d,totalPurchases14d,totalPurchases14d,-,-,-
+total_purchase_rate_14d,总购买率(14天),Amazon Purchase,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,totalPurchaseRate14d,totalPurchaseRate14d,totalPurchaseRate14d,-,-,-
+total_sales_14d,总销售额(14天),Amazon Sales,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,totalSales14d,totalSales14d,totalSales14d,-,-,-
+total_units_sold_14d,总销售件数(14天),Amazon Sales,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,totalUnitsSold14d,totalUnitsSold14d,totalUnitsSold14d,-,-,-
+ntb_purchases_14d,品牌新客购买量(14天),Amazon NTB,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,newToBrandPurchases14d,newToBrandPurchases14d,newToBrandPurchases14d,-,-,-
+ntb_purchase_rate_14d,品牌新客购买率(14天),Amazon NTB,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,newToBrandPurchaseRate14d,newToBrandPurchaseRate14d,newToBrandPurchaseRate14d,-,-,-
+measurable_impressions,可衡量展示量,Amazon Viewability,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,measurableImpressions,measurableImpressions,measurableImpressions,-,-,-
+viewable_impressions,可见展示量,Amazon Viewability,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,viewableImpressions,viewableImpressions,viewableImpressions,-,-,-
+viewability_rate,可见率,Amazon Viewability,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,viewabilityRate,viewabilityRate,viewabilityRate,-,-,-
+video_started,视频开始播放量,Video,视频指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,videoStarted,videoStarted,videoStarted,-,-,-
+purchases_1d,购买量(1天归因),Amazon Attribution,归因指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,purchases1d,purchases1d,purchases1d,-,-,-
+purchases_7d,购买量(7天归因),Amazon Attribution,归因指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,purchases7d,purchases7d,purchases7d,-,-,-
+purchases_14d,购买量(14天归因),Amazon Attribution,归因指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,purchases14d,purchases14d,purchases14d,-,-,-
+purchases_30d,购买量(30天归因),Amazon Attribution,归因指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,purchases30d,purchases30d,purchases30d,-,-,-
+sales_1d,销售额(1天归因),Amazon Attribution,归因指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,sales1d,sales1d,sales1d,-,-,-
+sales_7d,销售额(7天归因),Amazon Attribution,归因指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,sales7d,sales7d,sales7d,-,-,-
+sales_14d,销售额(14天归因),Amazon Attribution,归因指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,sales14d,sales14d,sales14d,-,-,-
+sales_30d,销售额(30天归因),Amazon Attribution,归因指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,sales30d,sales30d,sales30d,-,-,-
+add_to_cart,加入购物车量,Conversions,转化指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:add_to_cart,actions:add_to_cart,actions:add_to_cart
+initiate_checkout,发起结账量,Conversions,转化指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:initiate_checkout,actions:initiate_checkout,actions:initiate_checkout
+view_content,内容浏览量,Conversions,转化指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:view_content,actions:view_content,actions:view_content
+lead,线索量,Conversions,转化指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:lead,actions:lead,actions:lead
+video_play_actions,视频播放量,Video,视频指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,video_play_actions,video_play_actions,video_play_actions
+video_watched_2s,视频2秒观看量,Video,视频指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,video_continuous_2_sec_watched_actions,video_continuous_2_sec_watched_actions,video_continuous_2_sec_watched_actions
+video_thruplay,ThruPlay视频观看量,Video,视频指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,video_thruplay_watched_actions,video_thruplay_watched_actions,video_thruplay_watched_actions
+video_30_sec_watched,视频30秒观看量,Video,视频指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,video_30_sec_watched_actions,video_30_sec_watched_actions,video_30_sec_watched_actions
+cpp,千人触达成本,Core,核心指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,cpp,cpp,cpp
+unique_clicks,独立点击量,Core,核心指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,unique_clicks,unique_clicks,unique_clicks
+unique_ctr,独立点击率,Core,核心指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,unique_ctr,unique_ctr,unique_ctr
+inline_link_clicks,链接点击量,Engagement,互动指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,inline_link_clicks,inline_link_clicks,inline_link_clicks
+inline_post_engagement,帖子互动量,Engagement,互动指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,inline_post_engagement,inline_post_engagement,inline_post_engagement
+post_engagement,帖子互动量(action),Engagement,互动指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:post_engagement,actions:post_engagement,actions:post_engagement
+page_engagement,主页互动量,Engagement,互动指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:page_engagement,actions:page_engagement,actions:page_engagement
+link_click,链接点击量(action),Engagement,互动指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:link_click,actions:link_click,actions:link_click
+landing_page_view,落地页浏览量,Engagement,互动指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,actions:landing_page_view,actions:landing_page_view,actions:landing_page_view
+cost_per_thruplay,ThruPlay单次费用,FB Video Cost,核心指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,cost_per_thruplay,cost_per_thruplay,cost_per_thruplay
+cost_per_inline_link_click,链接点击单次费用,FB Click Cost,核心指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,cost_per_inline_link_click,cost_per_inline_link_click,cost_per_inline_link_click
+cost_per_outbound_click,外链点击单次费用,FB Click Cost,核心指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,cost_per_outbound_click,cost_per_outbound_click,cost_per_outbound_click
+cost_per_unique_click,独立点击单次费用,FB Click Cost,核心指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,cost_per_unique_click,cost_per_unique_click,cost_per_unique_click
+outbound_clicks,外链点击量,FB Click,核心指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,outbound_clicks,outbound_clicks,outbound_clicks
+social_spend,社交花费,FB Engagement,核心指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,social_spend,social_spend,social_spend
+website_purchase_roas,网站购买ROAS,FB ROAS,核心指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,website_purchase_roas,website_purchase_roas,website_purchase_roas
+canvas_avg_view_percent,即时体验平均浏览百分比,FB Canvas,核心指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,canvas_avg_view_percent,canvas_avg_view_percent,canvas_avg_view_percent
+quality_ranking,质量排名,FB Quality,核心指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,quality_ranking,quality_ranking,quality_ranking
+engagement_rate_ranking,互动率排名,FB Quality,核心指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,engagement_rate_ranking,engagement_rate_ranking,engagement_rate_ranking
+conversion_rate_ranking,转化率排名,FB Quality,核心指标,Facebook,-,-,-,-,-,-,-,-,-,-,-,-,-,-,conversion_rate_ranking,conversion_rate_ranking,conversion_rate_ranking
+dpv_clicks_14d,详情页点击量(14天),Amazon DPV,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,dpvClicks14d,dpvClicks14d,dpvClicks14d,-,-,-
+total_add_to_cart_clicks_14d,加购点击归因(14天),Amazon Cart,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,totalAddToCartClicks14d,totalAddToCartClicks14d,totalAddToCartClicks14d,-,-,-
+total_add_to_cart_views_14d,加购浏览归因(14天),Amazon Cart,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,totalAddToCartViews14d,totalAddToCartViews14d,totalAddToCartViews14d,-,-,-
+total_purchases_clicks_14d,购买点击归因(14天),Amazon Purchase,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,totalPurchasesClicks14d,totalPurchasesClicks14d,totalPurchasesClicks14d,-,-,-
+total_purchases_views_14d,购买浏览归因(14天),Amazon Purchase,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,totalPurchasesViews14d,totalPurchasesViews14d,totalPurchasesViews14d,-,-,-
+purchases_clicks_14d,推广商品购买点击归因(14天),Amazon Purchase,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,purchasesClicks14d,purchasesClicks14d,purchasesClicks14d,-,-,-
+purchases_views_14d,推广商品购买浏览归因(14天),Amazon Purchase,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,purchasesViews14d,purchasesViews14d,purchasesViews14d,-,-,-
+units_sold_14d,推广商品销售件数(14天),Amazon Sales,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,unitsSold14d,unitsSold14d,unitsSold14d,-,-,-
+ntb_purchases_clicks_14d,品牌新客购买点击归因(14天),Amazon NTB,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,newToBrandPurchasesClicks14d,newToBrandPurchasesClicks14d,newToBrandPurchasesClicks14d,-,-,-
+ntb_purchases_views_14d,品牌新客购买浏览归因(14天),Amazon NTB,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,newToBrandPurchasesViews14d,newToBrandPurchasesViews14d,newToBrandPurchasesViews14d,-,-,-
+ntb_ecpp_14d,品牌新客每次购买成本(14天),Amazon NTB,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,newToBrandEcpp14d,newToBrandEcpp14d,newToBrandEcpp14d,-,-,-
+total_ntb_purchases_14d,总品牌新客购买量(14天),Amazon NTB,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,totalNewToBrandPurchases14d,totalNewToBrandPurchases14d,totalNewToBrandPurchases14d,-,-,-
+new_subscribe_and_save_14d,新订阅省(14天),Amazon Subscribe,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,newSubscribeAndSave14d,newSubscribeAndSave14d,newSubscribeAndSave14d,-,-,-
+total_subscribe_and_save_14d,总订阅省(14天),Amazon Subscribe,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,totalSubscribeAndSave14d,totalSubscribeAndSave14d,totalSubscribeAndSave14d,-,-,-
+brand_search_14d,品牌搜索量(14天),Amazon Brand,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,brandSearch14d,brandSearch14d,brandSearch14d,-,-,-
+brand_search_clicks_14d,品牌搜索点击归因(14天),Amazon Brand,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,brandSearchClicks14d,brandSearchClicks14d,brandSearchClicks14d,-,-,-
+brand_search_views_14d,品牌搜索浏览归因(14天),Amazon Brand,转化指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,brandSearchViews14d,brandSearchViews14d,brandSearchViews14d,-,-,-
+units_sold_1d,销售件数(1天归因),Amazon Attribution,归因指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,unitsSold1d,unitsSold1d,unitsSold1d,-,-,-
+units_sold_7d,销售件数(7天归因),Amazon Attribution,归因指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,unitsSold7d,unitsSold7d,unitsSold7d,-,-,-
+units_sold_14d_sp,销售件数(14天归因-SP),Amazon Attribution,归因指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,unitsSold14d,unitsSold14d,unitsSold14d,-,-,-
+units_sold_30d,销售件数(30天归因),Amazon Attribution,归因指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,unitsSold30d,unitsSold30d,unitsSold30d,-,-,-
+kindle_pages_read_14d,Kindle页面阅读量(14天),Amazon Kindle,归因指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,kindleEditionNormalizedPagesRead14d,kindleEditionNormalizedPagesRead14d,kindleEditionNormalizedPagesRead14d,-,-,-
+kindle_pages_royalties_14d,Kindle版税(14天),Amazon Kindle,归因指标,Amazon,-,-,-,-,-,-,-,-,-,-,-,kindleEditionNormalizedPagesRoyalties14d,kindleEditionNormalizedPagesRoyalties14d,kindleEditionNormalizedPagesRoyalties14d,-,-,-
