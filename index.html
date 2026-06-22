@@ -1,901 +1,957 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>数据源 - Dubhe Analytics</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazon DSP 批量创编 Demo</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div class="app">
-        <!-- 一级侧边栏 -->
-        <aside class="sidebar-primary">
-            <div class="logo">
-                <svg class="logo-mark" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-label="Gi">
-                    <!-- C 形弧（右下开口） -->
-                    <path d="M31 8.7 A 16 16 0 1 0 34.8 36.2" fill="none" stroke="currentColor" stroke-width="5.2" stroke-linecap="butt"/>
-                    <!-- 上升柱状图 -->
-                    <rect x="16.4" y="27" width="4.5" height="8" fill="currentColor"/>
-                    <rect x="22.5" y="22.5" width="4.5" height="12.5" fill="currentColor"/>
-                    <rect x="28.6" y="17" width="4.5" height="18" fill="currentColor"/>
-                    <!-- 星芒（i 的点） -->
-                    <path d="M35.5 5 C 36 9 37.5 10.5 41.5 11 C 37.5 11.5 36 13 35.5 17 C 35 13 33.5 11.5 29.5 11 C 33.5 10.5 35 9 35.5 5 Z" fill="currentColor"/>
-                </svg>
-            </div>
-            <nav class="nav-primary">
-                <a class="nav-item" data-key="dashboard">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>
-                    <span>Dashboard</span>
-                </a>
-                <a class="nav-item active" data-key="data">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                    <span>Data</span>
-                </a>
-                <a class="nav-item" data-key="processing">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                    <span>Processing</span>
-                </a>
-                <a class="nav-item" data-key="agent">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a6.5 6.5 0 0 1 13 0"/></svg>
-                    <span>Agent</span>
-                </a>
-                <a class="nav-item" data-key="bi">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17V9M12 17v-5M16 17v-3"/></svg>
-                    <span>BI</span>
-                </a>
-                <a class="nav-item" data-key="admin">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    <span>Admin</span>
-                </a>
-                <a class="nav-item" data-key="monitoring">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                    <span>Monitoring</span>
-                </a>
-                <a class="nav-item" data-key="ad-studio">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-                    <span>Ad Studio</span>
-                </a>
-                <a class="nav-item" data-key="creation">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
-                    <span>Creation</span>
-                </a>
-            </nav>
-        </aside>
-
-        <!-- 二级侧边栏 -->
-        <aside class="sidebar-secondary">
-            <div class="env-selector">
-                <button class="env-btn">
-                    <span class="env-badge">D</span>
-                    <span class="env-name">Development</span>
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                </button>
-                <button class="collapse-btn" title="折叠">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg>
-                </button>
-            </div>
-
-            <!-- Dashboard 视图列表 -->
-            <div class="sidebar-section" id="dashboardSidebar" style="display:none;">
-                <div class="section-header-with-action">
-                    <div class="section-label">视图</div>
-                    <div class="add-menu-wrap">
-                        <button class="icon-btn-sm" id="btnAddView" title="新建">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        </button>
-                        <div class="add-menu" id="addViewMenu">
-                            <div class="ctx-item" data-action="new-folder">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                                新建文件夹
-                            </div>
-                            <div class="ctx-item" data-action="new-view">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17V9M12 17v-5M16 17v-3"/></svg>
-                                新建视图
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="search-box-sm">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                    <input type="text" placeholder="搜索视图...">
-                </div>
-                <div class="view-group">
-                    <div class="folder-header" data-folder="ungrouped">
-                        <svg class="folder-chevron" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                        <svg class="folder-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                        <span class="folder-title">UNGROUPED</span>
-                        <span class="folder-count">1</span>
-                        <button class="folder-menu-btn">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-                        </button>
-                    </div>
-                    <div class="view-list">
-                        <div class="view-item active" data-view="dev-test">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17V9M12 17v-5M16 17v-3"/></svg>
-                            <span>Development Test</span>
-                            <button class="view-menu-btn">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Data 侧边栏 -->
-            <div class="sidebar-section" id="dataSidebar">
-                <div class="section-label">Data</div>
-                <nav class="nav-secondary">
-                <a class="sub-item active" data-key="autoReport">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-                    <span>Auto Report</span>
-                </a>
-                <a class="sub-item" data-key="sources">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                    <span>Sources</span>
-                </a>
-                <a class="sub-item" data-key="connectors">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                    <span>Connectors</span>
-                </a>
-                <a class="sub-item" data-key="destinations">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-                    <span>Destinations</span>
-                </a>
-                <a class="sub-item" data-key="datasets">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-                    <span>Datasets</span>
-                </a>
-            </nav>
-            </div>
-
-            <!-- BI 侧边栏 -->
-            <div class="sidebar-section" id="biSidebar" style="display:none;">
-                <div class="section-header-with-action">
-                    <div class="section-label">报表</div>
-                    <div class="add-menu-wrap">
-                        <button class="icon-btn-sm" id="btnAddReport" title="新建">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        </button>
-                        <div class="add-menu" id="addReportMenu">
-                            <div class="ctx-item" data-action="new-bi-folder">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                                新建文件夹
-                            </div>
-                            <div class="ctx-item" data-action="new-bi-report">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17V9M12 17v-5M16 17v-3"/></svg>
-                                新建报表
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="search-box-sm">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                    <input type="text" placeholder="搜索报表...">
-                </div>
-
-                <div class="view-group" id="biFolderMyReports">
-                    <div class="folder-header" data-folder="my-reports">
-                        <svg class="folder-chevron" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                        <svg class="folder-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                        <span class="folder-title">我的报表</span>
-                        <span class="folder-count">3</span>
-                        <button class="folder-menu-btn">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-                        </button>
-                    </div>
-                    <div class="view-list">
-                        <div class="view-item" data-report-url="" data-mode="single">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17V9M12 17v-5M16 17v-3"/></svg>
-                            <span>广告投放概览</span>
-                            <button class="view-menu-btn">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-                            </button>
-                        </div>
-                        <div class="view-item" data-report-url="" data-mode="single">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17V9M12 17v-5M16 17v-3"/></svg>
-                            <span>转化漏斗分析</span>
-                            <button class="view-menu-btn">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-                            </button>
-                        </div>
-                        <div class="view-item active" data-report-url="https://bi.tec-do.cn/dashboard/view/pc.htm?pageId=030096c1-48d3-479f-8717-0f22de8d7b4c" data-mode="single">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17V9M12 17v-5M16 17v-3"/></svg>
-                            <span>B端统一用户行为分析</span>
-                            <button class="view-menu-btn">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="view-group">
-                    <div class="folder-header" data-folder="shared">
-                        <svg class="folder-chevron" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                        <svg class="folder-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                        <span class="folder-title">共享给我</span>
-                        <span class="folder-count">2</span>
-                        <button class="folder-menu-btn">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-                        </button>
-                    </div>
-                    <div class="view-list">
-                        <div class="view-item" data-report-url="https://bi.tec-do.cn/dashboard/view/pc.htm?pageId=030096c1-48d3-479f-8717-0f22de8d7b4c" data-perm="edit">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17V9M12 17v-5M16 17v-3"/></svg>
-                            <span>团队周报</span>
-                            <span class="perm-badge perm-edit" title="可编辑">
-                                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                            </span>
-                            <button class="view-menu-btn">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-                            </button>
-                        </div>
-                        <div class="view-item" data-report-url="https://bi.tec-do.cn/dashboard/view/pc.htm?pageId=030096c1-48d3-479f-8717-0f22de8d7b4c" data-perm="view">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17V9M12 17v-5M16 17v-3"/></svg>
-                            <span>区域销售简报</span>
-                            <span class="perm-badge perm-view" title="只读">
-                                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                            </span>
-                            <button class="view-menu-btn">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ad Studio 侧边栏 -->
-            <div class="sidebar-section" id="adStudioSidebar" style="display:none;">
-                <div class="section-label">Ad Studio</div>
-                <nav class="nav-secondary">
-                    <a class="sub-item active" data-ads-key="facebook">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-                        <span>Facebook Partnershi…</span>
-                    </a>
-                    <a class="sub-item" data-ads-key="amazon">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18l-2 13H5L3 6z"/><path d="M3 6L2 2"/><circle cx="9" cy="21" r="1"/><circle cx="17" cy="21" r="1"/></svg>
-                        <span>Amazon DSP</span>
-                    </a>
-                </nav>
-            </div>
-        </aside>
-
-        <!-- 主内容区 -->
-        <main class="main">
-            <!-- Auto Report 页面 -->
-            <div class="page-content" id="autoReportPage">
-                <iframe id="autoReportFrame" src="creatiads2.0.1迭代/google-ads-connector.html" class="auto-report-frame"></iframe>
-            </div>
-
-            <!-- Sources 页面 -->
-            <div class="page-content" id="sourcesPage" style="display:none;">
-                <header class="page-header">
-                    <h1 class="page-title">数据源</h1>
-                    <div class="page-actions">
-                        <button class="btn btn-ghost">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#a78bfa" stroke-width="2"><path d="M12 2v6M12 22v-2M4.93 4.93l4.24 4.24M19.07 19.07l-4.24-4.24M2 12h6M22 12h-6M4.93 19.07l4.24-4.24M19.07 4.93l-4.24 4.24"/></svg>
-                            Seeds
-                        </button>
-                    </div>
-                </header>
-
-                <div class="tabs">
-                    <button class="tab active" data-tab="media">媒体平台</button>
-                    <button class="tab" data-tab="other">其他</button>
-                </div>
-
-                <!-- 可用数据源 -->
-                <section class="card-section">
-                    <div class="section-header">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#a78bfa" stroke-width="2"><path d="M9 2v6M15 2v6M6 8h12v6a6 6 0 0 1-12 0V8zM12 20v2"/></svg>
-                        <h2>可用数据源</h2>
-                    </div>
-                    <div class="source-grid" id="sourceGrid"></div>
-                </section>
-
-                <!-- 数据源账户 -->
-                <section class="card-section accounts">
-                    <div class="section-header between">
-                        <div class="section-title">
-                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#a78bfa" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-                            <h2>数据源账户</h2>
-                        </div>
-                        <span class="meta-text" id="accountCount">1 个账户</span>
-                    </div>
-                    <div class="account-table">
-                        <div class="table-head">
-                            <div>平台</div>
-                            <div>邮箱</div>
-                            <div>用户名</div>
-                            <div>状态</div>
-                            <div>创建时间</div>
-                            <div>操作</div>
-                        </div>
-                        <div class="table-body" id="accountList"></div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- 数据源详情页面 -->
-            <div class="page-content" id="sourceDetailPage" style="display:none;">
-                <header class="source-detail-header">
-                    <div class="source-detail-header-left">
-                        <button class="btn btn-ghost btn-back" id="btnBackToSources">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-                            返回
-                        </button>
-                        <div class="source-detail-title-group">
-                            <div class="source-detail-icon" id="detailPlatformIcon"></div>
-                            <div class="source-detail-title-text">
-                                <h1 class="source-detail-title" id="detailPlatformTitle">Facebook 账户</h1>
-                                <p class="source-detail-subtitle" id="detailPlatformSubtitle">管理已连接的 Facebook 账户</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="source-detail-header-right">
-                        <button class="btn btn-ghost" id="btnDetailRefresh">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                            刷新
-                        </button>
-                        <button class="btn btn-primary" id="btnDetailAddAccount">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            添加账户
-                        </button>
-                    </div>
-                </header>
-
-                <!-- 空状态 -->
-                <div class="source-detail-empty" id="detailEmptyState">
-                    <div class="source-detail-empty-icon" id="detailEmptyIcon"></div>
-                    <h2 class="source-detail-empty-title" id="detailEmptyTitle">暂无 Facebook 账户</h2>
-                    <p class="source-detail-empty-desc" id="detailEmptyDesc">连接您的第一个 Facebook 账户，开始同步广告账户和广告系列数据。</p>
-                    <button class="btn btn-primary btn-lg" id="btnDetailConnect">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        <span id="btnDetailConnectText">连接 Facebook 账户</span>
-                    </button>
-                </div>
-
-                <!-- 账户列表 -->
-                <div class="source-detail-accounts" id="detailAccountList" style="display:none;"></div>
-            </div>
-
-            <!-- Dashboard 页面 -->
-            <div class="page-content" id="dashboardPage" style="display:none;">
-                <div class="dashboard-toolbar">
-                    <div class="toolbar-left">
-                        <div class="custom-select db-date-select">
-                            <div class="cs-trigger">
-                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                                <span class="cs-value">最近 30 天</span>
-                                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                            </div>
-                            <div class="cs-menu">
-                                <div class="cs-option" data-value="7d">最近 7 天</div>
-                                <div class="cs-option active" data-value="30d">最近 30 天</div>
-                                <div class="cs-option" data-value="90d">最近 90 天</div>
-                            </div>
-                        </div>
-                        <div class="btn-group">
-                            <button class="btn-group-item active">日</button>
-                            <button class="btn-group-item">周</button>
-                            <button class="btn-group-item">月</button>
-                            <button class="btn-group-item">季</button>
-                        </div>
-                        <button class="btn btn-ghost btn-sm">
-                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-                            对比
-                        </button>
-                        <button class="btn btn-ghost btn-sm">
-                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-                            筛选
-                        </button>
-                        <button class="btn btn-ghost btn-sm">
-                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            添加筛选
-                        </button>
-                    </div>
-                    <div class="toolbar-right">
-                        <button class="btn btn-ghost btn-sm" id="btnEdit">
-                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                            编辑
-                        </button>
-                        <button class="btn btn-ghost btn-sm">
-                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                            刷新全部
-                        </button>
-                        <button class="btn btn-ghost btn-sm">
-                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            添加图表
-                        </button>
-                        <button class="btn btn-ghost btn-sm">
-                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-                            分享
-                        </button>
-                    </div>
-                </div>
-
-                <div class="dashboard-content">
-                    <div class="chart-placeholder">
-                        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#d1d5db" stroke-width="1.5"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>
-                        <p>暂无图表数据</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- BI 页面 -->
-            <div class="page-content" id="biPage" style="display:none;">
-                <header class="page-header">
-                    <div>
-                        <h1 class="page-title" id="biTitle">广告投放概览</h1>
-                        <p class="page-subtitle" id="biSubtitle">粘贴报表链接即可嵌入查看</p>
-                    </div>
-                    <div class="page-actions">
-                        <button class="btn btn-ghost btn-sm" id="btnReportRefresh">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                            刷新
-                        </button>
-                        <button class="btn btn-ghost btn-sm" id="btnReportShare">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-                            分享
-                        </button>
-                    </div>
-                </header>
-
-                <div class="bi-url-bar">
-                    <div class="bi-url-input">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#9ca3af" stroke-width="2" style="flex-shrink:0"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                        <input type="text" id="biUrlInput" placeholder="粘贴报表链接（支持 Looker Studio、Power BI、Tableau 等）...">
-                        <button class="btn-clear" id="biUrlClear" style="display:none;">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                        </button>
-                    </div>
-                    <button class="btn btn-primary btn-sm" id="biUrlLoad">加载报表</button>
-                </div>
-
-                <div class="bi-content">
-                    <div class="bi-empty" id="biEmpty" style="display:none;">
-                        <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="#d1d5db" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17V9M12 17v-5M16 17v-3"/></svg>
-                        <h3>暂未加载报表</h3>
-                        <p>在上方粘贴报表链接，点击"加载报表"即可嵌入查看</p>
-                        <div class="bi-empty-tips">
-                            <span class="bi-tag">Quick BI</span>
-                            <span class="bi-tag">Looker Studio</span>
-                            <span class="bi-tag">Power BI</span>
-                            <span class="bi-tag">Tableau</span>
-                        </div>
-                    </div>
-                    <iframe id="biFrame" class="bi-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"></iframe>
-                </div>
-            </div>
-
-            <!-- Connectors 页面 -->
-            <div class="page-content" id="connectorsPage" style="display:none;">
-                <header class="page-header">
-                    <div>
-                        <h1 class="page-title">平台连接器</h1>
-                        <p class="page-subtitle">连接和管理您的广告平台</p>
-                    </div>
-                    <div class="page-actions">
-                        <button class="btn btn-primary" id="btnAddConnector">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            添加连接器
-                        </button>
-                    </div>
-                </header>
-
-                <!-- 筛选栏 -->
-                <div class="filter-bar">
-                    <div class="search-box">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                        <input type="text" placeholder="搜索连接器..." id="connectorSearch">
-                    </div>
-                    <div class="custom-select" data-name="platform">
-                        <button type="button" class="cs-trigger">
-                            <span class="cs-value">全部平台</span>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                        </button>
-                        <div class="cs-menu">
-                            <div class="cs-option active" data-value="all">全部平台</div>
-                            <div class="cs-option" data-value="facebook">Facebook</div>
-                            <div class="cs-option" data-value="tiktok">TikTok</div>
-                            <div class="cs-option" data-value="google">Google</div>
-                            <div class="cs-option" data-value="feishu">飞书</div>
-                        </div>
-                    </div>
-                    <div class="custom-select" data-name="status">
-                        <button type="button" class="cs-trigger">
-                            <span class="cs-value">全部状态</span>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                        </button>
-                        <div class="cs-menu">
-                            <div class="cs-option active" data-value="all">全部状态</div>
-                            <div class="cs-option" data-value="active">活跃</div>
-                            <div class="cs-option" data-value="paused">暂停</div>
-                            <div class="cs-option" data-value="error">错误</div>
-                        </div>
-                    </div>
-                    <div class="filter-label">排序:</div>
-                    <div class="custom-select" data-name="sort" style="min-width:140px">
-                        <button type="button" class="cs-trigger">
-                            <span class="cs-value">创建时间</span>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                        </button>
-                        <div class="cs-menu">
-                            <div class="cs-option active" data-value="created">创建时间</div>
-                            <div class="cs-option" data-value="updated">更新时间</div>
-                            <div class="cs-option" data-value="name">名称</div>
-                        </div>
-                    </div>
-                    <button class="btn-sort-icon" id="btnSortDir" title="切换升降序">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-                    </button>
-                    <button class="btn-icon-search">
-                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                        <span>搜索</span>
-                    </button>
-                    <button class="btn-reset">
-                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                        重置
-                    </button>
-                </div>
-
-                <!-- 连接器列表 -->
-                <section class="card-section connector-section">
-                    <div class="connector-table">
-                        <div class="table-head">
-                            <div><input type="checkbox" class="row-checkbox" id="connectorSelectAll"></div>
-                            <div>连接器</div>
-                            <div>连接器类型</div>
-                            <div>调度</div>
-                            <div>下次执行</div>
-                            <div>上次执行</div>
-                            <div>时间范围</div>
-                            <div>状态</div>
-                            <div>操作</div>
-                        </div>
-                        <div class="table-body" id="connectorList"></div>
-                    </div>
-                </section>
-
-                <!-- 分页 -->
-                <div class="pagination">
-                    <div class="pagination-info">
-                        <span>每页行数</span>
-                        <div class="custom-select cs-small" data-name="pageSize">
-                            <button type="button" class="cs-trigger">
-                                <span class="cs-value">20</span>
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                            </button>
-                            <div class="cs-menu">
-                                <div class="cs-option active" data-value="20">20</div>
-                                <div class="cs-option" data-value="50">50</div>
-                                <div class="cs-option" data-value="100">100</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pagination-summary">共 <span id="connectorTotal">2</span> 个连接器</div>
-                    <div class="pagination-controls">
-                        <span>第 1 页, 共 1 页</span>
-                        <button class="page-btn" disabled>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-                        </button>
-                        <button class="page-btn" disabled>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ad Studio 页面（iframe 嵌入独立页面） -->
-            <div class="page-content" id="adStudioPage" style="display:none;">
-                <iframe id="adStudioFrame" src="ad-studio/index.html"
-                    style="width:100%;height:100%;border:none;display:block;"></iframe>
-            </div>
-
-            <!-- Ad Studio - Amazon Task Management（嵌入 Amazon 创编 home.html） -->
-            <div class="page-content" id="adStudioAmazonPage" style="display:none;">
-                <iframe id="adStudioAmazonFrame" src="Amazon%E5%88%9B%E7%BC%96/home.html"
-                    style="width:100%;height:100%;border:none;display:block;"></iframe>
-            </div>
-        </main>
+  <header class="topbar" hidden>
+    <div class="brand">
+      <span class="logo">▣</span>
+      <span class="title">Amazon DSP 批量创编</span>
+      <span class="badge">Demo · Mock API</span>
     </div>
-
-    <!-- 视图右键菜单 -->
-    <div class="context-menu" id="viewContextMenu">
-        <div class="ctx-item" data-action="rename">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-            重命名
-        </div>
-        <div class="ctx-item" data-action="duplicate">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            复制
-        </div>
-        <div class="ctx-item" data-action="permission">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            管理权限
-        </div>
-        <div class="ctx-item" data-action="share">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-            分享
-        </div>
-        <div class="ctx-divider"></div>
-        <div class="ctx-item danger" data-action="delete">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-            删除视图
-        </div>
+    <div class="env">
+      <label>区域</label>
+      <select id="region">
+        <option value="NA">北美 (advertising-api.amazon.com)</option>
+        <option value="EU">欧洲 (advertising-api-eu.amazon.com)</option>
+        <option value="FE">远东 (advertising-api-fe.amazon.com)</option>
+      </select>
+      <label>Profile ID</label>
+      <input id="profileId" value="1234567890" />
+      <span class="conn ok" id="connStatus">● Mock 已连接</span>
     </div>
+  </header>
 
-    <div class="context-menu" id="folderContextMenu">
-        <div class="ctx-item" data-action="folder-rename">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-            重命名
-        </div>
-        <div class="ctx-item" data-action="folder-duplicate">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            复制
-        </div>
-        <div class="ctx-item" data-action="folder-new-view">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            新建视图
-        </div>
-        <div class="ctx-divider"></div>
-        <div class="ctx-item" data-action="folder-permission">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            管理权限
-        </div>
-        <div class="ctx-item" data-action="folder-share">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-            分享
-        </div>
-        <div class="ctx-divider"></div>
-        <div class="ctx-item danger" data-action="folder-delete">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-            删除文件夹
-        </div>
-    </div>
-
-    <!-- 报表分享弹窗 -->
-    <div class="modal" id="shareModal">
-        <div class="modal-mask"></div>
-        <div class="modal-box">
-            <div class="modal-head">
-                <div>
-                    <h3>分享报表</h3>
-                    <p class="modal-subtitle" id="shareSubtitle">广告投放概览</p>
-                </div>
-                <button class="modal-close" id="shareModalClose">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="share-section">
-                    <label class="share-label">邀请用户</label>
-                    <div class="share-invite">
-                        <input type="text" id="shareInvite" placeholder="输入邮箱或用户名...">
-                        <select id="sharePerm">
-                            <option value="view">可查看</option>
-                            <option value="edit">可编辑</option>
-                            <option value="manage">可管理</option>
-                        </select>
-                        <button class="btn btn-primary btn-sm" id="shareAddBtn">添加</button>
-                    </div>
-                </div>
-
-                <div class="share-section">
-                    <label class="share-label">已有权限</label>
-                    <div class="share-list" id="shareList">
-                        <div class="share-row">
-                            <div class="share-user">
-                                <div class="share-avatar">M</div>
-                                <div>
-                                    <div class="share-name">我（所有者）</div>
-                                    <div class="share-email">me@example.com</div>
-                                </div>
-                            </div>
-                            <span class="share-role">所有者</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="share-section">
-                    <label class="share-label">链接分享</label>
-                    <div class="share-link-row">
-                        <div class="share-toggle">
-                            <input type="checkbox" id="shareLinkEnable">
-                            <label for="shareLinkEnable">启用链接分享（任何拿到链接的人可查看）</label>
-                        </div>
-                    </div>
-                    <div class="share-link-box" id="shareLinkBox" style="display:none;">
-                        <input type="text" readonly id="shareLink" value="https://creatiads.example.com/share/abc123">
-                        <button class="btn btn-ghost btn-sm" id="shareLinkCopy">复制</button>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-foot">
-                <button class="btn btn-ghost" id="shareCancelBtn">取消</button>
-                <button class="btn btn-primary" id="shareConfirmBtn">完成</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 添加数据源弹窗 -->
-    <div class="modal" id="addModal">
-        <div class="modal-mask"></div>
-        <div class="modal-box modal-wide">
-            <div class="modal-head">
-                <div>
-                    <h3>数据源</h3>
-                    <p class="modal-subtitle">选择和管理您的数据源</p>
-                </div>
-                <button class="modal-close" id="modalClose">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-search">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                    <input type="text" id="modalSearch" placeholder="搜索数据源...">
-                </div>
-                <h4 class="modal-section-title">所有数据源</h4>
-                <div class="modal-grid" id="modalGrid"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 管理权限弹窗 -->
-    <div class="modal" id="permissionModal">
-        <div class="modal-mask"></div>
-        <div class="modal-box modal-permission">
-            <div class="modal-head">
-                <div>
-                    <h3>
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#7c3aed" stroke-width="2" style="vertical-align:-3px;margin-right:4px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                        管理权限
-                    </h3>
-                    <p class="modal-subtitle" id="permissionTarget">Chen Baosui</p>
-                </div>
-                <button class="modal-close" id="permissionModalClose">&times;</button>
-            </div>
-            <div class="modal-body">
-                <!-- 当前权限列表 -->
-                <div class="perm-section">
-                    <h4 class="perm-section-title">当前权限</h4>
-                    <div class="perm-table">
-                        <div class="perm-table-head">
-                            <div>被授权者</div>
-                            <div>类型</div>
-                            <div>级别</div>
-                            <div>操作</div>
-                        </div>
-                        <div class="perm-table-body" id="permTableBody"></div>
-                    </div>
-                </div>
-
-                <!-- 授予权限 -->
-                <div class="perm-section">
-                    <h4 class="perm-section-title">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#7c3aed" stroke-width="2" style="vertical-align:-3px;margin-right:4px"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-                        授予权限
-                    </h4>
-                    <div class="perm-tabs">
-                        <button class="perm-tab active" data-perm-type="user">用户</button>
-                        <button class="perm-tab" data-perm-type="department">部门</button>
-                        <button class="perm-tab" data-perm-type="workspace">工作空间</button>
-                    </div>
-
-                    <div class="perm-form">
-                        <label class="perm-label" id="permGranteeLabel">选择用户</label>
-                        <div class="multi-select" id="multiSelect">
-                            <div class="ms-control" id="msControl">
-                                <div class="ms-tags" id="msTags">
-                                    <input type="text" class="ms-input" id="msInput" placeholder="搜索并选择...">
-                                </div>
-                                <svg class="ms-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                            </div>
-                            <div class="ms-dropdown" id="msDropdown">
-                                <div class="ms-option-list" id="msOptionList"></div>
-                            </div>
-                        </div>
-
-                        <label class="perm-label" style="margin-top:14px">权限级别</label>
-                        <select class="perm-select" id="permLevel">
-                            <option value="USE">USE — 可查看和使用</option>
-                            <option value="EDIT">EDIT — 可编辑</option>
-                            <option value="ADMIN">ADMIN — 完全管理</option>
-                        </select>
-
-                        <button class="btn-grant" id="btnGrant">授予权限</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- OAuth 授权页面（全屏覆盖） -->
-    <div class="oauth-page" id="oauthPage">
-        <div class="oauth-stars"></div>
-
-        <header class="oauth-header">
-            <div class="oauth-logo">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#a78bfa" stroke-width="2">
-                    <circle cx="12" cy="12" r="9"/>
-                    <circle cx="12" cy="12" r="3" fill="#a78bfa"/>
-                </svg>
-                <span>CreatiAds</span>
-            </div>
-        </header>
-
-        <div class="oauth-main">
-            <div class="oauth-title-bar">
-                <button class="oauth-back" id="btnOauthBack">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-                    返回
-                </button>
-                <h1 class="oauth-page-title" id="oauthPageTitle">连接 Google Ads</h1>
-            </div>
-
-            <div class="oauth-card" id="oauthRequestCard">
-                <div class="oauth-card-icon" id="oauthPlatformIcon"></div>
-                <h2 class="oauth-card-title" id="oauthCardTitle">连接到 Google Ads</h2>
-                <p class="oauth-card-desc" id="oauthCardDesc">授权 Creatiads 访问您的 Google Ads 广告账户和营销数据。</p>
-
-                <div class="oauth-perm-box">
-                    <div class="oauth-perm-title">这将允许我们：</div>
-                    <ul class="oauth-perm-list" id="oauthPermList">
-                        <li><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#3b82f6" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>访问您的广告账户信息</li>
-                        <li><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#3b82f6" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>读取广告系列效果数据</li>
-                        <li><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#3b82f6" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>获取洞察和分析数据</li>
-                        <li><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#3b82f6" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>查看广告账户花费和预算信息</li>
-                    </ul>
-                </div>
-
-                <button class="oauth-connect-btn" id="btnOauthConnect">
-                    <span id="oauthConnectText">使用 Google 连接</span>
-                </button>
-                <button class="oauth-cancel-btn" id="btnOauthCancel">取消</button>
-            </div>
-
-            <!-- 连接成功状态卡片 -->
-            <div class="oauth-card oauth-success-card" id="oauthSuccessCard" style="display:none;">
-                <div class="oauth-success-icon">
-                    <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#10b981" stroke-width="3">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                </div>
-                <h2 class="oauth-card-title" id="oauthSuccessTitle">Google Ads 账户连接成功！</h2>
-                <p class="oauth-card-desc" id="oauthSuccessDesc">您的 Google Ads 账户已成功授权。您现在可以同步广告数据并查看效果分析。</p>
-
-                <div class="oauth-success-info" id="oauthSuccessInfo">
-                    <div class="oauth-success-info-row">
-                        <span class="oauth-success-info-label">已连接账户</span>
-                        <span class="oauth-success-info-value" id="oauthSuccessAccountEmail">new.user@example.com</span>
-                    </div>
-                    <div class="oauth-success-info-row">
-                        <span class="oauth-success-info-label">平台</span>
-                        <span class="oauth-success-info-value" id="oauthSuccessPlatform">Google Ads</span>
-                    </div>
-                    <div class="oauth-success-info-row">
-                        <span class="oauth-success-info-label">状态</span>
-                        <span class="badge-active">ACTIVE</span>
-                    </div>
-                </div>
-
-                <button class="oauth-connect-btn" id="btnOauthViewAccount">查看账户</button>
-                <button class="oauth-cancel-btn" id="btnOauthGoDashboard">前往仪表盘</button>
-            </div>
-        </div>
-
-        <div class="oauth-tagline">
-            <h3>Precision-Driven<br>Growth &amp; Conversion</h3>
-            <p>Unify your advertising data across platforms. Make<br>smarter decisions with real-time analytics, automated<br>pipelines, and actionable insights.</p>
-        </div>
-
-        <footer class="oauth-footer">
-            © 2026 Creatiads. All rights reserved.
-        </footer>
-    </div>
-
-    <!-- 连接器配置抽屉（右侧滑入，内嵌 connector-demo/config-modal.html） -->
-    <div class="conn-drawer-mask" id="connDrawerMask"></div>
-    <aside class="conn-drawer" id="connDrawer">
-        <iframe id="connConfigFrame" title="配置连接器"></iframe>
+  <main class="layout">
+    <!-- 左侧步骤 -->
+    <aside class="steps">
+      <div class="steps-title">流程步骤</div>
+      <div class="step active" data-step="1"><span>1</span>选择广告主</div>
+      <div class="step" data-step="2"><span>2</span>Order</div>
+      <div class="step" data-step="3"><span>3</span>LineItem</div>
+      <!-- <div class="step" data-step="4"><span>4</span>Creative 模板与变体</div> -->
+      <div class="step" data-step="5"><span>4</span>组合预览</div>
+      <!-- <div class="step" data-step="6"><span>6</span>执行批量任务</div> -->
     </aside>
 
-    <script src="script.js"></script>
+    <!-- 中间内容 -->
+    <section class="content">
+
+      <!-- 步骤1 -->
+      <div class="panel active" data-panel="1">
+        <div class="panel-head">
+          <div class="panel-head-row">
+            <button type="button" class="back-btn" id="btnBackHome" title="返回">←</button>
+            <h2>1. 选择广告主</h2>
+          </div>
+          <p class="hint">从已授权账户拉取广告主列表（Mock 数据）。批量任务会归属到选中的广告主。</p>
+        </div>
+
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">广告主选择</span><span class="card-subtitle">支持批量选择，最多 10 个</span></div>
+          <div class="adv-picker">
+            <div class="adv-pane">
+              <div class="adv-pane-head">投放账户</div>
+              <div class="adv-search-box">
+                <input id="advSearch" placeholder="搜索广告主 ID / 名称" autocomplete="off" />
+              </div>
+              <div class="adv-list" id="advList"></div>
+            </div>
+            <div class="adv-pane">
+              <div class="adv-pane-head">已选 (<span id="advSelectedCount">0</span>/10)</div>
+              <div class="adv-selected" id="advSelectedList"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 订单模式 -->
+        <div class="section-card" id="orderModeWrap" style="display:none">
+          <div class="card-head"><span class="card-title">订单模式</span><span class="card-subtitle">决定批量任务的订单归属策略</span></div>
+          <div class="order-mode">
+            <label class="mode-card">
+              <input type="radio" name="orderMode" value="NEW" checked />
+              <div>
+                <div class="mode-name">新建订单</div>
+                <div class="mode-desc">每行先创建一个新 Order，再挂 LineItem / Creative（完整四步链）。</div>
+              </div>
+            </label>
+            <label class="mode-card">
+              <input type="radio" name="orderMode" value="EXISTING" />
+              <div>
+                <div class="mode-name">沿用已有订单</div>
+                <div class="mode-desc">跳过创建 Order，把订单项批量加到已存在的订单下。</div>
+              </div>
+            </label>
+          </div>
+
+          <!-- 已有订单选择（下拉式） -->
+          <div id="existingOrderWrap" style="display:none">
+            <div class="field" style="max-width:480px;">
+              <label>订单</label>
+              <div class="order-select" id="orderSelect">
+                <button type="button" class="order-select-trigger" id="orderSelectTrigger">
+                  <span class="order-select-value" id="orderSelectValue">选择订单</span>
+                  <span class="order-select-arrow">▾</span>
+                </button>
+                <div class="order-select-panel" id="orderSelectPanel" hidden>
+                  <input id="orderSearch" placeholder="搜索订单名称 / ID…" autocomplete="off" />
+                  <div class="order-select-list" id="orderDropdown"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions"><button class="btn next primary" data-next="2" disabled>下一步</button></div>
+      </div>
+
+      <!-- 步骤2: Order 模板 -->
+      <div class="panel" data-panel="2">
+        <div class="panel-head">
+          <div class="panel-head-row">
+            <button type="button" class="back-btn back-btn-step" title="返回">←</button>
+            <h2>2. Order 模板</h2>
+          </div>
+          <p class="hint">已按真实 DSP 后台重构。支持 <code>{{变量名}}</code> 占位符。goal/kpiType/kpiValue/amazonPromotion/poNumber 按行变量，其余全局统一。</p>
+          <div id="ord_modeHint" class="mode-hint" style="display:none; margin-top:12px">
+            当前为「沿用已有订单」模式，此步骤配置<strong>不会执行</strong>。如需新建订单请返回步骤1切换模式。
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">基础信息</span></div>
+          <div class="form-grid">
+            <div class="field full">
+              <label>名称模板 *</label>
+              <input id="ord_name" value="{{mediaType}}_{{goal}}_{{kpiType}}" />
+              <div class="name-builder">
+                <div class="name-builder-chips" id="ord_nameChips"></div>
+                <div class="name-builder-hint">点击变量插入到名称模板；字段分隔符为 <code>_</code>，也可手动编辑。</div>
+              </div>
+            </div>
+            <div class="field"><label>PO编号模板</label><input id="ord_poNumber" value="{{poNumber}}" /></div>
+            <div class="field"><label>广告主域名</label><input id="ord_advertiserDomain" value="" placeholder="example.com" /></div>
+            <div class="field full"><label>备注（工具内可见）</label><input id="ord_notes" value="" /></div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">类型与目标</span><span class="card-subtitle">左侧添加多个类型，每个类型对应右侧一组配置，生成一个 Order</span></div>
+          <div class="combo-layout">
+            <!-- 左侧：类型列表 -->
+            <div class="combo-aside">
+              <div class="combo-aside-head"><span id="ord_comboCount">0 个类型</span></div>
+              <div class="combo-list" id="ord_comboList"></div>
+              <button type="button" class="combo-add" id="btnAddOrderCombo">＋ 添加</button>
+            </div>
+            <!-- 右侧：当前类型配置 -->
+            <div class="combo-detail" id="ord_comboDetail">
+              <div class="combo-detail-title" id="ord_comboDetailTitle">类型 1</div>
+              <div class="form-grid">
+                <div class="field full">
+                  <label><input type="checkbox" id="ord_amazonPromotion" /> 亚马逊促销（如果选中，此订单只会有"视频 - 亚马逊交易"或"音频有保证"订单项。）</label>
+                </div>
+                <div class="field full" id="ord_mediaTypesWrap">
+                  <label>MEDIA 类型（多选，促销时隐藏）</label>
+                  <div class="checks" id="ord_mediaTypes">
+                    <label><input type="checkbox" value="DISPLAY" checked />展示</label>
+                    <label><input type="checkbox" value="ONLINE_VIDEO" />在线视频</label>
+                    <label><input type="checkbox" value="STREAMING_TV" />流媒体电视</label>
+                    <label><input type="checkbox" value="AUDIO" />音频</label>
+                  </div>
+                </div>
+                <div class="field"><label>目标 (goal) *</label>
+                  <select id="ord_goal">
+                    <option value="AWARENESS">认知度</option>
+                    <option value="CONSIDERATION">购买意向</option>
+                    <option value="CONVERSIONS">转化量</option>
+                  </select>
+                </div>
+                <div class="field"><label>KPI</label>
+                  <select id="ord_kpiType"></select>
+                </div>
+                <div class="field">
+                  <label>KPI 目标值</label>
+                  <input id="ord_kpiValue" value="{{kpiValue}}" placeholder="按行变量" />
+                  <label style="margin-top:8px"><input type="checkbox" id="ord_kpiNoTarget" /> 不设置 KPI 目标值</label>
+                </div>
+                <div class="field full">
+                  <div class="form-grid">
+                    <div class="field"><label>竞价优先级</label>
+                      <select id="ord_optimizationPriority">
+                        <option value="SPEND_FULL_BUDGET">优先用完预算</option>
+                        <option value="KPI_TARGET">优先 KPI 目标值</option>
+                      </select>
+                    </div>
+                    <div class="field"><label>预算管理</label>
+                      <select id="ord_budgetAllocation">
+                        <option value="AUTO">自动分配</option>
+                        <option value="MANUAL">手动管理</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 空态 -->
+            <div class="combo-empty-detail" id="ord_comboEmpty" style="display:none">
+              点击左侧「＋ 添加」创建第一个类型
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">预算和投放</span><span class="card-subtitle">左侧添加多个投放，每个投放对应右侧一组配置；与「类型」叉乘生成 Order</span></div>
+          <div class="combo-layout">
+            <!-- 左侧：投放列表 -->
+            <div class="combo-aside">
+              <div class="combo-aside-head"><span id="ord_flightCount">0 个投放</span></div>
+              <div class="combo-list" id="ord_flightList"></div>
+              <button type="button" class="combo-add" id="btnAddFlight">＋ 添加</button>
+            </div>
+            <!-- 右侧：当前投放配置 -->
+            <div class="combo-detail" id="ord_flightDetail">
+              <div class="combo-detail-title" id="ord_flightDetailTitle">投放 1</div>
+              <div class="flights-container" id="ord_fl_rows">
+                <!-- 动态广告活动行（预算+开始+结束+名称），由 JS 渲染 -->
+              </div>
+              <button type="button" class="btn" id="btnAddFlightRow">+ 添加投放的广告活动</button>
+              <div class="form-grid" style="margin-top:14px">
+                <!-- 未使用预算 -->
+                <div class="field full">
+                  <label>未使用预算</label>
+                  <div class="radio-group">
+                    <label class="radio-card">
+                      <input type="radio" name="ord_unusedBudget" value="NO_CHANGE" checked />
+                      <div>
+                        <div class="radio-title">请不要更改投放预算</div>
+                        <div class="radio-desc">未花费预算在活动结束后将被释放</div>
+                      </div>
+                    </label>
+                    <label class="radio-card">
+                      <input type="radio" name="ord_unusedBudget" value="ROLLOVER_PACING" />
+                      <div>
+                        <div class="radio-title">结转提前投放未使用的预算</div>
+                        <div class="radio-desc">将未花费预算用于后续投放</div>
+                      </div>
+                    </label>
+                    <label class="radio-card">
+                      <input type="radio" name="ord_unusedBudget" value="ROLLOVER_CUMULATIVE" />
+                      <div>
+                        <div class="radio-title">结转累计未使用的预算</div>
+                        <div class="radio-desc">将未花费预算累计到账户余额</div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 高级设置 -->
+                <div class="field full">
+                  <label><input type="checkbox" id="ord_budgetCapEnabled" /> 预算上限 — 设置每日和/或每月支出限额</label>
+                  <div class="sub-fields" id="ord_budgetCapFields" style="display:none">
+                    <div class="field"><label>上限类型</label>
+                      <select id="ord_budgetCapType">
+                        <option value="DAILY">每日上限</option>
+                        <option value="MONTHLY">每月上限</option>
+                      </select>
+                    </div>
+                    <div class="field"><label>金额 $</label><input id="ord_budgetCapAmount" type="number" value="" placeholder="如 1000" /></div>
+                  </div>
+                </div>
+                <div class="field full">
+                  <label><input type="checkbox" id="ord_agencyFeeEnabled" /> 代理费 — 收取代理费</label>
+                  <div class="sub-fields" id="ord_agencyFeeFields" style="display:none">
+                    <div class="field"><label>代理费类型</label>
+                      <select id="ord_agencyFeeType">
+                        <option value="PERCENTAGE">百分比</option>
+                        <option value="FIXED">固定金额</option>
+                      </select>
+                    </div>
+                    <div class="field"><label>值</label><input id="ord_agencyFeeValue" type="number" value="" placeholder="如 15 或 500" /></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 空态 -->
+            <div class="combo-empty-detail" id="ord_flightEmpty" style="display:none">
+              点击左侧「＋ 添加」创建第一个投放
+            </div>
+          </div>
+          <div class="flight-total">
+            <span class="flight-total-label">Time zone: PDT</span>
+            <div class="flight-total-row">
+              <span class="flight-total-amount">$ <strong id="ord_flightTotal">0.00</strong></span>
+              <span class="flight-total-range" id="ord_flightRange">添加投放后显示时间范围</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">频次</span></div>
+          <div class="form-grid">
+            <div class="field full">
+              <label><input type="checkbox" id="ord_freqCapEnabled" /> 频率 — 限制顾客可以看到此广告的次数</label>
+              <div class="sub-fields" id="ord_freqCapFields" style="display:none">
+                <div class="field full"><div class="section-title">频次上限（可加多条）</div></div>
+                <div class="field full" id="freqCapRows">
+                  <!-- 动态频次行容器 -->
+                  <div class="freq-row">
+                    <input type="number" data-freq-impressions value="3" min="1" placeholder="次数" style="width:60px" />
+                    次，每
+                    <input type="number" data-freq-timevalue value="1" min="1" style="width:50px" />
+                    <select data-freq-timeunit style="width:80px"><option value="DAY">天</option><option value="HOUR">小时</option><option value="MINUTE">分钟</option></select>
+                    每
+                    <select data-freq-scope style="width:80px"><option value="USER">用户</option><option value="HOUSEHOLD">家庭</option></select>
+                    <button type="button" class="freq-del" title="删除">×</button>
+                  </div>
+                </div>
+                <div class="field full">
+                  <button type="button" class="btn" id="btnAddFreqCap">+ 添加频次上限</button>
+                </div>
+                <div class="field full">
+                  <label><input type="checkbox" id="ord_includeLinearTV" /> 将传统电视广告展示添加到频次上限</label>
+                </div>
+              </div>
+            </div>
+            <div class="field full">
+              <label><input type="checkbox" id="ord_freqGroupEnabled" /> 频次组 — 将此订单添加到频率组</label>
+              <div class="sub-fields" id="ord_freqGroupFields" style="display:none">
+                <div class="field"><label>频次组 ID（引用已有）</label><input id="ord_frequencyGroupId" value="" placeholder="需预先存在且有效" /></div>
+              </div>
+            </div>
+          </div>
+          <details class="preview">
+            <summary>预览 Payload (JSON)</summary>
+            <pre id="ord_preview"></pre>
+          </details>
+        </div>
+
+        <div class="actions">
+          <button class="btn ghost" data-prev="1">上一步</button>
+          <button class="btn next primary" data-next="3">下一步</button>
+        </div>
+      </div>
+
+      <!-- 步骤3: LineItem 模板 -->
+      <div class="panel" data-panel="3">
+        <div class="panel-head">
+          <div class="panel-head-row">
+            <button type="button" class="back-btn back-btn-step" title="返回">←</button>
+            <h2>3. LineItem 模板（订单项）</h2>
+          </div>
+          <p class="hint">每条 Order 下生成一个 LineItem。mediaType/geoCountry/audienceId/baseBidCpm 按行变量，其余全局统一。出版商/产品类别/受众等大枚举仅放代表值，真实接入需字典接口。</p>
+        </div>
+
+        <!-- 基础信息 -->
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">基础信息</span></div>
+          <div class="form-grid">
+          <div class="field full">
+            <label>名称模板 *</label>
+            <input id="li_name" value="LineItem_{{mediaType}}" />
+            <div class="name-builder">
+              <div class="name-builder-chips" id="li_nameChips"></div>
+              <div class="name-builder-hint">点击变量插入到名称模板；字段分隔符为 <code>_</code>，也可手动编辑。</div>
+            </div>
+          </div>
+          <div class="field"><label>外部 ID 或采购订单</label><input id="li_externalId" value="li_{{poNumber}}" /></div>
+          <div class="field full"><label>备注（工具内可见）</label><input id="li_notes" value="" /></div>
+          </div>
+        </div>
+
+        <!-- 媒体类型（分支型核心，可批量配置） -->
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">媒体类型</span><span class="card-subtitle">左侧添加多个媒体类型，每个对应右侧一组配置；与 Order 叉乘各生成一个 LineItem</span></div>
+          <div class="combo-layout">
+            <!-- 左侧：媒体类型列表 -->
+            <div class="combo-aside">
+              <div class="combo-aside-head"><span id="li_mediaCount">0 个媒体类型</span></div>
+              <div class="combo-list" id="li_mediaList"></div>
+              <button type="button" class="combo-add" id="btnAddMedia">＋ 添加</button>
+            </div>
+            <!-- 右侧：当前媒体类型配置 -->
+            <div class="combo-detail" id="li_mediaDetail">
+              <div class="combo-detail-title" id="li_mediaDetailTitle">媒体类型 1</div>
+              <div class="form-grid">
+                <div class="field full"><label>媒体类型 *</label>
+                  <select id="li_mediaType">
+                    <option value="DISPLAY">展示 (DISPLAY)</option>
+                    <option value="STREAMING_TV">流媒体电视 (STREAMING_TV)</option>
+                    <option value="ONLINE_VIDEO">在线视频 (ONLINE_VIDEO)</option>
+                    <option value="AUDIO">音频 (AUDIO)</option>
+                    <option value="DIGITAL_OUT_OF_HOME">数字户外广告 (DOOH)</option>
+                  </select>
+                </div>
+                <!-- DISPLAY 分支 -->
+                <div class="field full media-branch" id="li_branch_DISPLAY">
+                  <label>设备（DISPLAY 专属，至少选一个）</label>
+                  <div class="checks" id="li_media_devices">
+                    <label><input type="checkbox" value="DESKTOP" checked />电脑端</label>
+                    <label><input type="checkbox" value="MOBILE" checked />移动端</label>
+                  </div>
+                </div>
+                <div class="field full media-branch" id="li_branch_DISPLAY_mobileEnv">
+                  <label>移动环境（DISPLAY 专属，至少选一个）</label>
+                  <div class="checks" id="li_media_mobileEnv">
+                    <label><input type="checkbox" value="WEB" checked />网页</label>
+                    <label><input type="checkbox" value="APP" checked />应用程序</label>
+                  </div>
+                </div>
+                <!-- STREAMING_TV 分支 -->
+                <div class="field media-branch" id="li_branch_STREAMING_TV" style="display:none">
+                  <label>方案（流媒体电视专属）</label>
+                  <select id="li_media_streamingPlan">
+                    <option value="ALL_CONTENT">所有内容</option>
+                    <option value="LIVE_EVENTS_OPTIMIZER">直播活动优化器</option>
+                  </select>
+                </div>
+                <!-- DOOH 分支 -->
+                <div class="field media-branch" id="li_branch_DIGITAL_OUT_OF_HOME" style="display:none">
+                  <label>Product location（数字户外专属）</label>
+                  <select id="li_media_doohLocation">
+                    <option value="SOLD_IN_STORE">Sold in-store</option>
+                    <option value="NOT_SOLD_IN_STORE">Not sold in-store</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="combo-empty-detail" id="li_mediaEmpty" style="display:none">
+              点击左侧「＋ 添加」创建第一个媒体类型
+            </div>
+          </div>
+        </div>
+
+        <!-- 产品和服务（可批量配置） -->
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">产品和服务</span><span class="card-subtitle">左侧添加多组产品和服务，每组对应右侧一份类别选择；与 Order/媒体类型 叉乘生成 LineItem</span></div>
+          <div class="combo-layout">
+            <!-- 左侧：产品组列表 -->
+            <div class="combo-aside">
+              <div class="combo-aside-head"><span id="li_productCount">0 组</span></div>
+              <div class="combo-list" id="li_productList"></div>
+              <button type="button" class="combo-add" id="btnAddProduct">＋ 添加</button>
+            </div>
+            <!-- 右侧：当前产品组的类别选择 -->
+            <div class="combo-detail" id="li_productDetail">
+              <div class="combo-detail-title" id="li_productDetailTitle">产品和服务 1</div>
+              <div class="form-grid">
+                <div class="field full">
+                  <label>类别（选择您要推广的商品和服务类别，多选）</label>
+                  <input id="li_productSearch" placeholder="搜索类别…" autocomplete="off" />
+                  <div class="category-box" id="li_productCategories"></div>
+                  <small class="field-note" id="li_productSelected">未选择任何类别</small>
+                </div>
+              </div>
+            </div>
+            <div class="combo-empty-detail" id="li_productEmpty" style="display:none">
+              点击左侧「＋ 添加」创建第一组产品和服务
+            </div>
+          </div>
+        </div>
+
+        <!-- 库存（可批量配置） -->
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">库存（Inventory）</span><span class="card-subtitle">左侧添加多组库存配置，与 Order/媒体/产品 叉乘生成 LineItem</span></div>
+          <div class="combo-layout">
+            <!-- 左侧：库存组列表 -->
+            <div class="combo-aside">
+              <div class="combo-aside-head"><span id="li_invCount">0 组</span></div>
+              <div class="combo-list" id="li_invList"></div>
+              <button type="button" class="combo-add" id="btnAddInventory">＋ 添加</button>
+            </div>
+            <!-- 右侧：当前库存组配置 -->
+            <div class="combo-detail" id="li_invDetail">
+              <div class="combo-detail-title" id="li_invDetailTitle">库存 1</div>
+              <div class="form-grid">
+                <div class="field full"><label>广告库存类型</label>
+                  <div class="radio-group">
+                    <label class="radio-card">
+                      <input type="radio" name="li_inv_type" value="ALL_PUBLISHERS" checked />
+                      <div>
+                        <div class="radio-title">所有出版商</div>
+                        <div class="radio-desc">自动选择可帮助实现广告活动目标的出版商（Amazon 自营 / Amazon Publisher Direct / 第三方交易平台）。</div>
+                      </div>
+                    </label>
+                    <label class="radio-card">
+                      <input type="radio" name="li_inv_type" value="MANUAL_PUBLISHERS" />
+                      <div>
+                        <div class="radio-title">手动选择出版商</div>
+                        <div class="radio-desc">从三大类出版商中手动勾选。</div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+                <!-- 手动出版商树 -->
+                <div class="field full" id="li_inv_manualWrap" style="display:none">
+                  <label>出版商（多选）<span class="inv-selcount" id="li_inv_pubCount"></span></label>
+                  <input id="li_inv_pubSearch" placeholder="搜索出版商…" autocomplete="off" />
+                  <div class="category-box" id="li_inv_publishers"></div>
+                </div>
+                <!-- 交易 -->
+                <div class="field full">
+                  <div class="inv-section-head" data-inv-toggle="deals">
+                    <span class="cat-caret">›</span>
+                    <span class="inv-section-title">交易（Deals）</span>
+                    <span class="inv-selcount" id="li_inv_dealCount">无</span>
+                  </div>
+                  <div class="inv-section-body" id="li_inv_dealsWrap" style="display:none">
+                    <input id="li_inv_dealSearch" placeholder="搜索交易…" autocomplete="off" />
+                    <div class="inv-table" id="li_inv_deals"></div>
+                  </div>
+                </div>
+                <!-- 库存组 -->
+                <div class="field full">
+                  <div class="inv-section-head" data-inv-toggle="groups">
+                    <span class="cat-caret">›</span>
+                    <span class="inv-section-title">库存组（Inventory Groups）</span>
+                    <span class="inv-selcount" id="li_inv_groupCount">无</span>
+                  </div>
+                  <div class="inv-section-body" id="li_inv_groupsWrap" style="display:none">
+                    <input id="li_inv_groupSearch" placeholder="搜索交易包…" autocomplete="off" />
+                    <div class="inv-table" id="li_inv_groups"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="combo-empty-detail" id="li_invEmpty" style="display:none">
+              点击左侧「＋ 添加」创建第一组库存配置
+            </div>
+          </div>
+        </div>
+
+        <!-- 定向策略 -->
+        <div class="section-card">
+          <div class="card-head">
+            <span class="card-title">定向策略（Targeting）</span>
+            <div class="targeting-add-wrap">
+              <button type="button" class="btn" id="btnAddTargeting">添加投放目标 ▾</button>
+              <div class="targeting-add-menu" id="targetingAddMenu" hidden></div>
+            </div>
+          </div>
+          <div class="targeting-rows" id="li_targetingRows"></div>
+          <div class="targeting-empty" id="li_targetingEmpty">点击右上角「添加投放目标」选择需要的定向维度。</div>
+        </div>
+
+        <!-- 投放 -->
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">投放（Delivery）</span></div>
+          <div class="form-grid">
+          <div class="field"><label>开始时间（时区 PDT）</label><input id="li_delivery_start" value="2026-07-01T00:00:00-07:00" /></div>
+          <div class="field"><label>结束时间（时区 PDT）</label><input id="li_delivery_end" value="2026-09-30T23:59:59-07:00" /></div>
+          <div class="field"><label>订单项预算</label>
+            <select id="li_delivery_budgetAlloc">
+              <option value="AUTO">自动预算分配</option>
+              <option value="MANUAL">手动管理预算</option>
+            </select>
+          </div>
+          <div class="field"><label>投放进度</label>
+            <select id="li_delivery_pacing">
+              <option value="EVEN">均匀</option>
+              <option value="FRONT_LOADED">提前</option>
+              <option value="ASAP">尽快</option>
+            </select>
+          </div>
+          <div class="field"><label>每日/每月支出限额 $（可空）</label><input id="li_delivery_spendLimit" type="number" value="" /></div>
+          <div class="field"><label>每日最低支出 $（可空）</label><input id="li_delivery_spendMin" type="number" value="" /></div>
+          <div class="field full">
+            <label><input type="checkbox" id="li_delivery_freqCap" /> 限制顾客可以看到此广告的次数（频率上限）</label>
+            <div class="sub-fields" id="li_delivery_freqCapFields" style="display:none">
+              <div class="field full"><div class="section-title">频次上限（可加多条）</div></div>
+              <div class="field full" id="li_freqCapRows">
+                <!-- 动态频次行容器 -->
+                <div class="freq-row">
+                  <input type="number" data-freq-impressions value="3" min="1" placeholder="次数" style="width:60px" />
+                  次，每
+                  <input type="number" data-freq-timevalue value="1" min="1" style="width:50px" />
+                  <select data-freq-timeunit style="width:80px"><option value="DAY">天</option><option value="HOUR">小时</option><option value="MINUTE">分钟</option></select>
+                  每
+                  <select data-freq-scope style="width:80px"><option value="USER">用户</option><option value="HOUSEHOLD">家庭</option></select>
+                  <button type="button" class="freq-del" title="删除">×</button>
+                </div>
+              </div>
+              <div class="field full">
+                <button type="button" class="btn" id="btnAddLiFreqCap">+ 添加频次上限</button>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <!-- 竞价 -->
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">竞价（Bidding）</span></div>
+          <div class="form-grid">
+            <div class="field full">
+              <small class="field-note">竞价优先级从 Order 层 optimization.priority 继承（只读，此处不重设）。</small>
+            </div>
+            <div class="field"><label>基础竞价 CPM（按行变量 baseBidCpm）</label><input id="li_bidding_baseBid" value="{{baseBidCpm}}" /></div>
+            <div class="field"><label>最高 CPM 平均值模式</label>
+              <select id="li_bidding_maxCpmMode">
+                <option value="AUTO">自动优化</option>
+                <option value="MANUAL">手动设置</option>
+              </select>
+            </div>
+            <div class="field" id="li_bidding_maxCpmWrap" style="display:none"><label>最高 CPM 平均值 $</label><input id="li_bidding_maxCpmValue" type="number" value="" placeholder="如 13.55" /></div>
+          </div>
+          <details class="preview">
+            <summary>预览 Payload (JSON)</summary>
+            <pre id="li_preview"></pre>
+          </details>
+        </div>
+
+        <div class="actions">
+          <button class="btn ghost" data-prev="2">上一步</button>
+          <button class="btn next primary" data-next="5">下一步</button>
+        </div>
+      </div>
+
+      <!-- 步骤4: Creative 模板（暂时隐藏） -->
+      <div class="panel" data-panel="4" style="display:none">
+        <div class="panel-head">
+          <h2>4. Creative 模板</h2>
+          <p class="hint">按 DSP 后台真实结构对齐：4 大类（展示/视频/音频/基于组件）+ 子类型 + 点击跳转分支联动。creativeType 按行变量覆盖，其余全局统一。大枚举（创意素材类别/广告位尺寸等）仅放代表值，真实接入需字典接口。</p>
+        </div>
+
+        <!-- 基础信息 -->
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">基础信息</span></div>
+          <div class="form-grid">
+            <div class="field"><label>名称模板 *</label><input id="cr_name" value="CR_{{creativeType}}_{{idx}}" /></div>
+          <div class="field"><label>语言</label>
+            <select id="cr_language">
+              <option value="en">英语</option>
+              <option value="es">西班牙语</option>
+              <option value="ja">日语</option>
+              <option value="pt">葡萄牙语</option>
+            </select>
+          </div>
+          <div class="field"><label>外部编号（可选）</label><input id="cr_externalId" value="cr_{{poNumber}}" /></div>
+          <div class="field" id="cr_siteWrap" style="display:none"><label>站点（第三方专属）</label>
+            <select id="cr_site">
+              <option value="US">US</option><option value="BR">BR</option>
+              <option value="CA">CA</option><option value="MX">MX</option>
+            </select>
+          </div>
+          </div>
+        </div>
+
+        <!-- 创意类型（4大类Tab + 子类型） -->
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">创意类型</span><span class="card-subtitle">决定创意形态</span></div>
+          <div class="form-grid">
+          <div class="field"><label>创意大类 *（按行变量 creativeType 覆盖）</label>
+            <select id="cr_type">
+              <option value="DISPLAY">展示 (DISPLAY)</option>
+              <option value="VIDEO">视频 (VIDEO)</option>
+              <option value="AUDIO">音频 (AUDIO)</option>
+              <option value="COMPONENT_BASED">基于组件 (COMPONENT_BASED)</option>
+            </select>
+          </div>
+          <div class="field"><label>子类型 *（随大类联动）</label>
+            <select id="cr_subtype"></select>
+          </div>
+          </div>
+        </div>
+
+        <!-- 点击跳转（clickThrough 分支） -->
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">点击跳转（Click-Through）</span></div>
+          <div class="form-grid">
+          <div class="field full"><label>着陆页类型 *（随大类联动，COMPONENT_BASED 此项决定素材区结构）</label>
+            <select id="cr_clickType"></select>
+          </div>
+          <div class="field full click-branch" id="cr_click_AMAZON_PRODUCT" style="display:none"><label>商品 ASIN（亚马逊站内商品，按行变量 asins 取首个/列表）</label><input id="cr_click_asin" value="{{asins}}" /></div>
+          <div class="field click-branch" id="cr_click_BRAND_STORE" style="display:none"><label>品牌旗舰店 storeId</label><input id="cr_click_storeId" value="" placeholder="store_xxx" /></div>
+          <div class="field click-branch" id="cr_click_BRAND_STORE_page" style="display:none"><label>页面 pageId（可选）</label><input id="cr_click_pageId" value="" /></div>
+          <div class="field full click-branch" id="cr_click_OTHER_WEBSITE" style="display:none"><label>落地页 URL（其他网站）</label><input id="cr_click_url" value="{{landingUrl}}" /></div>
+          </div>
+        </div>
+
+        <!-- 创意素材设置（按大类分支） -->
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">创意素材设置</span><span class="card-subtitle">随大类/子类型联动</span></div>
+          <!-- DISPLAY 分支 -->
+        <div class="creative-branch" id="cr_branch_DISPLAY">
+          <h3 class="section-title">展示创意设置</h3>
+          <div class="form-grid">
+            <div class="field cr-std-display"><label>广告体验</label>
+              <select id="cr_disp_adExperience">
+                <option value="SINGLE_IMAGE">单图 (SINGLE_IMAGE)</option>
+                <option value="HTML5">动态 (HTML5)</option>
+              </select>
+            </div>
+            <div class="field full cr-std-display"><label>广告位尺寸（多选，仅列代表值）</label>
+              <div class="checks" id="cr_disp_sizes">
+                <label><input type="checkbox" value="300x250" checked />300x250</label>
+                <label><input type="checkbox" value="728x90" checked />728x90</label>
+                <label><input type="checkbox" value="160x600" />160x600</label>
+                <label><input type="checkbox" value="320x50" />320x50</label>
+                <label><input type="checkbox" value="970x250" />970x250</label>
+                <label><input type="checkbox" value="300x600" />300x600</label>
+              </div>
+              <small class="field-note">真实后台 10 种：320x50/300x250/414x125/728x90/160x600/970x250/300x600/300x50/320x100/980x55。</small>
+            </div>
+            <div class="field cr-3p-display"><label>第三方尺寸（单选）</label>
+              <select id="cr_disp_3pSize">
+                <option value="300x250">300x250</option><option value="728x90">728x90</option>
+                <option value="160x600">160x600</option><option value="320x50">320x50</option>
+              </select>
+            </div>
+            <div class="field full cr-3p-display"><label>标签来源（HTML 标签粘贴）</label><input id="cr_disp_tagSource" value="" placeholder="<script>...</script>" /></div>
+            <div class="field full cr-std-display">
+              <small class="field-note">标准展示：素材为图片数组(SINGLE_IMAGE)或 HTML5 ZIP+备用图。settings 含广告选择标识位置/边框。demo 仅 mock 素材占位。</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIDEO 分支 -->
+        <div class="creative-branch" id="cr_branch_VIDEO" style="display:none">
+          <h3 class="section-title">视频创意设置</h3>
+          <div class="form-grid">
+            <div class="field full cr-std-video"><label>广告体验（多选）</label>
+              <div class="checks" id="cr_vid_adExperience">
+                <label><input type="checkbox" value="ONLINE_VIDEO" checked />在线视频</label>
+                <label><input type="checkbox" value="STREAMING_TV" />流媒体电视</label>
+              </div>
+            </div>
+            <div class="field full cr-std-video"><label>VAST 第三方验证 URL（可选）</label><input id="cr_vid_vastVerifyUrl" value="" /></div>
+            <div class="field full cr-3p-video"><label>VAST/VPAID 标签 URL</label><input id="cr_vid_vastTagUrl" value="" placeholder="https://.../vast.xml" /></div>
+            <div class="field full cr-std-video"><label>创意素材类别（内容分类，多选 · 仅列代表值）</label>
+              <div class="checks" id="cr_vid_categories">
+                <label><input type="checkbox" value="ALCOHOL" />酒类</label>
+                <label><input type="checkbox" value="DATING" />交友</label>
+                <label><input type="checkbox" value="GAMBLING" />博彩</label>
+                <label><input type="checkbox" value="POLITICAL" />政治</label>
+                <label><input type="checkbox" value="TOBACCO" />烟草</label>
+                <label><input type="checkbox" value="VIDEO_GAMES" />电子游戏</label>
+              </div>
+              <small class="field-note">真实后台 40+ 项（药品/性保健/成人/误导性声明...），需字典接口拉取全量。</small>
+            </div>
+            <div class="field full cr-std-video">
+              <small class="field-note">标准视频：上传 MP4（1920x1080 / 1080x1920）。demo 仅 mock 素材占位。</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- AUDIO 分支 -->
+        <div class="creative-branch" id="cr_branch_AUDIO" style="display:none">
+          <h3 class="section-title">音频创意设置</h3>
+          <div class="form-grid">
+            <div class="field full"><label>标题（≤50 字符，标准音频/播客）</label><input id="cr_aud_title" value="{{headline}}" maxlength="50" /></div>
+            <div class="field cr-interactive-audio"><label>品牌名称（互动式专属，Alexa 语音互动）</label><input id="cr_aud_brandName" value="{{brand}}" /></div>
+            <div class="field cr-interactive-audio"><label>CTA 类型（互动式专属）</label>
+              <select id="cr_aud_ctaType">
+                <option value="ADD_TO_CART">加入购物车</option>
+                <option value="REMIND_ME">提醒我</option>
+                <option value="SEND_MORE_INFO">发送更多信息</option>
+              </select>
+            </div>
+            <div class="field full">
+              <small class="field-note">音频素材：MP3/WAV/OGG · ≤500MB · 10-30秒。标准/播客可配图(1024x1024)。互动式"加入购物车"CTA 需关联商品。demo 仅 mock 素材占位。</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMPONENT_BASED 分支 -->
+        <div class="creative-branch" id="cr_branch_COMPONENT_BASED" style="display:none">
+          <h3 class="section-title">基于组件创意设置（素材区随着陆页类型变化）</h3>
+          <div class="form-grid">
+            <div class="field cr-cb-brand"><label>品牌名称（≤25 字符，其他网站/品牌旗舰店）</label><input id="cr_cb_brandName" value="{{brand}}" maxlength="25" /></div>
+            <div class="field full"><label>标题（≤50 字符，多条用 | 分隔）</label><input id="cr_cb_headlines" value="{{headline}}" /></div>
+            <div class="field full cr-cb-body"><label>正文文本（其他网站≤100 / 品牌旗舰店≤200，可选）</label><input id="cr_cb_bodyText" value="" /></div>
+            <div class="field cr-cb-cta"><label>行动号召 CTA</label>
+              <select id="cr_cb_cta">
+                <option value="">无</option>
+                <option value="SHOP_NOW">立即购买</option>
+                <option value="LEARN_MORE">了解更多</option>
+                <option value="SIGN_UP">注册</option>
+              </select>
+            </div>
+            <div class="field"><label>广告位</label>
+              <select id="cr_cb_placementMode">
+                <option value="RESPONSIVE">使用响应式尺寸调整</option>
+                <option value="SPECIFIC">选择特定尺寸</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label><input type="checkbox" id="cr_cb_aiPersons" /> 声明含 AI 生成拟真人物</label>
+            </div>
+            <div class="field full">
+              <small class="field-note">3 着陆页分支字段差异：亚马逊商品(商品列表+视频2+图片15+多语言/优化开关) / 其他网站(品牌名+图片15+CTA5+正文5) / 品牌旗舰店(自定义图单+品牌促销复选)。徽标/免责声明各分支通用。demo 仅 mock 素材占位。</small>
+            </div>
+          </div>
+        </div>
+        </div>
+
+        <!-- 高级 -->
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">高级（Advanced）</span></div>
+          <div class="form-grid">
+            <div class="field full"><label>第三方展示量 URL（逗号分隔，可空）</label><input id="cr_3pImpressionUrls" value="" /></div>
+            <div class="field full" id="cr_3pClickWrap"><label>第三方点击量 URL（展示/视频，逗号分隔，可空）</label><input id="cr_3pClickUrls" value="" /></div>
+            <div class="field full"><label>其他 HTML（可选）</label><input id="cr_otherHtml" value="" /></div>
+          </div>
+          <details class="preview">
+            <summary>预览 Payload (JSON)</summary>
+            <pre id="cr_preview"></pre>
+          </details>
+        </div>
+
+        <!-- Creative 变体表 -->
+        <div class="section-card variant-card">
+          <div class="card-head">
+            <span class="card-title">Creative 变体</span>
+            <span class="card-subtitle">每行 = 1 个 Creative；会共用挂到每个 LineItem 上（共享模式）</span>
+          </div>
+          <div class="variant-tools">
+            <button class="btn" data-vt-add="creative">+ 添加一行</button>
+            <span class="vt-batch">批量新增 <input type="number" data-vt-count="creative" value="5" min="1" max="500" /> 行
+              <button class="btn" data-vt-addn="creative">新增</button>
+            </span>
+            <button class="btn" data-vt-demo="creative">加载示例</button>
+            <button class="btn ghost danger" data-vt-clear="creative">清空全部</button>
+            <span class="row-count" id="cr_rowCount">0 行</span>
+          </div>
+          <div class="table-wrap">
+            <table class="vartable" id="cr_varTable">
+              <thead>
+                <tr><th>#</th><th>creativeType</th><th>asins</th><th>headline</th><th>landingUrl</th><th>操作</th></tr>
+              </thead>
+              <tbody id="cr_varTbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn ghost" data-prev="3">上一步</button>
+          <button class="btn next primary" data-next="5">下一步</button>
+        </div>
+      </div>
+
+      <!-- 步骤5: 组合预览 -->
+      <div class="panel" data-panel="5">
+        <div class="panel-head">
+          <div class="panel-head-row">
+            <button type="button" class="back-btn back-btn-step" title="返回">←</button>
+            <h2>4. 组合预览</h2>
+          </div>
+          <p class="hint">预览 Order × LineItem 叉乘结果，Creative 共用挂到每个 LineItem。确认无误后进入执行。</p>
+        </div>
+
+        <div class="section-card">
+          <div class="card-head">
+            <span class="card-title">叉乘汇总</span>
+            <span class="card-subtitle">Order × LineItem 笛卡尔积 + Creative 共用</span>
+          </div>
+          <div class="combo-preview" id="comboPreview">
+            <!-- JS 动态填充：combo-summary + combo-tree -->
+            <div class="combo-empty">请先在步骤 2/3/4 填写变体行。</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn ghost" data-prev="3">上一步</button>
+          <button class="btn primary" id="btnSubmit">提交</button>
+        </div>
+      </div>
+
+      <!-- 步骤6: 执行（暂时隐藏） -->
+      <div class="panel" data-panel="6" style="display:none">
+        <div class="panel-head">
+          <h2>6. 执行批量任务</h2>
+          <p class="hint">执行顺序：每行 → 创建 Order → 创建 LineItem → 创建 Creative → 关联。支持限流、重试、断点续建。</p>
+        </div>
+
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">执行参数</span></div>
+          <div class="exec-config">
+            <label>并发数 <input id="cfg_concurrency" type="number" value="3" min="1" max="10" /></label>
+            <label>QPS 上限 <input id="cfg_qps" type="number" value="5" min="1" max="20" /></label>
+            <label>Mock 错误率 <input id="cfg_errorRate" type="number" value="0.15" min="0" max="1" step="0.05" /></label>
+            <label>最大重试次数 <input id="cfg_maxRetry" type="number" value="3" min="0" max="5" /></label>
+          </div>
+
+          <div class="exec-bar">
+            <button class="btn primary" id="btnRun">▶ 开始执行</button>
+            <button class="btn" id="btnPause" disabled>⏸ 暂停</button>
+            <button class="btn" id="btnResume" disabled>▶ 续建失败项</button>
+            <button class="btn ghost" id="btnClear">清空结果</button>
+          </div>
+
+          <div class="progress">
+            <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
+            <div class="progress-text" id="progText">就绪</div>
+          </div>
+
+          <div class="exec-stats">
+            <div class="stat"><span class="stat-label">总数</span><span class="stat-val" id="stTotal">0</span></div>
+            <div class="stat ok"><span class="stat-label">成功</span><span class="stat-val" id="stOk">0</span></div>
+            <div class="stat fail"><span class="stat-label">失败</span><span class="stat-val" id="stFail">0</span></div>
+            <div class="stat run"><span class="stat-label">进行中</span><span class="stat-val" id="stRun">0</span></div>
+            <div class="stat"><span class="stat-label">API 调用</span><span class="stat-val" id="stCalls">0</span></div>
+            <div class="stat"><span class="stat-label">重试次数</span><span class="stat-val" id="stRetry">0</span></div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="card-head"><span class="card-title">任务列表与日志</span></div>
+          <div class="result-grid">
+            <div class="result-list">
+              <h3>任务列表</h3>
+              <div class="result-rows" id="resultRows"></div>
+            </div>
+            <div class="log-panel">
+              <h3>执行日志</h3>
+              <div class="log" id="logBox"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn ghost" data-prev="5">上一步</button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 右侧固定 sidebar -->
+    <aside class="sidebar">
+      <div class="side-card">
+        <div class="side-card-title">基础配置</div>
+        <div class="side-row"><span class="side-row-label">广告主</span><span class="side-row-value empty" id="sb_advertiser">未选择</span></div>
+        <div class="side-row"><span class="side-row-label">区域</span><span class="side-row-value" id="sb_region">北美</span></div>
+        <div class="side-row"><span class="side-row-label">订单模式</span><span class="side-row-value" id="sb_orderMode">新建订单</span></div>
+        <div class="side-row"><span class="side-row-label">币种</span><span class="side-row-value" id="sb_currency">USD</span></div>
+      </div>
+
+      <div class="side-card">
+        <div class="side-card-title">批量策略</div>
+        <div class="side-row"><span class="side-row-label">LineItem 行数</span><span class="side-row-value" id="sb_liRows">0 行</span></div>
+        <div class="side-row"><span class="side-row-label">预计 Order</span><span class="side-row-value" id="sb_orderEst">0</span></div>
+        <div class="side-row"><span class="side-row-label">预计 LineItem</span><span class="side-row-value" id="sb_liEst">0</span></div>
+        <div class="side-row"><span class="side-row-label">预计 Creative</span><span class="side-row-value" id="sb_crEst">0</span></div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- CSV 粘贴弹窗 -->
+  <div class="modal" id="csvModal" hidden>
+    <div class="modal-box">
+      <h3>粘贴 CSV</h3>
+      <p class="hint">第一行为表头（列名需匹配变量表格列）。</p>
+      <textarea id="csvText" rows="10" placeholder="brand,quarter,goal,budget,audience,...
+BrandA,2026Q3,AWARENESS,50000,InMarketHome,..."></textarea>
+      <div class="modal-actions">
+        <button class="btn" id="csvCancel">取消</button>
+        <button class="btn primary" id="csvImport">导入</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
