@@ -102,7 +102,7 @@ function renderTable() {
   const headerHtml = `
     <thead><tr>
       <th style="width:40px"><input type="checkbox" id="rowAll" ${allChecked ? 'checked' : ''} ${someChecked ? 'data-indeterminate="1"' : ''} /></th>
-      ${cols.map((c) => `<th><span class="warn-icon">⚠</span>${escapeHTML(c.label)}${c.tip ? ' <span class="ico-info">i</span>' : ''}</th>`).join('')}
+      ${cols.map((c) => `<th>${escapeHTML(c.label)}${c.tip ? ' <span class="ico-info">i</span>' : ''}</th>`).join('')}
     </tr></thead>
   `;
 
